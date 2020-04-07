@@ -7,12 +7,12 @@
           <v-toolbar
             dark
             flat>
-            <v-toolbar-title>Home</v-toolbar-title>
+            <v-toolbar-title>Game</v-toolbar-title>
           </v-toolbar>
 
           <!-- Form -->
           <v-card-text>
-            I display general stuff about the website :)
+            I display the questions, some UI (health, gold, etc) and other stuff
           </v-card-text>
         </v-card>
       </v-container>
@@ -22,6 +22,6 @@
 <script>
 
 export default {
-  name: 'Home'
+  name: 'Game'
 }
 </script>
