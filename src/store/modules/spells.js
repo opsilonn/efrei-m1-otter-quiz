@@ -1,0 +1,80 @@
+import Vue from 'vue'
+
+const state = {
+  spells: []
+}
+
+const getters = {
+  /**
+   * Get the spell by its id
+   * @param {number} id - The id of the spell
+   */
+  getSpellById: state => (id) => {
+    return state.spells.findIndex(spell => spell.id === id)
+  },
+
+  /**
+   * Get all the spells with a specific playerStatId
+   * @param {number} playerstatId - The id of the playerstat
+   */
+  getSpellsByPlayerStatId: state => (playerstatId) => {
+    return state.spells.find(spell => spell.playerstatId === playerstatId)
+  }
+}
+
+/**
+ * Update all the prop of the spell by the given id
+ * @param {object}  state                 - The spells state
+ * @param {object}  spellPropValue
+ * @param {number}  spellPropValue.id    - The id of the spell
+ * @param {string}  spellPropValue.prop  - The key of a prop of the spell
+ * @param {object}  spellPropValue.value - The new value for the prop of the spell
+ */
+function updateProp (state, { id, prop, value }) {
+  const spell = getters.getSpellById(state)(id)
+
+  Vue.set(spell, prop, value)
+}
+
+const mutations = {
+  /**
+   * Add a new spell or update an existing one
+   * @param {object} state  - The spells state
+   * @param {object} spell - The spell to be added
+   */
+  addSpell (state, { spell }) {
+    if (!spell.id) {
+      console.log('adding new id')
+      const lastSpell = getters.getLastSpell(state)()
+      console.log(`lastSpell : ${lastSpell}`)
+      spell.id = (lastSpell) ? lastSpell.id + 1 : 0
+      console.log(`spell id: ${spell.id}`)
+    }
+
+    const existing = state.spells.findIndex(e => e.id === spell.id)
+    if (existing !== -1) {
+      const keys = Object.keys(spell)
+      for (const key of keys) {
+        if (key === 'id') continue
+        updateProp(state, { id: spell.id, prop: key, value: spell[key] })
+      }
+    } else {
+      state.spells.push(spell)
+    }
+  },
+  updateProp (state, { id, prop, value }) {
+    updateProp(state, { id, prop, value })
+  }
+
+}
+
+const actions = {
+}
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  mutations,
+  actions
+}
