@@ -11,5 +11,15 @@ new Vue({
   store,
   router,
   vuetify,
-  render: h => h(App)
+  render: h => h(App),
+  watch: {
+    $route (to) {
+      // Changes the page's name (works)
+      document.title = `Otter Quiz - ${to.name}`
+
+      // Changes the page's icon (does not work)
+      const link = document.querySelector("[rel='icon']")
+      link.setAttribute('href', '/assets/logo.svg')
+    }
+  }
 }).$mount('#app')

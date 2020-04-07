@@ -20,5 +20,19 @@ export default {
     ...mapState('themes', ['themes'])
   }
 }
-
 </script>
+
+<style>
+.fill100{
+  height:100%
+}
+.fill60{
+  height:60%
+}
+.fill50{
+  height:50%
+}
+.fill40{
+  height:40%
+}
+</style>
