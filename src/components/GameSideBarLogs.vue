@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-col v-for="(question) in questionItems" :key="question.id" cols="12" align="center">
+        <v-col v-for="(question) in questionItems" :key="question.id" cols="12" align="center" class="blue-grey darken-3">
             <v-dialog
                 v-model="question.seeDetails"
                 width="500"

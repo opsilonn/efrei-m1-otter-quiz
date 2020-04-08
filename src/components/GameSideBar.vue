@@ -1,8 +1,7 @@
 <template>
     <div class="blue-grey darken-3 fill100">
         <v-tabs
-            background-color="blue-grey darken-4 red"
-            center-active
+            background-color="blue-grey darken-4"
             grow
             dark
             >

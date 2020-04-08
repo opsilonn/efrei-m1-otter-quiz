@@ -10,9 +10,11 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                    <v-list-item-title v-html="item.title"/>
-                    <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
-                    <v-list-item-subtitle v-html="'remaining : ' + item.cpt"></v-list-item-subtitle>
+                    <v-list-item-title v-html="item.title" class="grey--text text--lighten-2"/>
+                    <v-list-item-subtitle class="grey--text text--lighten-1">
+                        <span class="font-italic"> {{ item.category }} </span> &mdash; {{ item.description }}
+                    </v-list-item-subtitle>
+                    <v-list-item-subtitle v-html="'remaining : ' + item.cpt" class="font-weight-black grey--text text--lighten-1"/>
                 </v-list-item-content>
 
                 <v-list-item-icon>
@@ -39,27 +41,27 @@ export default {
       {
         cpt: 3,
         title: 'Poussifeu',
-        subtitle: "<span class='text--primary'>Poussin</span> &mdash; attaquez-le, et une nuée de poussin vous assaillera...",
+        category: 'Poussin',
+        description: 'Attaquez-le, et une nuée de poussin vous assaillera...',
         avatar: 'https://www.pokepedia.fr/images/thumb/5/5d/Poussifeu-ROSA.png/250px-Poussifeu-ROSA.png'
       },
       {
         cpt: 2,
         title: 'Vipélierre',
-        subtitle: "<span class='text--primary'>Serpent</span> &mdash; SSSssssSSSS",
+        category: 'Serpent',
+        description: 'SSSssssSSSS',
         avatar: 'https://cdn.bulbagarden.net/upload/thumb/c/ca/Cheren_Snivy_Adventures.png/200px-Cheren_Snivy_Adventures.png'
       },
       {
         cpt: 1,
         title: 'Brindibou',
-        subtitle: "<span class='text--primary'>Hibou</span> &mdash; Cui-c... pardon : Hou ! Hou !",
+        category: 'Crocodile',
+        description: 'Cui-c... pardon : Hou ! Hou !',
         avatar: 'https://vignette.wikia.nocookie.net/victoryroad/images/7/7f/USUMArt_Rowlet.png/revision/latest?cb=20170819020146'
       }
     ]
   }),
   methods: {
-    hasEnoughCoins (price) {
-      return this.myCoins >= price
-    },
     onClick () {
       console.log('clicked from the inventory !')
     }
