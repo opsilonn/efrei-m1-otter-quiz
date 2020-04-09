@@ -1,5 +1,5 @@
 <template>
-    <div class="lime accent-2 fill100">
+    <div class="lime accent-2 height100">
         <v-container>
             <h3 align="center">
                 Fighters

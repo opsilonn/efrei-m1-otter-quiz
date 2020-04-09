@@ -1,43 +1,40 @@
 <template>
     <v-container class="blue-grey darken-3">
-        <v-list class="blue-grey darken-3">
-            <v-list-item
-                v-for="item in shopItems"
-                :key="item.title"
-            >
-                <v-list-item-avatar>
-                    <v-img :src="item.avatar"/>
-                </v-list-item-avatar>
 
-                <v-list-item-content>
-                    <v-list-item-title v-html="item.title" class="grey--text text--lighten-2"/>
-                    <v-list-item-subtitle class="grey--text text--lighten-1">
-                        <span class="font-italic"> {{ item.category }} </span> &mdash; {{ item.description }}
-                    </v-list-item-subtitle>
-                </v-list-item-content>
+      <!-- Items the player CAN buy-->
+      <CustomList :items="itemsBuyable()" v-bind:active="true" v-bind:showRemaining="false" icon="mdi-cart-plus" :onClick="onClick"/>
 
-                <v-list-item-action align="center">
-                    <v-list-item-action-text v-text="item.price" class="text-center"/>
-                    <v-hover v-slot:default="{ hover }">
-                        <v-icon
-                            :color="(hasEnoughCoins(item.price) && hover) ? 'green' : hasEnoughCoins(item.price) ? 'grey' : 'blue-grey darken-1'"
-                            :disabled="!hasEnoughCoins(item.price)"
-                            @click="onClick"
-                        >
-                            mdi-cart-plus
-                        </v-icon>
-                    </v-hover>
-                </v-list-item-action>
-            </v-list-item>
-        </v-list>
+      <v-divider/>
+
+      <!-- Items the player CANNOT buy-->
+      <CustomList :items="itemsNotBuyable()" v-bind:active="false" v-bind:showRemaining="false" icon="mdi-cart-plus"/>
+
+      <!-- TEST ZONE : pour ajouter / retirer des sous sous !! -->
+      <v-btn
+        align="center"
+        large
+        v-on:click="shopItems[1].price -= 100"
+        >
+        tiplouf --
+      </v-btn>
+      <v-btn
+        align="center"
+        large
+        v-on:click="shopItems[1].price += 100"
+        >
+        tiplouf ++
+      </v-btn>
+
     </v-container>
 </template>
 
 <script>
+import CustomList from '@/components/CustomList'
 
 export default {
   name: 'GameSideBarShopItem',
   components: {
+    CustomList
   },
   data: () => ({
     myCoins: 400,
@@ -80,11 +77,45 @@ export default {
     ]
   }),
   methods: {
+    // Method to know whether an item can be bought or not
     hasEnoughCoins (price) {
       return this.myCoins >= price
     },
+
+    // Method called when clicking on something
     onClick () {
       console.log('clicked from the shop !')
+    },
+
+    // List of all the items the player CAN buy
+    itemsBuyable () {
+      // We declare a new List
+      var items = []
+
+      // For Each objet, we only keep those that the player CAN buy
+      this.shopItems.map(item => this.hasEnoughCoins(item.price) ? items.push(item) : console.log(''))
+
+      // We return the list
+      return items
+    },
+
+    // List of all the items the player CANNOT buy
+    itemsNotBuyable () {
+      // We declare a new List
+      var items = []
+
+      // For Each objet, we only keep those that the player CANNOT buy
+      this.shopItems.map(item => !this.hasEnoughCoins(item.price) ? items.push(item) : console.log(''))
+
+      // We return the list
+      return items
+    },
+
+    useless () {
+      console.log('clicked !')
+      console.log(this.shopItems[0].price)
+      this.shopItems[4].price = 200
+      console.log(this.shopItems[0].price)
     }
   }
 }

@@ -1,40 +1,17 @@
 <template>
     <v-container class="blue-grey darken-3">
-        <v-list class="blue-grey darken-3">
-            <v-list-item
-                v-for="item in inventoryItems"
-                :key="item.title"
-            >
-                <v-list-item-avatar>
-                    <v-img :src="item.avatar"/>
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                    <v-list-item-title v-html="item.title" class="grey--text text--lighten-2"/>
-                    <v-list-item-subtitle class="grey--text text--lighten-1">
-                        <span class="font-italic"> {{ item.category }} </span> &mdash; {{ item.description }}
-                    </v-list-item-subtitle>
-                    <v-list-item-subtitle v-html="'remaining : ' + item.cpt" class="font-weight-black grey--text text--lighten-1"/>
-                </v-list-item-content>
-
-                <v-list-item-icon>
-                    <v-hover v-slot:default="{ hover }">
-                        <v-icon
-                            :color="hover ? 'green' : 'grey'"
-                            @click="onClick"
-                        >
-                            mdi-archive-arrow-up
-                        </v-icon>
-                    </v-hover>
-                </v-list-item-icon>
-            </v-list-item>
-        </v-list>
+      <!-- Items in the inventory-->
+      <CustomList :items="inventoryItems" v-bind:active="true" v-bind:showRemaining="true" icon="mdi-archive-arrow-up" :onClick="onClick"/>
     </v-container>
 </template>
 
 <script>
+import CustomList from '@/components/CustomList'
 export default {
   name: 'GameSideBarInventory',
+  components: {
+    CustomList
+  },
   data: () => ({
     myCoins: 400,
     inventoryItems: [

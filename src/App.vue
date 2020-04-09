@@ -23,16 +23,19 @@ export default {
 </script>
 
 <style>
-.fill100{
+.width100{
+  width:100%
+}
+.height100{
   height:100%
 }
-.fill60{
+.height60{
   height:60%
 }
-.fill50{
+.height50{
   height:50%
 }
-.fill40{
+.height40{
   height:40%
 }
 </style>

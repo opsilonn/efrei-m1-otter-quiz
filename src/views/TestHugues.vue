@@ -1,19 +1,19 @@
 <template>
-    <div class="fill100">
+    <div class="height100">
         <!-- We divide the space in 2 columns-->
-        <v-row class="fill100">
+        <v-row class="height100">
             <!-- Column 1 : Game footage -->
             <v-col
-                class="ma-0 pa-0 fill100"
+                class="ma-0 pa-0 height100"
                 cols="8"
                 >
 
                 <!-- We divide this row in 2 verticals boxes -->
-                <v-row class="fill100">
+                <v-row class="height100">
 
                     <!-- Column 1-A : Fighters -->
                     <v-col
-                    class="ma-0 pa-0 fill60"
+                    class="ma-0 pa-0 height60"
                     cols="12"
                     >
                         <GameFighters/>
@@ -21,7 +21,7 @@
 
                     <!-- Column 1-B : Question Choices -->
                     <v-col
-                    class="ma-0 pa-0 fill40"
+                    class="ma-0 pa-0 height40"
                     cols="12"
                     >
                         <GameQuestions/>
@@ -31,7 +31,7 @@
 
             <!-- Column 2 : Side Navbar -->
             <v-col
-                class="ma-0 pa-0 fill100"
+                class="ma-0 pa-0 height100"
                 cols="4"
                 >
                     <GameSideBar/>

@@ -1,5 +1,5 @@
 <template>
-    <div class="indigo darken-3 fill100">
+    <div class="indigo darken-3 height100">
         <v-container>
             <h3 align="center">
                 Questions

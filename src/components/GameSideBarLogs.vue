@@ -7,11 +7,12 @@
                 >
                 <template v-slot:activator="{ on }">
                     <v-btn
-                        align="center"
-                        :color="isPlayerCorrect(question) ? 'green' : 'red'"
-                        v-on="on"
-                        large
-                        >
+                      block
+                      align="center"
+                      :color="isPlayerCorrect(question) ? 'green' : 'red'"
+                      v-on="on"
+                      large
+                      >
                         {{ question.title }}
                     </v-btn>
                 </template>

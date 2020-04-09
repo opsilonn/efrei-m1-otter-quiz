@@ -1,5 +1,5 @@
 <template>
-    <div class="blue-grey darken-3 fill100">
+    <div class="blue-grey darken-3 height100">
         <v-tabs
             background-color="blue-grey darken-4"
             grow
