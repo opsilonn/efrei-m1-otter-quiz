@@ -2,39 +2,22 @@
     <v-container class="blue-grey darken-3">
 
       <!-- Items the player CAN buy-->
-      <CustomList :items="itemsBuyable()" v-bind:active="true" v-bind:showRemaining="false" icon="mdi-cart-plus" :onClick="onClick"/>
+      <CustomGrid :items="itemsBuyable()" v-bind:isInventory="false" v-bind:isActive="true" :onClick="onClick"/>
 
-      <v-divider/>
+      <v-divider class="ma-6"/>
 
       <!-- Items the player CANNOT buy-->
-      <CustomList :items="itemsNotBuyable()" v-bind:active="false" v-bind:showRemaining="false" icon="mdi-cart-plus"/>
-
-      <!-- TEST ZONE : pour ajouter / retirer des sous sous !! -->
-      <v-btn
-        align="center"
-        large
-        v-on:click="shopItems[1].price -= 100"
-        >
-        tiplouf --
-      </v-btn>
-      <v-btn
-        align="center"
-        large
-        v-on:click="shopItems[1].price += 100"
-        >
-        tiplouf ++
-      </v-btn>
-
+      <CustomGrid :items="itemsNotBuyable()" v-bind:isInventory="false" v-bind:isActive="false" :onClick="onClick"/>
     </v-container>
 </template>
 
 <script>
-import CustomList from '@/components/CustomList'
+import CustomGrid from '@/components/CustomGrid'
 
 export default {
   name: 'GameSideBarShopItem',
   components: {
-    CustomList
+    CustomGrid
   },
   data: () => ({
     myCoins: 400,
@@ -89,11 +72,8 @@ export default {
 
     // List of all the items the player CAN buy
     itemsBuyable () {
-      // We declare a new List
-      var items = []
-
       // For Each objet, we only keep those that the player CAN buy
-      this.shopItems.map(item => this.hasEnoughCoins(item.price) ? items.push(item) : console.log(''))
+      var items = this.shopItems.filter((item) => this.hasEnoughCoins(item.price))
 
       // We return the list
       return items
@@ -101,21 +81,11 @@ export default {
 
     // List of all the items the player CANNOT buy
     itemsNotBuyable () {
-      // We declare a new List
-      var items = []
-
       // For Each objet, we only keep those that the player CANNOT buy
-      this.shopItems.map(item => !this.hasEnoughCoins(item.price) ? items.push(item) : console.log(''))
+      var items = this.shopItems.filter((item) => !this.hasEnoughCoins(item.price))
 
       // We return the list
       return items
-    },
-
-    useless () {
-      console.log('clicked !')
-      console.log(this.shopItems[0].price)
-      this.shopItems[4].price = 200
-      console.log(this.shopItems[0].price)
     }
   }
 }

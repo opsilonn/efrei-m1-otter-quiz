@@ -8,24 +8,31 @@
 
         <!-- All the menus-->
         <v-tab>
-            <v-icon left>mdi-help</v-icon>
-            Logs
+            <v-icon left>mdi-medical-bag</v-icon>
+            <div class="shrink mt-1 d-none d-lg-flex">
+                Inventory
+            </div>
         </v-tab>
 
         <v-tab>
             <v-icon left>mdi-currency-usd</v-icon>
-            Shop
+            <div class="shrink mt-1 d-none d-lg-flex">
+                Shop
+            </div>
         </v-tab>
 
         <v-tab>
-            <v-icon left>mdi-medical-bag</v-icon>
-            Inventory
+            <v-icon left>mdi-help</v-icon>
+            <div class="shrink mt-1 d-none d-lg-flex">
+                Logs
+            </div>
         </v-tab>
 
         <!-- All the menu's contents -->
-        <!-- 1 - Logs -->
+
+        <!-- 1 - Inventory -->
         <v-tab-item class="blue-grey darken-3">
-            <GameSideBarLogs/>
+            <GameSideBarInventory/>
         </v-tab-item>
 
         <!-- 2 - Shop -->
@@ -33,9 +40,9 @@
             <GameSideBarShop/>
         </v-tab-item>
 
-        <!-- 3 - Inventory -->
+        <!-- 3 - Logs -->
         <v-tab-item class="blue-grey darken-3">
-            <GameSideBarInventory/>
+            <GameSideBarLogs/>
         </v-tab-item>
 
         </v-tabs>

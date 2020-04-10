@@ -44,5 +44,7 @@
 export default {
   name: 'CustomList',
   props: ['items', 'active', 'showRemaining', 'icon', 'onClick']
+  // Example of call :
+  // <CustomList :items="itemsBuyable()" v-bind:active="true" v-bind:showRemaining="false" icon="mdi-cart-plus" :onClick="onClick"/>
 }
 </script>

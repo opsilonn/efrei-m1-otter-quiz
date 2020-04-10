@@ -1,5 +1,5 @@
 <template>
-    <div class="height100">
+    <div class="height100" style="overflow: hidden">
         <!-- We divide the space in 2 columns-->
         <v-row class="height100">
             <!-- Column 1 : Game footage -->

@@ -1,16 +1,18 @@
 <template>
     <v-container class="blue-grey darken-3">
       <!-- Items in the inventory-->
-      <CustomList :items="inventoryItems" v-bind:active="true" v-bind:showRemaining="true" icon="mdi-archive-arrow-up" :onClick="onClick"/>
+      <CustomGrid :items="inventoryItems" v-bind:isInventory="true" v-bind:isActive="true" :onClick="onClick"/>
+
     </v-container>
 </template>
 
 <script>
-import CustomList from '@/components/CustomList'
+import CustomGrid from '@/components/CustomGrid'
+
 export default {
   name: 'GameSideBarInventory',
   components: {
-    CustomList
+    CustomGrid
   },
   data: () => ({
     myCoins: 400,
@@ -32,7 +34,7 @@ export default {
       {
         cpt: 1,
         title: 'Brindibou',
-        category: 'Crocodile',
+        category: 'Hibou',
         description: 'Cui-c... pardon : Hou ! Hou !',
         avatar: 'https://vignette.wikia.nocookie.net/victoryroad/images/7/7f/USUMArt_Rowlet.png/revision/latest?cb=20170819020146'
       }
