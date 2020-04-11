@@ -43,12 +43,15 @@
         </div>
       </v-col>
     </v-row>
+    <div align="center" style="position: relative; bottom: 40px;">
       <v-btn
+        align="center"
         large
         v-on:click="doAnim = !doAnim"
         >
         click me :)
       </v-btn>
+    </div>
   </div>
 </template>
 
