@@ -4,58 +4,46 @@
     flat
     subheader
   >
-    <v-subheader dark>History</v-subheader>
+    <v-subheader dark><label>History</label></v-subheader>
     <v-list-item
-      v-for="(question) in questionItems" :key="question.id"
-      :style="'background-color: ' + (isPlayerCorrect(question) ? 'green' : 'red')"
-      @click="''"
+      v-for="(question, index) in questionItems" :key="question.id"
+      :style="'background-color: ' + (isPlayerCorrect(question) ? '#56966D' : '#954542')"
+      @click="expendId == index ? expendId = null : expendId = index"
     >
-      <v-dialog
-        v-model="question.seeDetails"
-        width="500"
-      >
-        <template v-slot:activator="{ on }">
-          <v-list-item-content>
-            <v-list-item-title
-              v-on="on"
-            >
-              {{ question.title }}
-            </v-list-item-title>
-          </v-list-item-content>
-        </template>
-
-        <v-card>
-          <v-card-title
-            :class="isPlayerCorrect(question) ? 'headline grey lighten-2 green--text' : 'headline grey lighten-2 red--text'"
-            primary-title
-            v-text="isPlayerCorrect(question) ? 'Right answer !' : 'Wrong answer...'"
-          />
-
-          <v-card-text>
-            <h2 class="ma-10" align="center"> {{ question.title }} </h2>
-
-            <v-divider></v-divider>
-
-            <v-layout column justify-center align-center>
-              <v-row>
-                <v-col v-for="(answer) in question.answers" :key="answer.id" cols="12">
-
-                  <h3 :class="
-                    (isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-black' :
-                    (isThePlayersAnswer(question, answer) && !isTheAnswerCorrect(question, answer)) ? 'ma-5 red--text font-weight-black' :
-                    (!isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-light' :
-                    'ma-5 red--text font-weight-light'"
-                  >
-                    {{ question.answers[question.answers.indexOf(answer)] }}
-                  </h3>
-
-                </v-col>
-              </v-row>
-            </v-layout>
-
-          </v-card-text>
-        </v-card>
-      </v-dialog>
+      <v-list-item-content>
+        <v-list-item-title
+          class="font-weight-black grey--text text--darken-4"
+        >
+          {{ question.title }}
+        </v-list-item-title>
+        <v-list
+          v-if="expendId == index"
+          style="background-color: inherit"
+          dense
+        >
+          <v-list-item v-for="(answer) in question.answers" :key="answer.id">
+            <v-list-item-icon>
+              <v-icon
+                :color="isTheAnswerCorrect(question, answer) ? 'green darken-4' : 'red darken-3'"
+              >
+                {{isThePlayersAnswer(question, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
+              </v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <div :class="
+                (isThePlayersAnswer(question, answer) ? 'font-weight-black ' : 'font-weight-medium ') +
+                (isTheAnswerCorrect(question, answer) ? 'green--text text--darken-4' : 'red--text text--darken-3')"
+              >
+                {{ question.answers[question.answers.indexOf(answer)] }}
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-list-item-content>
+      <v-list-item-icon>
+        <v-icon v-if="expendId == index">mdi-chevron-up</v-icon>
+        <v-icon v-else>mdi-chevron-down</v-icon>
+      </v-list-item-icon>
     </v-list-item>
   </v-list>
 </template>
@@ -64,6 +52,7 @@
 export default {
   name: 'GameSideBarLogs',
   data: () => ({
+    expendId: {},
     questionItems: [
       {
         seeDetails: false,
