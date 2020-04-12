@@ -2,11 +2,13 @@
   <div class="height100 width100 prettyBackground">
     <!-- Turn and category -->
     <v-container>
-      <h2 align="center">
-          Turn n° {{ turn }}
-          <br>
-          {{ categories[Math.floor(Math.random() * categories.length)] }}
-      </h2>
+      <label>
+        <h2 align="center">
+            Turn n° {{ turn }}
+            <br>
+            {{ categories[Math.floor(Math.random() * categories.length)] }}
+        </h2>
+      </label>
     </v-container>
 
     <!-- Display the players -->
@@ -17,20 +19,25 @@
         :key="index">
         <div>
           <div :class="(index==0) ? 'roundCornersPlayer' : 'roundCornersFoe'">
-            <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
-            <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
-              <div style="background-color:#783D31">
-              <v-progress-linear
-                :value="player.hp / player.hpMax * 100"
-                buffer-value="0"
-                color="green accent-3"
-                rounded
-                stream
-                >
-              </v-progress-linear>
-              </div>
-            </h4>
-            <h4 class="amber--text text--lighten-2"> $ {{player.money}} </h4>
+            <label>
+              <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
+              <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
+                <div style="background-color:#783D31">
+                  <v-progress-linear
+                    :value="player.hp / player.hpMax * 100"
+                    buffer-value="0"
+                    color="green accent-3"
+                    rounded
+                    stream
+                    >
+                  </v-progress-linear>
+                </div>
+              </h4>
+            </label>
+            <div class="d-flex align-center">
+              <v-icon color="amber">mdi-circle-multiple</v-icon>
+              <label><h4 class="amber--text text--lighten-2">{{player.money}}</h4></label>
+            </div>
           </div>
 
           <v-img
