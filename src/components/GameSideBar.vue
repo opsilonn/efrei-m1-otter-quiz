@@ -17,7 +17,8 @@
             dark
         >
 
-            <!-- All the menus-->
+            <!-- All the menus Tabs-->
+            <!-- 1 - Inventory -->
             <v-tab>
                 <v-icon left>mdi-medical-bag</v-icon>
                 <div class="shrink mt-1 d-none d-lg-flex">
@@ -25,6 +26,7 @@
                 </div>
             </v-tab>
 
+            <!-- 2 - Shop -->
             <v-tab>
                 <v-icon left>mdi-currency-usd</v-icon>
                 <div class="shrink mt-1 d-none d-lg-flex">
@@ -32,6 +34,7 @@
                 </div>
             </v-tab>
 
+            <!-- 3 - Logs -->
             <v-tab>
                 <v-icon left>mdi-history</v-icon>
                 <div class="shrink mt-1 d-none d-lg-flex">

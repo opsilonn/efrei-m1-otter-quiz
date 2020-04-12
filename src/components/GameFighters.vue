@@ -36,8 +36,7 @@
                 </h4>
               </label>
               <div v-if='player.isPlayer' class="d-flex align-center">
-                <v-icon color="amber">mdi-circle-multiple</v-icon>
-                <label><h4 class="amber--text text--lighten-2">{{player.money}}</h4></label>
+                <label><h4 class="amber--text text--lighten-2"> $ {{player.money}} </h4></label>
               </div>
             </div>
 

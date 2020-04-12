@@ -17,8 +17,8 @@
       >
       <!-- Sort of notification -->
       <template v-slot:badge>
-        <v-avatar :color="(isActive) ? '#FFCA28' : '#CC4F00'">
-          <h5 style="color: #AA3300"> {{ (isInventory) ? item.cpt : item.price }}</h5>
+        <v-avatar :class="(isActive) ? 'green accent-3' : 'red darken-2'">
+          <h5 class="black--text"> {{ (isInventory) ? item.cpt : item.price }}</h5>
         </v-avatar>
       </template>
 
@@ -27,13 +27,13 @@
           <!-- Item's picture -->
           <template v-slot:activator="{ on }">
           <v-avatar
-            color="#FFCA28"
+              class="blue-grey darken-4"
             size="50"
             v-on="on"
           >
             <v-avatar
-              size="46"
-              color="#CCA000">
+              class="blue-grey darken-3"
+              size="46">
               <v-img contain :src="item.avatar"></v-img>
             </v-avatar>
           </v-avatar>
