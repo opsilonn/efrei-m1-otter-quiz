@@ -1,5 +1,5 @@
 <template>
-  <div class="height100 width100 prettyBackground">
+  <div class="prettyBackground" style="height: 100%">
     <!-- Turn and category -->
     <v-container>
       <label>
@@ -12,52 +12,45 @@
     </v-container>
 
     <!-- Display the players -->
-    <v-row no-gutters justify="space-around">
-      <v-col
-        class="d-flex justify-center"
-        v-for="(player, index) in players"
-        :key="index">
-        <div>
-          <div :class="(index==0) ? 'roundCornersPlayer' : 'roundCornersFoe'">
-            <label>
-              <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
-              <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
-                <div style="background-color:#783D31">
-                  <v-progress-linear
-                    :value="player.hp / player.hpMax * 100"
-                    buffer-value="0"
-                    color="green accent-3"
-                    rounded
-                    stream
-                    >
-                  </v-progress-linear>
-                </div>
-              </h4>
-            </label>
-            <div class="d-flex align-center">
-              <v-icon color="amber">mdi-circle-multiple</v-icon>
-              <label><h4 class="amber--text text--lighten-2">{{player.money}}</h4></label>
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 100px">
+      <v-row no-gutters>
+        <v-col
+          class="d-flex justify-center align-end"
+          v-for="(player, index) in players"
+          :key="index">
+          <div>
+            <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
+              <label>
+                <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
+                <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
+                  <div style="background-color:#783D31">
+                    <v-progress-linear
+                      :value="player.hp / player.hpMax * 100"
+                      buffer-value="0"
+                      color="green accent-3"
+                      rounded
+                      stream
+                      >
+                    </v-progress-linear>
+                  </div>
+                </h4>
+              </label>
+              <div v-if='player.isPlayer' class="d-flex align-center">
+                <v-icon color="amber">mdi-circle-multiple</v-icon>
+                <label><h4 class="amber--text text--lighten-2">{{player.money}}</h4></label>
+              </div>
             </div>
-          </div>
 
-          <v-img
-            :class="(doAnim) ? 'element-animation' : ''"
-            :style="(index==1) ? 'transform:scaleX(-1)' : ''"
-            v-bind:src="player.imagePath"
-            contain
-            height="200px"
-            width="200px"/>
-        </div>
-      </v-col>
-    </v-row>
-    <div align="center" style="position: relative; bottom: 40px;">
-      <v-btn
-        align="center"
-        large
-        v-on:click="doAnim = !doAnim"
-        >
-        click me :)
-      </v-btn>
+            <v-img
+              :class="doAnim ? 'element-animation' : ''"
+              :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+              v-bind:src="player.imagePath"
+              contain
+              height="200px"
+              width="200px"/>
+          </div>
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
@@ -76,7 +69,8 @@ export default {
           imagePath: require('@/assets/sprite_player_1.png'),
           hp: 3,
           hpMax: 5,
-          money: 45
+          money: 45,
+          isPlayer: true
         },
         {
           name: 'I\'m the foe !',
@@ -104,7 +98,7 @@ export default {
 .roundCornersPlayer {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 15px 50px 30px 50px;
+  border-radius: 5px 30px 12px 30px;
   padding: 15px;
   margin: 15px;
 }
@@ -113,7 +107,7 @@ export default {
 .roundCornersFoe {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 50px 15px 50px 30px;
+  border-radius: 30px 5px 30px 12px;
   padding: 15px;
   margin: 15px;
 }

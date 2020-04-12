@@ -1,15 +1,17 @@
 <template>
     <v-navigation-drawer
+        @resize="onResize()"
+        v-resize="onResize"
         app
         right
         permanent
         hide-overlay
         dark
-        :width="500"
+        :width="windowSize.x / 4"
         color="blue-grey darken-3"
     >
         <v-tabs
-            v-model="test"
+            v-model="tabModel"
             background-color="blue-grey darken-4"
             grow
             dark
@@ -37,7 +39,7 @@
                 </div>
             </v-tab>
         </v-tabs>
-        <v-tabs-items v-model="test" class="blue-grey darken-3">
+        <v-tabs-items v-model="tabModel" class="blue-grey darken-3">
             <!-- All the menu's contents -->
             <!-- 1 - Inventory -->
             <v-tab-item class="blue-grey darken-3">
@@ -64,13 +66,26 @@ import GameSideBarInventory from '@/components/GameSideBarInventory'
 
 export default {
   name: 'GameSideBar',
+
   components: {
     GameSideBarLogs,
     GameSideBarShop,
     GameSideBarInventory
   },
+
   data: () => ({
-    test: null
-  })
+    tabModel: null,
+    windowSize: { x: 0, y: 0 }
+  }),
+
+  mounted () {
+    this.onResize()
+  },
+
+  methods: {
+    onResize () {
+      this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+    }
+  }
 }
 </script>
