@@ -22,7 +22,7 @@
         </v-tab>
 
         <v-tab>
-            <v-icon left>mdi-help</v-icon>
+            <v-icon left>mdi-history</v-icon>
             <div class="shrink mt-1 d-none d-lg-flex">
                 Logs
             </div>

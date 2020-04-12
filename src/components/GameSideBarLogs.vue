@@ -1,56 +1,63 @@
 <template>
-    <v-container>
-        <v-col v-for="(question) in questionItems" :key="question.id" cols="12" align="center" class="blue-grey darken-3">
-            <v-dialog
-                v-model="question.seeDetails"
-                width="500"
-                >
-                <template v-slot:activator="{ on }">
-                    <v-btn
-                      align="center"
-                      :color="isPlayerCorrect(question) ? 'green' : 'red'"
-                      v-on="on"
-                      large
-                      block
-                      >
-                        {{ question.title }}
-                    </v-btn>
-                </template>
+  <v-list
+    style="background-color: inherit"
+    flat
+    subheader
+  >
+    <v-subheader dark>History</v-subheader>
+    <v-list-item
+      v-for="(question) in questionItems" :key="question.id"
+      :style="'background-color: ' + (isPlayerCorrect(question) ? 'green' : 'red')"
+      @click="''"
+    >
+      <v-dialog
+        v-model="question.seeDetails"
+        width="500"
+      >
+        <template v-slot:activator="{ on }">
+          <v-list-item-content>
+            <v-list-item-title
+              v-on="on"
+            >
+              {{ question.title }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </template>
 
-                <v-card>
-                    <v-card-title
-                    :class="isPlayerCorrect(question) ? 'headline grey lighten-2 green--text' : 'headline grey lighten-2 red--text'"
-                    primary-title
-                    v-text="isPlayerCorrect(question) ? 'Right answer !' : 'Wrong answer...'"
-                    >
-                    </v-card-title>
+        <v-card>
+          <v-card-title
+            :class="isPlayerCorrect(question) ? 'headline grey lighten-2 green--text' : 'headline grey lighten-2 red--text'"
+            primary-title
+            v-text="isPlayerCorrect(question) ? 'Right answer !' : 'Wrong answer...'"
+          />
 
-                    <v-card-text>
-                        <h2 class="ma-10" align="center"> {{ question.title }} </h2>
+          <v-card-text>
+            <h2 class="ma-10" align="center"> {{ question.title }} </h2>
 
-                        <v-divider></v-divider>
+            <v-divider></v-divider>
 
-                        <v-layout column justify-center align-center>
-                            <v-row>
-                                <v-col v-for="(answer) in question.answers" :key="answer.id" cols="12">
+            <v-layout column justify-center align-center>
+              <v-row>
+                <v-col v-for="(answer) in question.answers" :key="answer.id" cols="12">
 
-                                <h3 :class="
-                                (isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-black' :
-                                (isThePlayersAnswer(question, answer) && !isTheAnswerCorrect(question, answer)) ? 'ma-5 red--text font-weight-black' :
-                                (!isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-light' :
-                                'ma-5 red--text font-weight-light'">
-                                    {{ question.answers[question.answers.indexOf(answer)] }}
-                                </h3>
+                  <h3 :class="
+                    (isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-black' :
+                    (isThePlayersAnswer(question, answer) && !isTheAnswerCorrect(question, answer)) ? 'ma-5 red--text font-weight-black' :
+                    (!isThePlayersAnswer(question, answer) && isTheAnswerCorrect(question, answer)) ? 'ma-5 green--text font-weight-light' :
+                    'ma-5 red--text font-weight-light'"
+                  >
+                    {{ question.answers[question.answers.indexOf(answer)] }}
+                  </h3>
 
-                                </v-col>
-                            </v-row>
-                        </v-layout>
+                </v-col>
+              </v-row>
+            </v-layout>
 
-                    </v-card-text>
-                </v-card>
-            </v-dialog>
-        </v-col>
-    </v-container>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-list-item>
+  </v-list>
 </template>
 
 <script>
