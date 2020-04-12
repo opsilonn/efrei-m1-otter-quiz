@@ -1,7 +1,7 @@
 <template>
     <v-container class="blue-grey darken-3">
       <!-- Items in the inventory-->
-      <CustomGrid :items="inventoryItems" v-bind:isInventory="true" v-bind:isActive="true" :onClick="onClick"/>
+      <CustomGrid :items="aLotOfItems()" v-bind:isInventory="true" v-bind:isActive="true" :onClick="onClick"/>
 
     </v-container>
 </template>
@@ -43,6 +43,21 @@ export default {
   methods: {
     onClick () {
       console.log('clicked from the inventory !')
+    },
+
+    // Returns a list of items that is artificially inflated
+    aLotOfItems () {
+      // We initialize a List
+      var list = []
+
+      // We add all the items to our List several times
+      var i
+      for (i = 0; i < 5; i++) {
+        list.push.apply(list, this.inventoryItems)
+      }
+
+      // We return the List
+      return list
     }
   }
 }

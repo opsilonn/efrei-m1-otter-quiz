@@ -73,7 +73,7 @@ export default {
     // List of all the items the player CAN buy
     itemsBuyable () {
       // For Each objet, we only keep those that the player CAN buy
-      var items = this.shopItems.filter((item) => this.hasEnoughCoins(item.price))
+      var items = this.aLotOfItems().filter((item) => this.hasEnoughCoins(item.price))
 
       // We return the list
       return items
@@ -82,10 +82,25 @@ export default {
     // List of all the items the player CANNOT buy
     itemsNotBuyable () {
       // For Each objet, we only keep those that the player CANNOT buy
-      var items = this.shopItems.filter((item) => !this.hasEnoughCoins(item.price))
+      var items = this.aLotOfItems().filter((item) => !this.hasEnoughCoins(item.price))
 
       // We return the list
       return items
+    },
+
+    // Returns a list of items that is artificially inflated
+    aLotOfItems () {
+      // We initialize a List
+      var list = []
+
+      // We add all the items to our List several times
+      var i
+      for (i = 0; i < 5; i++) {
+        list.push.apply(list, this.shopItems)
+      }
+
+      // We return the List
+      return list
     }
   }
 }

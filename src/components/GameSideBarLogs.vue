@@ -9,7 +9,7 @@
 
     <!-- We iterate through the questions -->
     <div
-      v-for="(question, index) in questionItems" :key="question.id"
+      v-for="(question, index) in aLotOfQuestions()" :key="question.id"
     >
       <!-- A divider between each question -->
       <v-divider/>
@@ -109,84 +109,6 @@ export default {
         ],
         correctAnswer: 1,
         playerAnswer: 2
-      },
-      {
-        seeDetails: false,
-        title: 'Is Piplup the best pokémon ?',
-        answers: [
-          'Yes',
-          'No'
-        ],
-        correctAnswer: 0,
-        playerAnswer: 1
-      },
-      {
-        seeDetails: false,
-        title: 'What is Metallica\'s third album ?',
-        answers: [
-          'Metallica',
-          'Kill\'em all',
-          'Ride the Lightning',
-          'Master of Puppets'
-        ],
-        correctAnswer: 3,
-        playerAnswer: 3
-      },
-      {
-        seeDetails: false,
-        title: 'Who let the dogs out ?',
-        answers: [
-          'HOU',
-          'OU',
-          'OUH',
-          'HOUH'
-        ],
-        correctAnswer: 1,
-        playerAnswer: 2
-      },
-      {
-        seeDetails: false,
-        title: 'Is Piplup the best pokémon ?',
-        answers: [
-          'Yes',
-          'No'
-        ],
-        correctAnswer: 0,
-        playerAnswer: 1
-      },
-      {
-        seeDetails: false,
-        title: 'What is Metallica\'s third album ?',
-        answers: [
-          'Metallica',
-          'Kill\'em all',
-          'Ride the Lightning',
-          'Master of Puppets'
-        ],
-        correctAnswer: 3,
-        playerAnswer: 3
-      },
-      {
-        seeDetails: false,
-        title: 'Who let the dogs out ?',
-        answers: [
-          'HOU',
-          'OU',
-          'OUH',
-          'HOUH'
-        ],
-        correctAnswer: 1,
-        playerAnswer: 2
-      },
-      {
-        seeDetails: false,
-        title: 'Is Piplup the best pokémon ?',
-        answers: [
-          'Yes',
-          'No'
-        ],
-        correctAnswer: 0,
-        playerAnswer: 1
       }
     ]
   }),
@@ -199,6 +121,21 @@ export default {
     },
     isThePlayersAnswer (question, answer) {
       return question.playerAnswer === question.answers.indexOf(answer)
+    },
+
+    // Returns a list of items that is artificially inflated
+    aLotOfQuestions () {
+      // We initialize a List
+      var list = []
+
+      // We add all the questions to our List several times
+      var i
+      for (i = 0; i < 5; i++) {
+        list.push.apply(list, this.questionItems)
+      }
+
+      // We return the List
+      return list
     }
   }
 }
