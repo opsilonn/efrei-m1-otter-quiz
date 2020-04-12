@@ -20,7 +20,7 @@
       <!-- Sort of notification -->
       <template v-slot:badge>
         <v-avatar :color="(isActive) ? '#FFCA28' : '#CC4F00'">
-          <h5 :style="'color: ' + ((isActive) ? '#FFA000' : '#CCA000')"> {{ (isInventory) ? item.cpt : item.price }}</h5>
+          <h5 style="color: #CCA000"> {{ (isInventory) ? item.cpt : item.price }}</h5>
         </v-avatar>
       </template>
 
