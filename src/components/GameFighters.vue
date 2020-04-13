@@ -19,24 +19,48 @@
           v-for="(player, index) in players"
           :key="index">
           <div>
+            <!-- The box is oriented differently, whether it's the player or the foe -->
             <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
               <label>
+                <!-- Name -->
                 <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
-                <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
-                  <div style="background-color:#783D31">
-                    <v-progress-linear
-                      :value="player.hp / player.hpMax * 100"
-                      buffer-value="0"
-                      color="green accent-3"
-                      rounded
-                      stream
-                      >
-                    </v-progress-linear>
-                  </div>
-                </h4>
+
+                <!-- Health bar -->
+                <div style="background-color:#783D31" class="ma-2">
+                  <v-progress-linear
+                    :value="player.hp / player.hpMax * 100"
+                    buffer-value="0"
+                    color="green accent-3"
+                    rounded
+                    stream
+                    >
+                  </v-progress-linear>
+                </div>
               </label>
+
+              <!-- Various counters (HP, money, mana...) -->
               <div v-if='player.isPlayer' class="d-flex align-center">
-                <label><h4 class="amber--text text--lighten-2"> $ {{player.money}} </h4></label>
+                <label>
+                  <h4>
+                    <!-- HP -->
+                    <span class="ma-2 green--text text--accent-3">
+                      <v-icon class="green--text text--accent-3">mdi-hospital-box</v-icon>
+                       {{ player.hp }}/{{ player.hpMax }}
+                    </span>
+
+                    <!-- Money -->
+                    <span class="ma-2 amber--text text--lighten-2">
+                      <v-icon class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
+                      {{player.money}}
+                    </span>
+
+                    <!-- Mana -->
+                    <span class="ma-2 blue--text text--accent-3">
+                      <v-icon class="blue--text text--accent-3">mdi-water</v-icon>
+                      {{player.hp}}
+                    </span>
+                  </h4>
+                </label>
               </div>
             </div>
 
