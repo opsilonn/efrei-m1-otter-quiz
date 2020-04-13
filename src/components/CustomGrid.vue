@@ -5,7 +5,9 @@
       :key="item.id"
       cols="12"
       :sm="6"
-      :lg="4"
+      :md="4"
+      :lg="3"
+      :xl="2"
       align="center"
       :class="(isActive) ? 'pointer zoom' : ''"
       @click="onClick"
@@ -17,7 +19,7 @@
       >
       <!-- Sort of notification -->
       <template v-slot:badge>
-        <v-avatar>
+        <v-avatar width="5vh">
           <h5 v-if="isInventory" class="black--text"> {{ (isInventory) ? item.cpt : item.price }}</h5>
           <v-img v-else src="../assets/coin.png" :gradient="((isActive) ? '' : 'to top right, rgba(150,0,0,.5), rgba(150,0,0,.5)')">
             <div class="width100 height100 d-flex align-center justify-center">

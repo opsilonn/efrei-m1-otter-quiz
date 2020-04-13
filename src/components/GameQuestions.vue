@@ -1,18 +1,18 @@
 <template>
-    <div class="indigo darken-3 height100 pl-3 pr-3">
+    <div class="indigo darken-3 height100">
         <v-progress-linear
           v-model="timerToProgress"
           :color="timerToGradient"
           :background-color="timerToGradientDarken"
         >
         </v-progress-linear>
-        <div
+        <label
           class="d-flex justify-end align-end pr-1"
           :style="'color: ' + timerToGradient"
         >
           <h2>{{timerRemainingSec.toFixed(1)}}</h2>
           <h3>s</h3>
-        </div>
+        </label>
         <v-container>
             <h3 align="center">
                 Questions

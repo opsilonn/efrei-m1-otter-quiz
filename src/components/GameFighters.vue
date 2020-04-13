@@ -1,19 +1,19 @@
 <template>
   <div class="prettyBackground" style="height: 100%">
     <!-- Turn and category -->
-    <v-container>
+    <div>
       <label>
-        <h2 align="center">
+        <h2 align="center" style="font-size: 3vh">
             Turn n° {{ turn }}
             <br>
             {{ categories[Math.floor(Math.random() * categories.length)] }}
         </h2>
       </label>
-    </v-container>
+    </div>
 
     <!-- Display the players -->
-    <div class="d-flex align-end" style="height: 100%; padding-bottom: 100px">
-      <v-row no-gutters>
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
+      <v-row no-gutters class="d-flex align-end">
         <v-col
           class="d-flex justify-center align-end"
           v-for="(player, index) in players"
@@ -21,8 +21,8 @@
           <div>
             <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
               <label>
-                <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
-                <h4 class="green--text text--accent-3"> HP : {{ player.hp }} / {{ player.hpMax }}
+                <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> {{player.name}} </h3>
+                <h4 class="green--text text--accent-3" style="font-size: 2vh"> HP : {{ player.hp }} / {{ player.hpMax }}
                   <div style="background-color:#783D31">
                     <v-progress-linear
                       :value="player.hp / player.hpMax * 100"
@@ -36,17 +36,52 @@
                 </h4>
               </label>
               <div v-if='player.isPlayer' class="d-flex align-center">
-                <label><h4 class="amber--text text--lighten-2"> $ {{player.money}} </h4></label>
+                <label><h4 class="amber--text text--lighten-2" style="font-size: 2vh"> $ {{player.money}} </h4></label>
               </div>
             </div>
 
-            <v-img
-              :class="doAnim ? 'element-animation' : ''"
-              :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-              :src="player.imagePath"
-              contain
-              height="200px"
-              width="200px"/>
+            <div class="d-flex justify-center">
+              <v-img
+                class="shrink d-none d-xl-flex"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="17rem"
+                width="17rem"/>
+              <v-img
+                class="shrink d-none d-lg-flex d-xl-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="12rem"
+                width="12rem"/>
+              <v-img
+                class="shrink d-none d-md-flex d-lg-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="8rem"
+                width="8rem"/>
+              <v-img
+                class="shrink d-none d-sm-flex d-md-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="4rem"
+                width="4rem"/>
+              <v-img
+                class="shrink d-xs-flex d-sm-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="2rem"
+                width="2rem"/>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -97,18 +132,18 @@ export default {
 .roundCornersPlayer {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 5px 30px 12px 30px;
-  padding: 15px;
-  margin: 15px;
+  border-radius: 1vh 6vh 2.5vh 6vh;
+  padding: 3vh;
+  margin-bottom: 1vh;
 }
 
 /* Nice box with corner for the foe's UI */
 .roundCornersFoe {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 30px 5px 30px 12px;
-  padding: 15px;
-  margin: 15px;
+  border-radius: 6vh 1vh 6vh 2.5vh;
+  padding: 3vh;
+  margin-bottom: 1vh;
 }
 
 /*
