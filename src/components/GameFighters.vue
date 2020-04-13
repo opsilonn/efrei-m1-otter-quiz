@@ -19,24 +19,49 @@
           v-for="(player, index) in players"
           :key="index">
           <div>
+            <!-- The box is oriented differently, whether it's the player or the foe -->
             <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
               <label>
+                <!-- Name -->
                 <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> {{player.name}} </h3>
-                <h4 class="green--text text--accent-3" style="font-size: 2vh"> HP : {{ player.hp }} / {{ player.hpMax }}
-                  <div style="background-color:#783D31">
-                    <v-progress-linear
-                      :value="player.hp / player.hpMax * 100"
-                      buffer-value="0"
-                      color="green accent-3"
-                      rounded
-                      stream
-                      >
-                    </v-progress-linear>
-                  </div>
-                </h4>
+
+                <!-- Health bar -->
+                <div style="background-color:#783D31" class="ma-2">
+                  <v-progress-linear
+                    :value="player.hp / player.hpMax * 100"
+                    buffer-value="0"
+                    color="green accent-3"
+                    rounded
+                    stream
+                    style="min-width: 50px"
+                    >
+                  </v-progress-linear>
+                </div>
               </label>
-              <div v-if='player.isPlayer' class="d-flex align-center">
-                <label><h4 class="amber--text text--lighten-2" style="font-size: 2vh"> $ {{player.money}} </h4></label>
+
+              <!-- Various counters (HP, money, mana...) -->
+              <div>
+                <label>
+                  <h4 style="font-size: 2vh">
+                    <!-- HP -->
+                    <span class="ma-2 green--text text--accent-3">
+                      <v-icon size="4vh" class="green--text text--accent-3">mdi-hospital-box</v-icon>
+                       {{ player.hp }}/{{ player.hpMax }}
+                    </span>
+
+                    <!-- Money -->
+                    <span v-if='player.isPlayer' class="ma-2 amber--text text--lighten-2">
+                      <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
+                      {{player.money}}
+                    </span>
+
+                    <!-- Mana -->
+                    <span v-if='player.isPlayer' class="ma-2 blue--text text--accent-3">
+                      <v-icon size="4vh" class="blue--text text--accent-3">mdi-water</v-icon>
+                      {{player.hp}}
+                    </span>
+                  </h4>
+                </label>
               </div>
             </div>
 
@@ -133,7 +158,7 @@ export default {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
   border-radius: 1vh 6vh 2.5vh 6vh;
-  padding: 3vh;
+  padding: 2vh;
   margin-bottom: 1vh;
 }
 
@@ -142,7 +167,7 @@ export default {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
   border-radius: 6vh 1vh 6vh 2.5vh;
-  padding: 3vh;
+  padding: 2vh;
   margin-bottom: 1vh;
 }
 

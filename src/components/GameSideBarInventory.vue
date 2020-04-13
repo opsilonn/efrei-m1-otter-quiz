@@ -15,7 +15,6 @@ export default {
     CustomGrid
   },
   data: () => ({
-    myCoins: 400,
     inventoryItems: [
       {
         cpt: 3,

@@ -19,11 +19,11 @@
       >
       <!-- Sort of notification -->
       <template v-slot:badge>
-        <v-avatar width="5vh">
-          <h5 v-if="isInventory" class="black--text"> {{ (isInventory) ? item.cpt : item.price }}</h5>
+        <v-avatar :class="(isInventory) ? 'blue accent-3' : ''" width="5vh">
+          <h5 v-if="isInventory" class="black--text"> {{ item.cpt }}</h5>
           <v-img v-else src="../assets/coin.png" :gradient="((isActive) ? '' : 'to top right, rgba(150,0,0,.5), rgba(150,0,0,.5)')">
             <div class="width100 height100 d-flex align-center justify-center">
-              <label><h5 :style="'color: ' + (isActive ? 'white' : '#BDBDBD')"> {{ (isInventory) ? item.cpt : item.price }}</h5></label>
+              <label><h5 :style="'color: ' + (isActive ? 'white' : '#BDBDBD')"> {{ item.price }}</h5></label>
             </div>
           </v-img>
         </v-avatar>
