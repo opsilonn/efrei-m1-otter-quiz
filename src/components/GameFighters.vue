@@ -43,7 +43,7 @@
             <v-img
               :class="doAnim ? 'element-animation' : ''"
               :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-              v-bind:src="player.imagePath"
+              :src="player.imagePath"
               contain
               height="200px"
               width="200px"/>
