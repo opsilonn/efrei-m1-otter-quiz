@@ -1,38 +1,42 @@
 <template>
     <div class="indigo darken-3 height100">
-        <v-progress-linear
-          v-model="timerToProgress"
-          :color="timerToGradient"
-          :background-color="timerToGradientDarken"
-        >
-        </v-progress-linear>
-        <label
-          class="d-flex justify-end align-end pr-3"
-          :style="'color: ' + timerToGradient"
-        >
-          <h2>{{timerRemainingSec.toFixed(1)}}</h2>
-          <h3>s</h3>
-        </label>
-        <v-container>
           <v-card
+            class="height100"
             dark
           >
-            <v-card-title v-html="lastTrivia.question"/>
+            <!-- Progress bar -->
+            <v-progress-linear
+              v-model="timerToProgress"
+              :color="timerToGradient"
+              :background-color="timerToGradientDarken"/>
+            <label
+              class="d-flex justify-end align-end pr-3"
+              :style="'color: ' + timerToGradient"
+            >
+              <h2>{{timerRemainingSec.toFixed(1)}}</h2>
+              <h3>s</h3>
+            </label>
+
+            <!-- Questions -->
+            <v-container>
+            <h3 v-html="lastTrivia.question" class="pa-0" align="center"/>
             <v-row>
               <v-col cols="6"
                 v-for="(answer, index) in lastTrivia.answers" v-bind:key="index"
               >
                 <v-hover v-slot:default="{ hover }">
+                  <v-container>
                   <v-card
                     :style="'background-color: ' + (hover ? (answer.value ? themes.Success : themes.Failure) :themes.DarkLight)"
                   >
                     <v-card-text v-html="answer.answer"/>
                   </v-card>
+                  </v-container>
                 </v-hover>
               </v-col>
             </v-row>
+            </v-container>
           </v-card>
-        </v-container>
     </div>
 </template>
 
