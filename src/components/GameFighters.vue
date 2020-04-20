@@ -1,19 +1,19 @@
 <template>
   <div class="prettyBackground" style="height: 100%">
     <!-- Turn and category -->
-    <v-container>
+    <div>
       <label>
-        <h2 align="center">
+        <h2 align="center" style="font-size: 3vh">
             Turn n° {{ turn }}
             <br>
             {{ categories[Math.floor(Math.random() * categories.length)] }}
         </h2>
       </label>
-    </v-container>
+    </div>
 
     <!-- Display the players -->
-    <div class="d-flex align-end" style="height: 100%; padding-bottom: 100px">
-      <v-row no-gutters>
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
+      <v-row no-gutters class="d-flex align-end">
         <v-col
           class="d-flex justify-center align-end"
           v-for="(player, index) in players"
@@ -23,7 +23,7 @@
             <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
               <label>
                 <!-- Name -->
-                <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black" align="center"> {{player.name}} </h3>
+                <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> {{player.name}} </h3>
 
                 <!-- Health bar -->
                 <div style="background-color:#783D31" class="ma-2">
@@ -33,30 +33,31 @@
                     color="green accent-3"
                     rounded
                     stream
+                    style="min-width: 50px"
                     >
                   </v-progress-linear>
                 </div>
               </label>
 
               <!-- Various counters (HP, money, mana...) -->
-              <div v-if='player.isPlayer' class="d-flex align-center">
+              <div>
                 <label>
-                  <h4>
+                  <h4 style="font-size: 2vh">
                     <!-- HP -->
                     <span class="ma-2 green--text text--accent-3">
-                      <v-icon class="green--text text--accent-3">mdi-hospital-box</v-icon>
+                      <v-icon size="4vh" class="green--text text--accent-3">mdi-hospital-box</v-icon>
                        {{ player.hp }}/{{ player.hpMax }}
                     </span>
 
                     <!-- Money -->
-                    <span class="ma-2 amber--text text--lighten-2">
-                      <v-icon class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
+                    <span v-if='player.isPlayer' class="ma-2 amber--text text--lighten-2">
+                      <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
                       {{player.money}}
                     </span>
 
                     <!-- Mana -->
-                    <span class="ma-2 blue--text text--accent-3">
-                      <v-icon class="blue--text text--accent-3">mdi-water</v-icon>
+                    <span v-if='player.isPlayer' class="ma-2 blue--text text--accent-3">
+                      <v-icon size="4vh" class="blue--text text--accent-3">mdi-water</v-icon>
                       {{player.hp}}
                     </span>
                   </h4>
@@ -64,13 +65,48 @@
               </div>
             </div>
 
-            <v-img
-              :class="doAnim ? 'element-animation' : ''"
-              :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-              :src="player.imagePath"
-              contain
-              height="200px"
-              width="200px"/>
+            <div class="d-flex justify-center">
+              <v-img
+                class="shrink d-none d-xl-flex"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="17rem"
+                width="17rem"/>
+              <v-img
+                class="shrink d-none d-lg-flex d-xl-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="12rem"
+                width="12rem"/>
+              <v-img
+                class="shrink d-none d-md-flex d-lg-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="8rem"
+                width="8rem"/>
+              <v-img
+                class="shrink d-none d-sm-flex d-md-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="4rem"
+                width="4rem"/>
+              <v-img
+                class="shrink d-xs-flex d-sm-none"
+                :class="doAnim ? 'element-animation' : ''"
+                :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
+                :src="player.imagePath"
+                contain
+                height="2rem"
+                width="2rem"/>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -121,18 +157,18 @@ export default {
 .roundCornersPlayer {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 5px 30px 12px 30px;
-  padding: 15px;
-  margin: 15px;
+  border-radius: 1vh 6vh 2.5vh 6vh;
+  padding: 2vh;
+  margin-bottom: 1vh;
 }
 
 /* Nice box with corner for the foe's UI */
 .roundCornersFoe {
   background: rgba(38, 50, 56, 0.6);
   border: 2px solid rgba(38, 50, 56, 0.75);
-  border-radius: 30px 5px 30px 12px;
-  padding: 15px;
-  margin: 15px;
+  border-radius: 6vh 1vh 6vh 2.5vh;
+  padding: 2vh;
+  margin-bottom: 1vh;
 }
 
 /*
