@@ -1,5 +1,6 @@
 <template>
   <v-app
+    class="hideScrollBar"
     :style="'background-color: ' + themes.Base"
     dark
   >
@@ -23,6 +24,9 @@ export default {
 </script>
 
 <style>
+/* Hides the scroll bar, no matter what */
+.hideScrollBar { overflow: hidden !important; }
+
 /* Changes the mouse's cursor on Pointer */
 .pointer {cursor: pointer;}
 
@@ -40,4 +44,18 @@ export default {
 .height60 { height:60% }
 .height50 { height:50% }
 .height40 { height:40% }
+
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}
+
 </style>

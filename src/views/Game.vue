@@ -1,7 +1,7 @@
 <template>
-  <div class="height100" style="overflow: hidden">
+  <div class="height100">
 
-    <GameSideBar style="overflow: hidden"/>
+    <GameSideBar/>
     <!-- We divide this row in 2 verticals boxes -->
     <v-row class="height100">
 
@@ -10,7 +10,7 @@
         class="ma-0 pa-0 height60"
         cols="12"
       >
-        <GameFighters style="overflow: hidden"/>
+        <GameFighters/>
       </v-col>
 
       <!-- Column 1-B : Question Choices -->
@@ -18,7 +18,7 @@
       class="ma-0 pa-0 height40"
       cols="12"
       >
-        <GameQuestions style="overflow: hidden"/>
+        <GameQuestions/>
       </v-col>
     </v-row>
   </div>

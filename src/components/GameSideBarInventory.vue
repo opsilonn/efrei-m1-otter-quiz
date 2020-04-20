@@ -1,5 +1,6 @@
 <template>
     <v-container class="blue-grey darken-3">
+
       <!-- Items in the inventory-->
       <CustomGrid :items="aLotOfItems()" v-bind:isInventory="true" v-bind:isActive="true" :onClick="onClick"/>
 
