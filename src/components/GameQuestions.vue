@@ -23,14 +23,18 @@
             <v-row>
               <v-col cols="6"
                 v-for="(answer, index) in lastTrivia.answers" v-bind:key="index"
-              >
+                >
                 <v-hover v-slot:default="{ hover }">
                   <v-container>
-                  <v-card
-                    :style="'background-color: ' + (hover ? (answer.value ? themes.Success : themes.Failure) :themes.DarkLight)"
-                  >
-                    <v-card-text v-html="answer.answer"/>
-                  </v-card>
+                    <v-card
+                      :style="'background-color: ' +
+                      (hasPlayerAnswered
+                      ? (answer.value ? themes.Success : themes.Failure)
+                      : (hover ? themes.DarkLighter : themes.DarkLight))"
+                      @click="chooseAnswer"
+                      >
+                      <v-card-text v-html="answer.answer"/>
+                    </v-card>
                   </v-container>
                 </v-hover>
               </v-col>
@@ -52,7 +56,8 @@ export default {
     timerLength: 20000,
     timerBegin: null,
     timerEnd: null,
-    timerRemaining: null
+    timerRemaining: null,
+    hasPlayerAnswered: false
   }),
   computed: {
     // States
@@ -73,7 +78,7 @@ export default {
       return this.getPlayerById(this.playerId)
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: 'none', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPlayerId(this.playerId) || { category: '0', difficulty: 'none', number: '0' }
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
@@ -113,12 +118,19 @@ export default {
       setTimeout(this.resetTimer, this.timerLength + 2000)
       this.updateTimer()
     },
+
+    // Updates the timer
     updateTimer () {
       this.timerRemaining = (this.timerEnd - Date.now())
 
-      if (this.timerRemaining > 0.12) {
+      if (!this.hasPlayerAnswered || this.timerRemaining > 0.12) {
         setTimeout(this.updateTimer, 100)
       }
+    },
+
+    // Method called when the user chooses an answer
+    chooseAnswer () {
+      this.hasPlayerAnswered = true
     }
   },
   async mounted () {
