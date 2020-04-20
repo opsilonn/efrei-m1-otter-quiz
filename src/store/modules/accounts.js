@@ -10,7 +10,14 @@ const getters = {
    * @param {number} id - The id of the account
    */
   getAccountById: state => (id) => {
-    return state.accounts.findIndex(account => account.id === id)
+    return state.accounts.find(account => account.id === id)
+  },
+
+  /**
+   * Get the last account fetched
+   */
+  getLastAccount: state => () => {
+    return state.account.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

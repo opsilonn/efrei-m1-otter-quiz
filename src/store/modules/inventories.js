@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the inventory
    */
   getInventoryById: state => (id) => {
-    return state.inventories.findIndex(inventory => inventory.id === id)
+    return state.inventories.find(inventory => inventory.id === id)
   },
 
   /**
@@ -18,7 +18,14 @@ const getters = {
    * @param {number} playerstatId - The id of the playerstat
    */
   getInventoriesByPlayerStatId: state => (playerstatId) => {
-    return state.inventories.find(inventory => inventory.playerstatId === playerstatId)
+    return state.inventories.filter(inventory => inventory.playerstatId === playerstatId)
+  },
+
+  /**
+   * Get the last inventory fetched
+   */
+  getLastInventory: state => () => {
+    return state.inventories.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

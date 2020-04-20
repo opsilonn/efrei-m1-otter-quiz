@@ -19,12 +19,13 @@ const getters = {
   getLastTrivia: state => () => {
     return state.trivias.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
+
   /**
    * Get the trivia by its id
    * @param {number} id - The id of the trivia
    */
   getTriviaById: state => (id) => {
-    return state.trivias.findIndex(trivia => trivia.id === id)
+    return state.trivias.find(trivia => trivia.id === id)
   }
 }
 

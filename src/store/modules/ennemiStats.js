@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the ennemistat
    */
   getEnnemiStatById: state => (id) => {
-    return state.ennemistats.findIndex(ennemistat => ennemistat.id === id)
+    return state.ennemistats.find(ennemistat => ennemistat.id === id)
   },
 
   /**
@@ -18,7 +18,14 @@ const getters = {
    * @param {number} roundId - The id of the round
    */
   getEnnemiStatsByRoundId: state => (roundId) => {
-    return state.ennemistats.find(ennemistat => ennemistat.roundId === roundId)
+    return state.ennemistats.filter(ennemistat => ennemistat.roundId === roundId)
+  },
+
+  /**
+   * Get the last ennemiStat fetched
+   */
+  getLastEnnemiStat: state => () => {
+    return state.ennemistats.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

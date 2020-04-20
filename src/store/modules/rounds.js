@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the round
    */
   getRoundById: state => (id) => {
-    return state.rounds.findIndex(round => round.id === id)
+    return state.rounds.find(round => round.id === id)
   },
 
   /**
@@ -18,7 +18,24 @@ const getters = {
    * @param {number} dunjonId - The id of the dunjon
    */
   getRoundsByDunjonId: state => (dunjonId) => {
-    return state.rounds.find(round => round.dunjonId === dunjonId)
+    return state.rounds.filter(round => round.dunjonId === dunjonId)
+  },
+
+  /**
+   * Get the last round with a specific dunjon id
+   * @param {number} dunjonId - The id of the round
+   */
+  getLastRoundByDunjonId: state => (dunjonId) => {
+    const roundsForDunjonId = getters.getRoundsByDunjonId(state)(dunjonId) || []
+    console.log(roundsForDunjonId)
+    return roundsForDunjonId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  },
+
+  /**
+   * Get the last round fetched
+   */
+  getLastRound: state => () => {
+    return state.rounds.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

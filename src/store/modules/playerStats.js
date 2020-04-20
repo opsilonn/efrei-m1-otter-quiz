@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the playerstat
    */
   getPlayerStatById: state => (id) => {
-    return state.playerstats.findIndex(playerstat => playerstat.id === id)
+    return state.playerstats.find(playerstat => playerstat.id === id)
   },
 
   /**
@@ -19,6 +19,13 @@ const getters = {
    */
   getPlayerStatsByRoundId: state => (roundId) => {
     return state.playerstats.find(playerstat => playerstat.roundId === roundId)
+  },
+
+  /**
+   * Get the last playerStat fetched
+   */
+  getLastPlayerStat: state => () => {
+    return state.trivias.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

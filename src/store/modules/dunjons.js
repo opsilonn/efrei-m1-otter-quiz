@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the dunjon
    */
   getDunjonById: state => (id) => {
-    return state.dunjons.findIndex(dunjon => dunjon.id === id)
+    return state.dunjons.find(dunjon => dunjon.id === id)
   },
 
   /**
@@ -18,7 +18,24 @@ const getters = {
    * @param {number} playerId - The id of the player
    */
   getDunjonsByPlayerId: state => (playerId) => {
-    return state.dunjons.find(dunjon => dunjon.playerId === playerId)
+    const result = state.dunjons.filter(dunjon => dunjon.playerId === playerId)
+    return result
+  },
+
+  /**
+   * Get the last dunjon with a specific player id
+   * @param {number} playerId - The id of the player
+   */
+  getLastDunjonByPlayerId: state => (playerId) => {
+    const dunjonsForPlayerId = getters.getDunjonsByPlayerId(state)(playerId) || []
+    return dunjonsForPlayerId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  },
+
+  /**
+   * Get the last dunjon fetched
+   */
+  getLastDunjon: state => () => {
+    return state.dunjons.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

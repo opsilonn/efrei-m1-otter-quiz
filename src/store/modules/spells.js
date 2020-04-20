@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the spell
    */
   getSpellById: state => (id) => {
-    return state.spells.findIndex(spell => spell.id === id)
+    return state.spells.find(spell => spell.id === id)
   },
 
   /**
@@ -18,7 +18,14 @@ const getters = {
    * @param {number} playerstatId - The id of the playerstat
    */
   getSpellsByPlayerStatId: state => (playerstatId) => {
-    return state.spells.find(spell => spell.playerstatId === playerstatId)
+    return state.spells.filter(spell => spell.playerstatId === playerstatId)
+  },
+
+  /**
+   * Get the last spell fetched
+   */
+  getLastSpell: state => () => {
+    return state.spells.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

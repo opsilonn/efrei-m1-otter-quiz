@@ -10,7 +10,7 @@ const getters = {
    * @param {number} id - The id of the player
    */
   getPlayerById: state => (id) => {
-    return state.players.findIndex(player => player.id === id)
+    return state.players.find(player => player.id === id)
   },
 
   /**
@@ -18,7 +18,14 @@ const getters = {
    * @param {number} accountId - The id of the account
    */
   getPlayersByAccountId: state => (accountId) => {
-    return state.players.find(player => player.accountId === accountId)
+    return state.players.filter(player => player.accountId === accountId)
+  },
+
+  /**
+   * Get the last player fetched
+   */
+  getLastPlayer: state => () => {
+    return state.players.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   }
 }
 

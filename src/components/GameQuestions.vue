@@ -7,30 +7,76 @@
         >
         </v-progress-linear>
         <label
-          class="d-flex justify-end align-end pr-1"
+          class="d-flex justify-end align-end pr-3"
           :style="'color: ' + timerToGradient"
         >
           <h2>{{timerRemainingSec.toFixed(1)}}</h2>
           <h3>s</h3>
         </label>
         <v-container>
-            <h3 align="center">
-                Questions
-            </h3>
+          <v-card
+            dark
+          >
+            <v-card-title v-html="lastTrivia.question"/>
+            <v-row>
+              <v-col cols="6"
+                v-for="(answer, index) in lastTrivia.answers" v-bind:key="index"
+              >
+                <v-hover v-slot:default="{ hover }">
+                  <v-card
+                    :style="'background-color: ' + (hover ? (answer.value ? themes.Success : themes.Failure) :themes.DarkLight)"
+                  >
+                    <v-card-text v-html="answer.answer"/>
+                  </v-card>
+                </v-hover>
+              </v-col>
+            </v-row>
+          </v-card>
         </v-container>
     </div>
 </template>
 
 <script>
+
+import { mapState, mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'GameQuestions',
+  props: ['playerId'],
   data: () => ({
-    timerLength: 6000,
+    trivia: null,
+    timerLength: 20000,
     timerBegin: null,
     timerEnd: null,
     timerRemaining: null
   }),
   computed: {
+    // States
+    ...mapState('themes', ['themes']),
+    ...mapState('players', ['players']),
+    ...mapState('dunjons', ['dunjons']),
+    ...mapState('rounds', ['rounds']),
+    ...mapState('trivias', ['trivias']),
+
+    // Getters
+    ...mapGetters('players', ['getPlayerById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
+    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('trivias', ['getLastTrivia']),
+
+    // Custom
+    player () {
+      return this.getPlayerById(this.playerId)
+    },
+    dunjon () {
+      return this.getLastDunjonByPlayerId(this.playerId) || { category: 'none', difficulty: 'none', number: '0' }
+    },
+    round () {
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+    },
+    lastTrivia () {
+      return this.getLastTrivia() || {}
+    },
     timerRemainingSec () {
       return Math.abs((this.timerRemaining || 0.0) / 1000)
     },
@@ -51,7 +97,12 @@ export default {
     }
   },
   methods: {
+    // Actions
+    ...mapActions('trivias', ['fetchTrivias']),
+
     resetTimer () {
+      this.fetchTrivias({ amount: 1, category: this.dunjon.category })
+      this.round.number += 1
       this.timerBegin = Date.now()
       this.timerEnd = this.timerBegin + this.timerLength
 
@@ -66,7 +117,7 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.resetTimer()
   }
 }
