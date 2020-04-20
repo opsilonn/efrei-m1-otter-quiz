@@ -1,8 +1,7 @@
 <template>
-  <div class="height100" style="overflow: hidden">
+  <div class="height100">
 
     <GameSideBar
-      style="overflow: hidden"
       :playerId="playerId"
     />
     <!-- We divide this row in 2 verticals boxes -->
@@ -14,7 +13,6 @@
         cols="12"
       >
         <GameFighters
-          style="overflow: hidden"
           :playerId="playerId"
         />
       </v-col>
@@ -25,7 +23,6 @@
       cols="12"
       >
         <GameQuestions
-          style="overflow: hidden"
           :playerId="playerId"
         />
       </v-col>
