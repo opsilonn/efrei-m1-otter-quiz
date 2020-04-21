@@ -7,13 +7,13 @@
             Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
             <br/>
             Round n° {{ round.number }} :
-            {{ round.result }} <v-btn @click="btnC"/>
+            {{ round.result }}
         </h2>
       </label>
     </div>
 
     <!-- Display the players -->
-    <div class="d-flex align-end" style="height: 100%; padding-bottom: 12vh">
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
       <v-row no-gutters class="d-flex align-end">
         <GamePlayers
           :isPlayer="true"
@@ -29,8 +29,9 @@
 </template>
 
 <script>
-
+// import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
+
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -48,7 +49,7 @@ export default {
         money: 45,
         isPlayer: true
       },
-      ennemiPlayer: {
+      enemyPlayer: {
         name: 'I\'m the foe !',
         hp: 2,
         hpMax: 7,
@@ -77,24 +78,6 @@ export default {
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     }
-  },
-  methods: {
-    btnC () {
-      console.log(this.round.result)
-    }
   }
 }
 </script>
-
-<style>
-
-/* Sets up a picture background properly */
-.prettyBackground {
-  background-image: url('../assets/background_1.jpg');
-  background-color: transparent;
-  background-repeat: repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-</style>

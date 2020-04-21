@@ -27,7 +27,7 @@
             <v-hover v-slot:default="{ hover }">
               <v-container>
                 <!-- Card if the player HAS answered -->
-                <v-card v-if="hasPlayerAnswered"
+                <v-card v-if="showResults"
                   :style="'background-color: ' + (answer.value ? themes.Success : themes.Failure)"
                   >
                   <v-card-text v-html="answer.answer"/>
@@ -36,7 +36,7 @@
                 <!-- Card if the player HAS NOT answered -->
                 <v-card v-else
                   :style="'background-color: ' + (hover ? themes.DarkLighter : themes.DarkLight)"
-                  @click="chooseAnswer"
+                  @click="chooseAnswer(); yourAnswer = answer;"
                   >
                   <v-card-text v-html="answer.answer"/>
                 </v-card>
@@ -66,7 +66,7 @@ export default {
     trivia: {},
     step: 1,
     yourAnswer: { answer: '' },
-    hasPlayerAnswered: false
+    showResults: false
   }),
   computed: {
     // States
@@ -110,20 +110,18 @@ export default {
     }
   },
   methods: {
-    // Custom
-    validate () {
-      console.log('[GameQuestion] Emit timer-stop')
-      EventBus.$emit('timer-stop', { timer: this.timer })
-    },
-
     // Method called when the user chooses an answer
     chooseAnswer () {
-      this.hasPlayerAnswered = true
+      console.log('[GameQuestion] Emit timer-stop')
+      this.showResults = true
+
+      // We stop the Timer
+      EventBus.$emit('timer-stop', { timer: this.timer })
     },
 
     // Event handlers
     onTimer_start ({ timer, trivia }) {
-      this.hasPlayerAnswered = false
+      this.showResults = false
       console.log('[GameQuestion] On event timer-start')
       this.yourAnswer = { answer: 'none' }
       this.timer = timer
@@ -135,6 +133,7 @@ export default {
     },
     onTimer_end ({ timer }) {
       console.log('[GameQuestion] On event timer-end')
+      this.showResults = true
       this.timer = timer
       this.step = 0
     },
@@ -143,6 +142,7 @@ export default {
       this.timer = timer
       this.step = 2
 
+      // If the player answered correctly or not (wrong answer / no answer at all)
       if (this.yourAnswer.value === true) {
         console.log('[GameQuestion] Emit event trivia-success')
         EventBus.$emit('trivia-success')

@@ -18,8 +18,8 @@ export default {
     },
     endLength: 2000,
     resetLength: 5000,
-    playerHp: 10,
-    enemyHp: 10
+    playerHp: 5,
+    enemyHp: 7
   }),
   computed: {
     // States
