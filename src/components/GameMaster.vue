@@ -50,8 +50,14 @@ export default {
     playerStat () {
       return this.getPlayerStatByRoundId(this.round.id)
     },
+    playerStat_HP () {
+      return this.playerStat.HP
+    },
     enemyStat () {
       return this.getEnemyStatByRoundId(this.round.id)
+    },
+    enemyStat_HP () {
+      return this.enemyStat.HP
     },
     lastTrivia () {
       return this.getLastTrivia() || {}
@@ -60,7 +66,7 @@ export default {
 
   methods: {
     // Mutations
-    ...mapMutations('rounds', ['nextRound', 'roundSucceded', 'roundFailed']),
+    ...mapMutations('rounds', ['nextRound', 'setRoundResult']),
     ...mapMutations('playerStats', ['nextPlayerStat', 'setPlayerStatHP']),
     ...mapMutations('enemyStats', ['nextEnemyStat', 'setEnemyStatHP']),
 
@@ -111,7 +117,7 @@ export default {
       }
     },
     endTimer () {
-      this.round.result = 'Pending'
+      this.setRoundResult({ round: this.round, result: 'Pending' })
       this.timer.remaining = 0
 
       // Broadcast event timer-end
@@ -138,12 +144,12 @@ export default {
     },
     onTrivia_success () {
       console.log('[GameMaster] On event trivia-success')
-      this.roundSucceded({ round: this.round })
+      this.setRoundResult({ round: this.round, result: 'Succeded' })
       this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
     },
     onTrivia_failure () {
       console.log('[GameMaster] On event trivia-failure')
-      this.roundFailed({ round: this.round })
+      this.setRoundResult({ round: this.round, result: 'Failed' })
       this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
     }
   },
@@ -157,13 +163,33 @@ export default {
     this.resetTimer()
   },
   watch: {
-    enemyHp: function (newValue, oldValue) {
-      console.log('[GameMaster] Emit event enemyHp-update')
-      EventBus.$emit('enemyHp-update', { enemyHp: this.enemyHp })
+    playerStat_HP: function (newValue, oldValue) {
+      if (newValue <= 0) {
+        console.log('[GameMaster] Emit event player-death')
+        EventBus.$emit('player-death')
+        return
+      }
+      if (newValue > oldValue) {
+        console.log('[GameMaster] Emit event player-heal')
+        EventBus.$emit('player-heal', { oldValue })
+      } else {
+        console.log('[GameMaster] Emit event player-damage')
+        EventBus.$emit('player-damage', { oldValue })
+      }
     },
-    playerHp: function (newValue, oldValue) {
-      console.log('[GameMaster] Emit event playerHp-update')
-      EventBus.$emit('playerHp-update', { playerHp: this.playerHp })
+    enemyStat_HP: function (newValue, oldValue) {
+      if (newValue <= 0) {
+        console.log('[GameMaster] Emit event enemy-death')
+        EventBus.$emit('enemy-death')
+        return
+      }
+      if (newValue > oldValue) {
+        console.log('[GameMaster] Emit event enemy-heal')
+        EventBus.$emit('enemy-heal', { oldValue })
+      } else {
+        console.log('[GameMaster] Emit event enemy-damage')
+        EventBus.$emit('enemy-damage', { oldValue })
+      }
     }
   }
 }

@@ -48,11 +48,17 @@ const getters = {
  * @param {object}  roundPropValue.value - The new value for the prop of the round
  */
 function updateProp (state, { id, prop, value }) {
+  console.log('updateProp id :')
+  console.log(id)
   const round = getters.getRoundById(state)(id)
 
+  console.log('updateProp round : id')
+  console.log(round.id)
   if (round) {
     console.log(`Update prop ${prop} with value ${value}`)
+    console.log(`from ${round[prop]}`)
     Vue.set(round, prop, value)
+    console.log(`to ${round[prop]}`)
   }
 }
 
@@ -91,13 +97,12 @@ const mutations = {
     }
     mutations.addRound(state, { round: nextRound })
   },
-  roundSucceded (state, { round }) {
-    updateProp(state, { id: round.id, prop: 'result', value: 'Succeded' })
+  setRoundResult (state, { round, result }) {
+    console.log('changing round s result')
+    console.log(round.id)
+    updateProp(state, { id: round.id, prop: 'result', value: result })
     // Second update or it don't work
-  },
-  roundFailed (state, { round }) {
-    updateProp(state, { id: round.id, prop: 'result', value: 'Failed' })
-    // Second update or it don't work
+    // updateProp(state, { id: round.id, prop: '', value: '' })
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
