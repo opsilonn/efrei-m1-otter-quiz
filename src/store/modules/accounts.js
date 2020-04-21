@@ -18,6 +18,18 @@ const getters = {
    */
   getLastAccount: state => () => {
     return state.account.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  },
+
+  /**
+   * Get accont by its login and password
+   */
+  getAccountByLoginAndPassword: state => (login, password) => {
+    var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
+    if(logged===undefined){
+      return logged
+    }
+    logged.connected = true
+    return logged
   }
 }
 
