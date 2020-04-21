@@ -77,6 +77,15 @@ const mutations = {
     }
     mutations.addEnemyStat(state, { enemyStat: nextEnemyStat })
   },
+  setEnemyStatHP (state, { enemyStat, HP }) {
+    if (HP < 0) {
+      HP = 0
+    } else if (HP > enemyStat.maxHP) {
+      HP = enemyStat.maxHP
+    }
+
+    updateProp(state, { id: enemyStat.id, prop: 'HP', value: HP })
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
   }

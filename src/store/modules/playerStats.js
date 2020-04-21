@@ -80,6 +80,24 @@ const mutations = {
     }
     mutations.addPlayerStat(state, { playerStat: nextPlayerStat })
   },
+  setPlayerStatHP (state, { playerStat, HP }) {
+    if (HP < 0) {
+      HP = 0
+    } else if (HP > playerStat.maxHP) {
+      HP = playerStat.maxHP
+    }
+
+    updateProp(state, { id: playerStat.id, prop: 'HP', value: HP })
+  },
+  setPlayerStatMana (state, { playerStat, mana }) {
+    if (mana < 0) {
+      mana = 0
+    } else if (mana > playerStat.maxmana) {
+      mana = playerStat.maxmana
+    }
+
+    updateProp(state, { id: playerStat.id, prop: 'mana', value: mana })
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
   }

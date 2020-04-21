@@ -17,8 +17,8 @@
 
       <!-- Column 1-B : Question Choices -->
       <v-col
-      class="ma-0 pa-0 height40"
-      cols="12"
+        class="ma-0 pa-0 height40"
+        cols="12"
       >
         <GameQuestions/>
       </v-col>

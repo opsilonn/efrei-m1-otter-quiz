@@ -17,7 +17,7 @@ export default {
       remaining: 0
     },
     endLength: 2000,
-    resetLength: 5000,
+    resetLength: 3000,
     playerHp: 5,
     enemyHp: 7
   }),
@@ -38,21 +38,20 @@ export default {
 
     // Custom
     playerId () {
-      console.log(`params : ${this.$route.params.playerId}`)
       return this.$route.params.playerId
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: '9', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPlayerId(this.playerId)
     },
     round () {
       console.log(`dunjon.id ${this.dunjon.id}`)
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id)
     },
     playerStat () {
-      return this.getPlayerStatByRoundId(this.round.id) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
+      return this.getPlayerStatByRoundId(this.round.id)
     },
     enemyStat () {
-      return this.getEnemyStatByRoundId(this.round.id) || { maxHP: '0', HP: '0' }
+      return this.getEnemyStatByRoundId(this.round.id)
     },
     lastTrivia () {
       return this.getLastTrivia() || {}
@@ -62,8 +61,8 @@ export default {
   methods: {
     // Mutations
     ...mapMutations('rounds', ['nextRound', 'roundSucceded', 'roundFailed']),
-    ...mapMutations('playerStats', ['nextPlayerStat']),
-    ...mapMutations('enemyStats', ['nextEnemyStat']),
+    ...mapMutations('playerStats', ['nextPlayerStat', 'setPlayerStatHP']),
+    ...mapMutations('enemyStats', ['nextEnemyStat', 'setEnemyStatHP']),
 
     // Actions
     ...mapActions('trivias', ['fetchTrivias']),
@@ -140,12 +139,12 @@ export default {
     onTrivia_success () {
       console.log('[GameMaster] On event trivia-success')
       this.roundSucceded({ round: this.round })
-      this.enemyHp -= 1
+      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
     },
     onTrivia_failure () {
       console.log('[GameMaster] On event trivia-failure')
       this.roundFailed({ round: this.round })
-      this.playerHp -= 1
+      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
     }
   },
   created () {

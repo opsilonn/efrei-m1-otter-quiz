@@ -94,12 +94,10 @@ const mutations = {
   roundSucceded (state, { round }) {
     updateProp(state, { id: round.id, prop: 'result', value: 'Succeded' })
     // Second update or it don't work
-    // updateProp(state, { id: round.id, prop: '', value: '' })
   },
   roundFailed (state, { round }) {
     updateProp(state, { id: round.id, prop: 'result', value: 'Failed' })
     // Second update or it don't work
-    // updateProp(state, { id: round.id, prop: '', value: '' })
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
