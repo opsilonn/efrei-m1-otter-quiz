@@ -48,8 +48,11 @@ export default {
     ...mapMutations('players', ['addPlayer']),
     ...mapMutations('dunjons', ['addDunjon']),
     ...mapMutations('rounds', ['addRound']),
+    ...mapMutations('playerStats', ['addPlayerStat']),
+    ...mapMutations('enemyStats', ['addEnemyStat']),
 
     startGame () {
+      // Player
       const newPlayer = {
         accountId: 1,
         seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
@@ -58,6 +61,7 @@ export default {
 
       this.addPlayer({ player: newPlayer })
 
+      // Dunjon
       const newDunjon = {
         playerId: newPlayer.id,
         category: 9,
@@ -67,6 +71,7 @@ export default {
 
       this.addDunjon({ dunjon: newDunjon })
 
+      // Round
       const newRound = {
         dunjonId: newDunjon.id,
         roundTime: 20000,
@@ -75,6 +80,28 @@ export default {
 
       this.addRound({ round: newRound })
 
+      // Enemy Stat
+      const newEnemyStat = {
+        roundId: newRound.id,
+        maxHP: 5,
+        HP: 3
+      }
+
+      this.addEnemyStat({ enemyStat: newEnemyStat })
+
+      // Player Stat
+      const newPlayerStat = {
+        roundId: newRound.id,
+        maxHP: 10,
+        HP: 8,
+        maxMana: 5,
+        mana: 5,
+        gold: 1
+      }
+
+      this.addPlayerStat({ playerStat: newPlayerStat })
+
+      // Go to Game page
       this.$router.push({ name: 'Game', params: { playerId: newPlayer.id } })
     }
   }

@@ -23,7 +23,7 @@ const getters = {
 
   /**
    * Get the last round with a specific dunjon id
-   * @param {number} dunjonId - The id of the round
+   * @param {number} dunjonId - The id of the dunjon
    */
   getLastRoundByDunjonId: state => (dunjonId) => {
     const roundsForDunjonId = getters.getRoundsByDunjonId(state)(dunjonId) || []
@@ -50,7 +50,18 @@ const getters = {
 function updateProp (state, { id, prop, value }) {
   const round = getters.getRoundById(state)(id)
 
-  Vue.set(round, prop, value)
+  if (round) {
+    console.log(`Update prop ${prop} with value ${value}`)
+    Vue.set(round, prop, value)
+  }
+}
+
+function refreshProps (state, { round }) {
+  const keys = Object.keys(round)
+  for (const key of keys) {
+    if (key === 'id') continue
+    updateProp(state, { id: round.id, prop: key, value: round[key] })
+  }
 }
 
 const mutations = {
@@ -61,20 +72,13 @@ const mutations = {
    */
   addRound (state, { round }) {
     if (!round.id) {
-      console.log('adding new id')
       const lastRound = getters.getLastRound(state)()
-      console.log(`lastRound : ${lastRound}`)
       round.id = (lastRound) ? lastRound.id + 1 : 0
-      console.log(`round id: ${round.id}`)
     }
 
     const existing = state.rounds.findIndex(e => e.id === round.id)
     if (existing !== -1) {
-      const keys = Object.keys(round)
-      for (const key of keys) {
-        if (key === 'id') continue
-        updateProp(state, { id: round.id, prop: key, value: round[key] })
-      }
+      refreshProps(state, round)
     } else {
       state.rounds.push(round)
     }
@@ -87,8 +91,21 @@ const mutations = {
     }
     mutations.addRound(state, { round: nextRound })
   },
+  roundSucceded (state, { round }) {
+    updateProp(state, { id: round.id, prop: 'result', value: 'Succeded' })
+    // Second update or it don't work
+    // updateProp(state, { id: round.id, prop: '', value: '' })
+  },
+  roundFailed (state, { round }) {
+    updateProp(state, { id: round.id, prop: 'result', value: 'Failed' })
+    // Second update or it don't work
+    // updateProp(state, { id: round.id, prop: '', value: '' })
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
+  },
+  refreshProps (state, { round }) {
+    refreshProps(state, { round })
   }
 
 }

@@ -6,7 +6,8 @@
         <h2 align="center" style="font-size: 3vh">
             Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
             <br/>
-            Round n° {{ round.number }}
+            Round n° {{ round.number }} :
+            {{ round.result }}
         </h2>
       </label>
     </div>
@@ -15,11 +16,11 @@
     <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
       <v-row no-gutters class="d-flex align-end">
         <GamePlayers
-          :player="userPlayer"
+          :isPlayer="true"
           :doAnim="doAnim"
         />
         <GamePlayers
-          :player="enemyPlayer"
+          :isPlayer="false"
           :doAnim="doAnim"
         />
       </v-row>
@@ -28,8 +29,9 @@
 </template>
 
 <script>
-import EventBus from '@/EventBus.js'
+// import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
+
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -37,22 +39,19 @@ export default {
   components: {
     GamePlayers
   },
-  props: ['playerId'],
   data: () => {
     return {
       doAnim: false,
       userPlayer: {
         name: 'I\'m the player !',
-        imagePath: require('@/assets/sprite_player_1.png'),
-        hp: 5,
+        hp: 3,
         hpMax: 5,
         money: 45,
         isPlayer: true
       },
       enemyPlayer: {
         name: 'I\'m the foe !',
-        imagePath: require('@/assets/sprite_player_3.png'),
-        hp: 7,
+        hp: 2,
         hpMax: 7,
         money: 15
       }
@@ -70,8 +69,8 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    player () {
-      return this.getPlayerById(this.playerId)
+    playerId () {
+      return this.$route.params.playerId
     },
     dunjon () {
       return this.getLastDunjonByPlayerId(this.playerId) || { category: 'none', difficulty: 'none', number: '0' }
@@ -79,21 +78,6 @@ export default {
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     }
-  },
-  methods: {
-    // Method handing the change of the user's HP
-    setPlayerHp ({ playerHp }) {
-      this.userPlayer.hp = playerHp
-    },
-
-    // Method handing the change of the ennemy's HP
-    setEnemyHp ({ enemyHp }) {
-      this.enemyPlayer.hp = enemyHp
-    }
-  },
-  created () {
-    EventBus.$on('playerHp-update', ({ playerHp }) => this.setPlayerHp({ playerHp }))
-    EventBus.$on('enemyHp-update', ({ enemyHp }) => this.setEnemyHp({ enemyHp }))
   }
 }
 </script>

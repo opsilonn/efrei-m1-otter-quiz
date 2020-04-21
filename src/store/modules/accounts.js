@@ -55,11 +55,8 @@ const mutations = {
    */
   addAccount (state, { account }) {
     if (!account.id) {
-      console.log('adding new id')
       const lastAccount = getters.getLastAccount(state)()
-      console.log(`lastAccount : ${lastAccount}`)
       account.id = (lastAccount) ? lastAccount.id + 1 : 0
-      console.log(`account id: ${account.id}`)
     }
 
     const existing = state.accounts.findIndex(e => e.id === account.id)

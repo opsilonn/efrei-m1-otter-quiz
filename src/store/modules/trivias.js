@@ -63,13 +63,9 @@ const mutations = {
    * @param {object} trivia - The trivia to be added
    */
   addTrivia (state, { trivia }) {
-    console.log(`adding trivia ${trivia.question}`)
     if (!trivia.id) {
-      console.log('adding new id')
       const lastTrivia = getters.getLastTrivia(state)()
-      console.log(`lastTrivia : ${lastTrivia}`)
       trivia.id = (lastTrivia) ? lastTrivia.id + 1 : 0
-      console.log(`trivia id: ${trivia.id}`)
     }
 
     trivia.answers = []
