@@ -25,7 +25,7 @@ const getters = {
    */
   getAccountByLoginAndPassword: state => (login, password) => {
     var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
-    if(logged===undefined){
+    if (logged === undefined) {
       return logged
     }
     logged.connected = true
