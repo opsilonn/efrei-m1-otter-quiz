@@ -6,20 +6,21 @@
         <h2 align="center" style="font-size: 3vh">
             Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
             <br/>
-            Round n° {{ round.number }}
+            Round n° {{ round.number }} :
+            {{ round.result }} <v-btn @click="btnC"/>
         </h2>
       </label>
     </div>
 
     <!-- Display the players -->
-    <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 12vh">
       <v-row no-gutters class="d-flex align-end">
         <GamePlayers
-          :player="userPlayer"
+          :isPlayer="true"
           :doAnim="doAnim"
         />
         <GamePlayers
-          :player="ennemiPlayer"
+          :isPlayer="false"
           :doAnim="doAnim"
         />
       </v-row>
@@ -37,13 +38,11 @@ export default {
   components: {
     GamePlayers
   },
-  props: ['playerId'],
   data: () => {
     return {
       doAnim: false,
       userPlayer: {
         name: 'I\'m the player !',
-        imagePath: require('@/assets/sprite_player_1.png'),
         hp: 3,
         hpMax: 5,
         money: 45,
@@ -51,7 +50,6 @@ export default {
       },
       ennemiPlayer: {
         name: 'I\'m the foe !',
-        imagePath: require('@/assets/sprite_player_3.png'),
         hp: 2,
         hpMax: 7,
         money: 15
@@ -70,14 +68,19 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    player () {
-      return this.getPlayerById(this.playerId)
+    playerId () {
+      return this.$route.params.playerId
     },
     dunjon () {
       return this.getLastDunjonByPlayerId(this.playerId) || { category: 'none', difficulty: 'none', number: '0' }
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+    }
+  },
+  methods: {
+    btnC () {
+      console.log(this.round.result)
     }
   }
 }

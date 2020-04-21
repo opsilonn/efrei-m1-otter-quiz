@@ -51,11 +51,8 @@ const mutations = {
    */
   addSpell (state, { spell }) {
     if (!spell.id) {
-      console.log('adding new id')
       const lastSpell = getters.getLastSpell(state)()
-      console.log(`lastSpell : ${lastSpell}`)
       spell.id = (lastSpell) ? lastSpell.id + 1 : 0
-      console.log(`spell id: ${spell.id}`)
     }
 
     const existing = state.spells.findIndex(e => e.id === spell.id)

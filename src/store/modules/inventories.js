@@ -51,11 +51,8 @@ const mutations = {
    */
   addInventory (state, { inventory }) {
     if (!inventory.id) {
-      console.log('adding new id')
       const lastInventory = getters.getLastInventory(state)()
-      console.log(`lastInventory : ${lastInventory}`)
       inventory.id = (lastInventory) ? lastInventory.id + 1 : 0
-      console.log(`inventory id: ${inventory.id}`)
     }
 
     const existing = state.inventories.findIndex(e => e.id === inventory.id)

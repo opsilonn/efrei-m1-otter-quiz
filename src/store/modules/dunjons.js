@@ -27,6 +27,7 @@ const getters = {
    * @param {number} playerId - The id of the player
    */
   getLastDunjonByPlayerId: state => (playerId) => {
+    console.log(`player.id : ${playerId}`)
     const dunjonsForPlayerId = getters.getDunjonsByPlayerId(state)(playerId) || []
     return dunjonsForPlayerId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
@@ -61,11 +62,8 @@ const mutations = {
    */
   addDunjon (state, { dunjon }) {
     if (!dunjon.id) {
-      console.log('adding new id')
       const lastDunjon = getters.getLastDunjon(state)()
-      console.log(`lastDunjon : ${lastDunjon}`)
       dunjon.id = (lastDunjon) ? lastDunjon.id + 1 : 0
-      console.log(`dunjon id: ${dunjon.id}`)
     }
 
     const existing = state.dunjons.findIndex(e => e.id === dunjon.id)

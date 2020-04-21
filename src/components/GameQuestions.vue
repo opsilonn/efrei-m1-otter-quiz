@@ -56,7 +56,6 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'GameQuestions',
-  props: ['playerId'],
   data: () => ({
     timer: {
       length: 0,
@@ -82,8 +81,8 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    player () {
-      return this.getPlayerById(this.playerId)
+    playerId () {
+      return this.$route.param.playerId
     },
     dunjon () {
       return this.getLastDunjonByPlayerId(this.playerId) || { category: '0', difficulty: 'none', number: '0' }

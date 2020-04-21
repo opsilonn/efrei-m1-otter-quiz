@@ -1,12 +1,9 @@
 <template>
   <div class="height100">
 
-    <GameMaster
-      :playerId="playerId"
-    />
-    <GameSideBar
-      :playerId="playerId"
-    />
+    <GameMaster/>
+    <GameSideBar/>
+
     <!-- We divide this row in 2 verticals boxes -->
     <v-row class="height100">
 
@@ -15,9 +12,7 @@
         class="ma-0 pa-0 height60"
         cols="12"
       >
-        <GameFighters
-          :playerId="playerId"
-        />
+        <GameFighters/>
       </v-col>
 
       <!-- Column 1-B : Question Choices -->
@@ -25,9 +20,7 @@
       class="ma-0 pa-0 height40"
       cols="12"
       >
-        <GameQuestions
-          :playerId="playerId"
-        />
+        <GameQuestions/>
       </v-col>
     </v-row>
   </div>
