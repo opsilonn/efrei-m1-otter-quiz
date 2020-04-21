@@ -41,20 +41,7 @@ export default {
   },
   data: () => {
     return {
-      doAnim: false,
-      userPlayer: {
-        name: 'I\'m the player !',
-        hp: 3,
-        hpMax: 5,
-        money: 45,
-        isPlayer: true
-      },
-      enemyPlayer: {
-        name: 'I\'m the foe !',
-        hp: 2,
-        hpMax: 7,
-        money: 15
-      }
+      doAnim: false
     }
   },
   computed: {
@@ -80,29 +67,6 @@ export default {
     }
   },
   methods: {
-    // Method handing the change of the user's HP
-    setPlayerHp ({ playerHp }) {
-      this.userPlayer.hp = playerHp
-
-      // SPAGHETTI CODE - DELETE LATER
-      if (this.userPlayer.hp <= 0) {
-        this.$router.push({ name: 'NotAVue' })
-      }
-    },
-
-    // Method handing the change of the ennemy's HP
-    setEnemyHp ({ enemyHp }) {
-      this.enemyPlayer.hp = enemyHp
-
-      // SPAGHETTI CODE - DELETE LATER
-      if (this.enemyPlayer.hp <= 0) {
-        this.$router.push({ name: 'NotAVue' })
-      }
-    }
-  },
-  created () {
-    EventBus.$on('playerHp-update', ({ playerHp }) => this.setPlayerHp({ playerHp }))
-    EventBus.$on('enemyHp-update', ({ enemyHp }) => this.setEnemyHp({ enemyHp }))
   }
 }
 </script>
