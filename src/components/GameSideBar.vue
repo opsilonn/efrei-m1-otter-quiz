@@ -9,7 +9,6 @@
         dark
         :width="windowSize.x / 4"
         color="blue-grey darken-3"
-        fixed-tabs
     >
         <v-tabs
             v-model="tabModel"

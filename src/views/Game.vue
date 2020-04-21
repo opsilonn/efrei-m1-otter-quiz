@@ -1,6 +1,9 @@
 <template>
   <div class="height100">
 
+    <GameMaster
+      :playerId="playerId"
+    />
     <GameSideBar
       :playerId="playerId"
     />
@@ -31,6 +34,7 @@
 </template>
 
 <script>
+import GameMaster from '@/components/GameMaster'
 import GameFighters from '@/components/GameFighters'
 import GameQuestions from '@/components/GameQuestions'
 import GameSideBar from '@/components/GameSideBar'
@@ -38,6 +42,7 @@ import GameSideBar from '@/components/GameSideBar'
 export default {
   name: 'Game',
   components: {
+    GameMaster,
     GameFighters,
     GameQuestions,
     GameSideBar

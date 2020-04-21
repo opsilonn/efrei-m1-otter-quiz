@@ -68,7 +68,7 @@ export default {
       this.addDunjon({ dunjon: newDunjon })
 
       const newRound = {
-        dunjonId: newPlayer.id,
+        dunjonId: newDunjon.id,
         roundTime: 20000,
         number: 1
       }
