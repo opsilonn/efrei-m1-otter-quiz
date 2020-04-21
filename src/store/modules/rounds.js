@@ -79,6 +79,14 @@ const mutations = {
       state.rounds.push(round)
     }
   },
+  nextRound (state, { round }) {
+    const nextRound = {
+      dunjonId: round.dunjonId,
+      roundTime: round.roundTime,
+      number: parseInt(round.number) + 1
+    }
+    mutations.addRound(state, { round: nextRound })
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
   }

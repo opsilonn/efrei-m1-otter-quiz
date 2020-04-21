@@ -5,7 +5,7 @@
 <script>
 import EventBus from '@/EventBus.js'
 
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'GameMaster',
@@ -19,7 +19,6 @@ export default {
     },
     endLength: 2000,
     resetLength: 5000,
-    round: 0,
     playerHp: 10,
     enemyHp: 10
   }),
@@ -52,6 +51,9 @@ export default {
   },
 
   methods: {
+    // Mutations
+    ...mapMutations('rounds', ['nextRound']),
+
     // Actions
     ...mapActions('trivias', ['fetchTrivias']),
 
@@ -94,7 +96,7 @@ export default {
       }
     },
     endTimer () {
-      this.round += 1
+      this.nextRound({ round: this.round })
       this.timer.remaining = 0
 
       // Broadcast event timer-end
