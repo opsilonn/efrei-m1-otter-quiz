@@ -146,6 +146,7 @@ export default {
     },
     onTimer_reset ({ timer }) {
       console.log('[GameQuestion] On event timer-reset')
+      this.showResults = true
       this.timer = timer
       this.step = 2
       this.showResults = true

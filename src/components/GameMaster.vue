@@ -16,7 +16,7 @@ export default {
       end: null,
       remaining: 0
     },
-    endLength: 2000,
+    endLength: 1000,
     resetLength: 3000,
     playerHp: 5,
     enemyHp: 7

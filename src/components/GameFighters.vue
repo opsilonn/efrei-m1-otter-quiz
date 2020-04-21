@@ -78,6 +78,31 @@ export default {
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     }
+  },
+  methods: {
+    // Method handing the change of the user's HP
+    setPlayerHp ({ playerHp }) {
+      this.userPlayer.hp = playerHp
+
+      // SPAGHETTI CODE - DELETE LATER
+      if (this.userPlayer.hp <= 0) {
+        this.$router.push({ name: 'NotAVue' })
+      }
+    },
+
+    // Method handing the change of the ennemy's HP
+    setEnemyHp ({ enemyHp }) {
+      this.enemyPlayer.hp = enemyHp
+
+      // SPAGHETTI CODE - DELETE LATER
+      if (this.enemyPlayer.hp <= 0) {
+        this.$router.push({ name: 'NotAVue' })
+      }
+    }
+  },
+  created () {
+    EventBus.$on('playerHp-update', ({ playerHp }) => this.setPlayerHp({ playerHp }))
+    EventBus.$on('enemyHp-update', ({ enemyHp }) => this.setEnemyHp({ enemyHp }))
   }
 }
 </script>
