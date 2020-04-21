@@ -84,11 +84,21 @@ export default {
     // Method handing the change of the user's HP
     setPlayerHp ({ playerHp }) {
       this.userPlayer.hp = playerHp
+
+      // SPAGHETTI CODE - DELETE LATER
+      if (this.userPlayer.hp <= 0) {
+        this.$router.push({ name: 'NotAVue' })
+      }
     },
 
     // Method handing the change of the ennemy's HP
     setEnemyHp ({ enemyHp }) {
       this.enemyPlayer.hp = enemyHp
+
+      // SPAGHETTI CODE - DELETE LATER
+      if (this.enemyPlayer.hp <= 0) {
+        this.$router.push({ name: 'NotAVue' })
+      }
     }
   },
   created () {

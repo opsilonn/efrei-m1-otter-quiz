@@ -114,7 +114,6 @@ export default {
     // Method called when the user chooses an answer
     chooseAnswer () {
       console.log('[GameQuestion] Emit timer-stop')
-      this.showResults = true
 
       // We stop the Timer
       EventBus.$emit('timer-stop', { timer: this.timer })
@@ -134,12 +133,12 @@ export default {
     },
     onTimer_end ({ timer }) {
       console.log('[GameQuestion] On event timer-end')
-      this.showResults = true
       this.timer = timer
       this.step = 0
     },
     onTimer_reset ({ timer }) {
       console.log('[GameQuestion] On event timer-reset')
+      this.showResults = true
       this.timer = timer
       this.step = 2
 
