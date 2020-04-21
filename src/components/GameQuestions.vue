@@ -18,33 +18,41 @@
         </label>
 
         <!-- Questions -->
-        <v-container>
         <h3 v-html="trivia.question" class="pa-0" align="center"/>
         <v-row>
-          <v-col cols="6"
+          <v-col
+            cols="6"
             v-for="(answer, index) in trivia.answers" v-bind:key="index"
-            >
+            :class="'pt-6 ' + (index%2 ? 'pr-12 pl-4' : 'pl-12 pr-4')"
+          >
             <v-hover v-slot:default="{ hover }">
-              <v-container>
-                <!-- Card if the player HAS answered -->
-                <v-card v-if="showResults"
-                  :style="'background-color: ' + (answer.value ? themes.Success : themes.Failure)"
-                  >
-                  <v-card-text v-html="answer.answer"/>
-                </v-card>
+              <!-- Choosing the answer -->
+              <v-card v-if="(step&1) === 1"
+                :style="'background-color: ' + (hover ? themes.DarkLighter : themes.DarkLight)"
+                :elevation="hover ? 12 : 0"
+                @click="chooseAnswer(answer)"
+                >
+                <v-card-text v-html="answer.answer"/>
+              </v-card>
 
-                <!-- Card if the player HAS NOT answered -->
-                <v-card v-else
-                  :style="'background-color: ' + (hover ? themes.DarkLighter : themes.DarkLight)"
-                  @click="chooseAnswer(); yourAnswer = answer;"
-                  >
-                  <v-card-text v-html="answer.answer"/>
-                </v-card>
-              </v-container>
+              <!-- Waiting for result -->
+              <v-card v-else-if="(step&2) !== 2"
+                :style="'background-color: ' + (yourAnswer === answer ? themes.DarkLighter : themes.DarkLight)"
+                :elevation="yourAnswer === answer ? 12 : 0"
+                >
+                <v-card-text v-html="answer.answer"/>
+              </v-card>
+
+              <!-- Displaying the result -->
+              <v-card v-else
+                :style="'background-color: ' + (answer.value ? themes.Success : themes.Failure)"
+                :elevation="yourAnswer === answer ? 12 : 0"
+                >
+                <v-card-text v-html="answer.answer"/>
+              </v-card>
             </v-hover>
           </v-col>
         </v-row>
-        </v-container>
       </v-card>
     </div>
 </template>
@@ -56,7 +64,6 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'GameQuestions',
-  props: ['playerId'],
   data: () => ({
     timer: {
       length: 0,
@@ -82,8 +89,8 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    player () {
-      return this.getPlayerById(this.playerId)
+    playerId () {
+      return this.$route.param.playerId
     },
     dunjon () {
       return this.getLastDunjonByPlayerId(this.playerId) || { category: '0', difficulty: 'none', number: '0' }
@@ -112,10 +119,11 @@ export default {
   },
   methods: {
     // Method called when the user chooses an answer
-    chooseAnswer () {
-      console.log('[GameQuestion] Emit timer-stop')
+    chooseAnswer (answer) {
+      this.yourAnswer = answer
 
       // We stop the Timer
+      console.log('[GameQuestion] Emit timer-stop')
       EventBus.$emit('timer-stop', { timer: this.timer })
     },
 
@@ -141,6 +149,7 @@ export default {
       this.showResults = true
       this.timer = timer
       this.step = 2
+      this.showResults = true
 
       // If the player answered correctly or not (wrong answer / no answer at all)
       if (this.yourAnswer.value === true) {

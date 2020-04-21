@@ -6,7 +6,7 @@ import AccountStore from './modules/accounts'
 import PlayerStore from './modules/players'
 import DunjonStore from './modules/dunjons'
 import RoundStore from './modules/rounds'
-import EnnemiStatStore from './modules/ennemiStats'
+import EnemyStatStore from './modules/enemyStats'
 import PlayerStatStore from './modules/playerStats'
 import InventoryStore from './modules/inventories'
 import SpellStore from './modules/spells'
@@ -25,7 +25,7 @@ export default new Vuex.Store({
     players: PlayerStore,
     dunjons: DunjonStore,
     rounds: RoundStore,
-    ennemiStats: EnnemiStatStore,
+    enemyStats: EnemyStatStore,
     playerStats: PlayerStatStore,
     inventories: InventoryStore,
     spells: SpellStore,

@@ -18,6 +18,18 @@ const getters = {
    */
   getLastAccount: state => () => {
     return state.account.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  },
+
+  /**
+   * Get accont by its login and password
+   */
+  getAccountByLoginAndPassword: state => (login, password) => {
+    var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
+    if(logged===undefined){
+      return logged
+    }
+    logged.connected = true
+    return logged
   }
 }
 
@@ -43,11 +55,8 @@ const mutations = {
    */
   addAccount (state, { account }) {
     if (!account.id) {
-      console.log('adding new id')
       const lastAccount = getters.getLastAccount(state)()
-      console.log(`lastAccount : ${lastAccount}`)
       account.id = (lastAccount) ? lastAccount.id + 1 : 0
-      console.log(`account id: ${account.id}`)
     }
 
     const existing = state.accounts.findIndex(e => e.id === account.id)

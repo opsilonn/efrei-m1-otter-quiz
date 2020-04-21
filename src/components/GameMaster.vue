@@ -9,7 +9,6 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'GameMaster',
-  props: ['playerId'],
   data: () => ({
     timer: {
       length: 20000,
@@ -33,17 +32,26 @@ export default {
     ...mapGetters('players', ['getPlayerById']),
     ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
     ...mapGetters('trivias', ['getLastTrivia']),
 
     // Custom
-    player () {
-      return this.getPlayerById(this.playerId)
+    playerId () {
+      return this.$route.params.playerId
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: '9', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPlayerId(this.playerId)
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      console.log(`dunjon.id ${this.dunjon.id}`)
+      return this.getLastRoundByDunjonId(this.dunjon.id)
+    },
+    playerStat () {
+      return this.getPlayerStatByRoundId(this.round.id)
+    },
+    enemyStat () {
+      return this.getEnemyStatByRoundId(this.round.id)
     },
     lastTrivia () {
       return this.getLastTrivia() || {}
@@ -52,7 +60,9 @@ export default {
 
   methods: {
     // Mutations
-    ...mapMutations('rounds', ['nextRound']),
+    ...mapMutations('rounds', ['nextRound', 'roundSucceded', 'roundFailed']),
+    ...mapMutations('playerStats', ['nextPlayerStat', 'setPlayerStatHP']),
+    ...mapMutations('enemyStats', ['nextEnemyStat', 'setEnemyStatHP']),
 
     // Actions
     ...mapActions('trivias', ['fetchTrivias']),
@@ -60,6 +70,11 @@ export default {
     // Customs
     async startTimer () {
       await this.fetchTrivias({ amount: 1, category: 9 })
+      const oldPlayerStat = this.playerStat
+      const oldEnemyStat = this.enemyStat
+      this.nextRound({ round: this.round })
+      this.nextPlayerStat({ playerStat: oldPlayerStat, roundId: this.round.id })
+      this.nextEnemyStat({ enemyStat: oldEnemyStat, roundId: this.round.id })
 
       // Reset localy
       this.timer.begin = Date.now()
@@ -72,8 +87,8 @@ export default {
       // Start update
       this.updateTimer(this.round)
     },
-    updateTimer (round) {
-      if (round !== this.round) {
+    updateTimer () {
+      if (this.round.result) {
         return
       }
 
@@ -90,13 +105,13 @@ export default {
 
       // Call next update
       if (this.timer.remaining > 0.12) {
-        setTimeout(this.updateTimer.bind(null, round), 100)
+        setTimeout(this.updateTimer, 100)
       } else {
         setTimeout(this.endTimer, 100)
       }
     },
     endTimer () {
-      this.nextRound({ round: this.round })
+      this.round.result = 'Pending'
       this.timer.remaining = 0
 
       // Broadcast event timer-end
@@ -123,11 +138,13 @@ export default {
     },
     onTrivia_success () {
       console.log('[GameMaster] On event trivia-success')
-      this.enemyHp -= 1
+      this.roundSucceded({ round: this.round })
+      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
     },
     onTrivia_failure () {
       console.log('[GameMaster] On event trivia-failure')
-      this.playerHp -= 1
+      this.roundFailed({ round: this.round })
+      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
     }
   },
   created () {

@@ -11,8 +11,7 @@ const state = {
 }
 
 const getters = {
-  getThemes: state => state.themes,
-  getStyleTheme: state => (theme, string) => string + ': ' + theme
+  getThemes: state => state.themes
 }
 
 const mutations = {

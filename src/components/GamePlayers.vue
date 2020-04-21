@@ -4,15 +4,15 @@
   >
     <div>
       <!-- The box is oriented differently, whether it's the player or the foe -->
-      <div :class="player.isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
+      <div :class="isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
         <label>
           <!-- Name -->
-          <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> {{player.name}} </h3>
+          <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> "name" </h3>
 
           <!-- Health bar -->
           <div style="background-color:#783D31" class="ma-2">
             <v-progress-linear
-              :value="player.hp / player.hpMax * 100"
+              :value="HP / maxHP * 100"
               buffer-value="0"
               color="green accent-3"
               rounded
@@ -29,19 +29,19 @@
                 <!-- HP -->
                 <span class="ma-2 green--text text--accent-3">
                   <v-icon size="4vh" class="green--text text--accent-3">mdi-hospital-box</v-icon>
-                  {{ player.hp }} / {{ player.hpMax }}
+                  {{ HP }} / {{ maxHP }}
                 </span>
 
-                <!-- Money -->
-                <span v-if='player.isPlayer' class="ma-2 amber--text text--lighten-2">
+                <!-- Gold -->
+                <span v-if='isPlayer' class="ma-2 amber--text text--lighten-2">
                   <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
-                  {{player.money}}
+                  {{gold}}
                 </span>
 
                 <!-- Mana -->
-                <span v-if='player.isPlayer' class="ma-2 blue--text text--accent-3">
+                <span v-if='isPlayer' class="ma-2 blue--text text--accent-3">
                   <v-icon size="4vh" class="blue--text text--accent-3">mdi-water</v-icon>
-                  {{player.hp}}
+                  {{mana}}
                 </span>
               </h4>
           </label>
@@ -52,8 +52,8 @@
         <v-img
           class="shrink d-none d-xl-flex"
           :class="doAnim ? 'element-animation' : ''"
-          :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-          :src="player.imagePath"
+          :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
+          :src="imagePath"
           contain
           height="17rem"
           width="17rem"
@@ -61,8 +61,8 @@
         <v-img
           class="shrink d-none d-lg-flex d-xl-none"
           :class="doAnim ? 'element-animation' : ''"
-          :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-          :src="player.imagePath"
+          :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
+          :src="imagePath"
           contain
           height="12rem"
           width="12rem"
@@ -70,8 +70,8 @@
         <v-img
           class="shrink d-none d-md-flex d-lg-none"
           :class="doAnim ? 'element-animation' : ''"
-          :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-          :src="player.imagePath"
+          :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
+          :src="imagePath"
           contain
           height="8rem"
           width="8rem"
@@ -79,8 +79,8 @@
         <v-img
           class="shrink d-none d-sm-flex d-md-none"
           :class="doAnim ? 'element-animation' : ''"
-          :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-          :src="player.imagePath"
+          :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
+          :src="imagePath"
           contain
           height="4rem"
           width="4rem"
@@ -88,8 +88,8 @@
         <v-img
           class="shrink d-xs-flex d-sm-none"
           :class="doAnim ? 'element-animation' : ''"
-          :style="!player.isPlayer ? 'transform:scaleX(-1)' : ''"
-          :src="player.imagePath"
+          :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
+          :src="imagePath"
           contain
           height="2rem"
           width="2rem"
@@ -101,12 +101,62 @@
 
 <script>
 
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'GamePlayers',
-  props: ['player', 'doAnim'],
+  props: ['isPlayer', 'doAnim'],
   data: () => ({
   }),
   computed: {
+    // States
+    ...mapState('players', ['players']),
+    ...mapState('dunjons', ['dunjons']),
+    ...mapState('rounds', ['rounds']),
+    ...mapState('playerStats', ['playerStats']),
+    ...mapState('enemyStats', ['enemyStats']),
+
+    // Getters
+    ...mapGetters('players', ['getPlayerById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
+    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
+
+    // Custom
+    playerId () {
+      return this.$route.params.playerId
+    },
+    dunjon () {
+      return this.getLastDunjonByPlayerId(this.playerId) || { category: '9', difficulty: 'none', number: '0' }
+    },
+    round () {
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+    },
+    playerStat () {
+      return this.getPlayerStatByRoundId(this.round.id) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
+    },
+    enemyStat () {
+      return this.getEnemyStatByRoundId(this.round.id) || { maxHP: '0', HP: '0' }
+    },
+    maxHP () {
+      return this.isPlayer ? this.playerStat.maxHP : this.enemyStat.maxHP
+    },
+    HP () {
+      return this.isPlayer ? this.playerStat.HP : this.enemyStat.HP
+    },
+    maxMana () {
+      return this.isPlayer ? this.playerStat.maxMana : 0
+    },
+    mana () {
+      return this.isPlayer ? this.playerStat.mana : 0
+    },
+    gold () {
+      return this.isPlayer ? this.playerStat.gold : 0
+    },
+    imagePath () {
+      return this.isPlayer ? require('@/assets/sprite_player_1.png') : require('@/assets/sprite_player_3.png')
+    }
   }
 }
 </script>
