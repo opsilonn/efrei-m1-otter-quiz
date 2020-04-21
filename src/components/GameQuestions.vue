@@ -26,11 +26,16 @@
                 >
                 <v-hover v-slot:default="{ hover }">
                   <v-container>
-                    <v-card
-                      :style="'background-color: ' +
-                      (hasPlayerAnswered
-                      ? (answer.value ? themes.Success : themes.Failure)
-                      : (hover ? themes.DarkLighter : themes.DarkLight))"
+                    <!-- Card if the player HAS answered -->
+                    <v-card v-if="hasPlayerAnswered"
+                      :style="'background-color: ' + (answer.value ? themes.Success : themes.Failure)"
+                      >
+                      <v-card-text v-html="answer.answer"/>
+                    </v-card>
+
+                    <!-- Card if the player HAS NOT answered -->
+                    <v-card v-else
+                      :style="'background-color: ' + (hover ? themes.DarkLighter : themes.DarkLight)"
                       @click="chooseAnswer"
                       >
                       <v-card-text v-html="answer.answer"/>
