@@ -19,7 +19,7 @@
           :doAnim="doAnim"
         />
         <GamePlayers
-          :player="ennemiPlayer"
+          :player="enemyPlayer"
           :doAnim="doAnim"
         />
       </v-row>
@@ -28,7 +28,7 @@
 </template>
 
 <script>
-
+import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 import { mapState, mapGetters } from 'vuex'
 
@@ -44,15 +44,15 @@ export default {
       userPlayer: {
         name: 'I\'m the player !',
         imagePath: require('@/assets/sprite_player_1.png'),
-        hp: 3,
+        hp: 5,
         hpMax: 5,
         money: 45,
         isPlayer: true
       },
-      ennemiPlayer: {
+      enemyPlayer: {
         name: 'I\'m the foe !',
         imagePath: require('@/assets/sprite_player_3.png'),
-        hp: 2,
+        hp: 7,
         hpMax: 7,
         money: 15
       }
@@ -79,19 +79,21 @@ export default {
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     }
+  },
+  methods: {
+    // Method handing the change of the user's HP
+    setPlayerHp ({ playerHp }) {
+      this.userPlayer.hp = playerHp
+    },
+
+    // Method handing the change of the ennemy's HP
+    setEnemyHp ({ enemyHp }) {
+      this.enemyPlayer.hp = enemyHp
+    }
+  },
+  created () {
+    EventBus.$on('playerHp-update', ({ playerHp }) => this.setPlayerHp({ playerHp }))
+    EventBus.$on('enemyHp-update', ({ enemyHp }) => this.setEnemyHp({ enemyHp }))
   }
 }
 </script>
-
-<style>
-
-/* Sets up a picture background properly */
-.prettyBackground {
-  background-image: url('../assets/background_1.jpg');
-  background-color: transparent;
-  background-repeat: repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-</style>

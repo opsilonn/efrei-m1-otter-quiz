@@ -24,9 +24,6 @@ export default {
 </script>
 
 <style>
-/* Hides the scroll bar, no matter what */
-.hideScrollBar { overflow: hidden !important; }
-
 /* Changes the mouse's cursor on Pointer */
 .pointer {cursor: pointer;}
 
@@ -45,6 +42,16 @@ export default {
 .height50 { height:50% }
 .height40 { height:40% }
 
+/* Sets up a picture background properly */
+.prettyBackground {
+  background-image: url('assets/background_1.jpg');
+  background-color: transparent;
+  background-repeat: repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Code to hide the Scroll Bar */
 html {
     overflow: scroll;
     overflow-x: hidden;

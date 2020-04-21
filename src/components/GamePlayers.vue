@@ -29,7 +29,7 @@
                 <!-- HP -->
                 <span class="ma-2 green--text text--accent-3">
                   <v-icon size="4vh" class="green--text text--accent-3">mdi-hospital-box</v-icon>
-                  {{ player.hp }}/{{ player.hpMax }}
+                  {{ player.hp }} / {{ player.hpMax }}
                 </span>
 
                 <!-- Money -->
@@ -112,15 +112,6 @@ export default {
 </script>
 
 <style>
-/* Sets up a picture background properly */
-.prettyBackground {
-  background-image: url('../assets/background_1.jpg');
-  background-color: transparent;
-  background-repeat: repeat;
-  background-position: center;
-  background-size: cover;
-}
-
 /* Nice box with corner for the player's UI */
 .roundCornersPlayer {
   background: rgba(38, 50, 56, 0.6);
