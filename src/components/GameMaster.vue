@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import EventBus from '@/EventBus.js'
 
 import { mapState, mapGetters, mapActions } from 'vuex'
 
@@ -17,7 +18,10 @@ export default {
       remaining: 0
     },
     endLength: 2000,
-    resetLength: 5000
+    resetLength: 5000,
+    round: 0,
+    playerHp: 10,
+    enemyHp: 10
   }),
   computed: {
     // States
@@ -60,12 +64,17 @@ export default {
       this.timer.end = this.timer.begin + this.timer.length
 
       // Broadcast timer-start
-      this.$emit('timer-start', { timer: this.timer, trivia: this.lastTrivia })
+      console.log('[GameMaster] Emit event timer-start')
+      EventBus.$emit('timer-start', { timer: this.timer, trivia: this.lastTrivia })
 
       // Start update
-      this.updateTimer()
+      this.updateTimer(this.round)
     },
-    updateTimer () {
+    updateTimer (round) {
+      if (round !== this.round) {
+        return
+      }
+
       // Update localy
       const updateTime = (this.timer.end - Date.now())
       if (updateTime > 0) {
@@ -75,42 +84,68 @@ export default {
       }
 
       // Broadcast update
-      this.$emit('timer-update', { timer: this.timer })
+      EventBus.$emit('timer-update', { timer: this.timer })
 
       // Call next update
       if (this.timer.remaining > 0.12) {
-        setTimeout(this.updateTimer, 100)
+        setTimeout(this.updateTimer.bind(null, round), 100)
       } else {
         setTimeout(this.endTimer, 100)
       }
     },
     endTimer () {
+      this.round += 1
+      this.timer.remaining = 0
+
       // Broadcast event timer-end
-      console.log('emit timer-end')
-      this.$emit('timer-end', { timer: this.timer })
+      console.log('[GameMaster] Emit timer-end')
+      EventBus.$emit('timer-end', { timer: this.timer })
 
       setTimeout(this.resetTimer, this.endLength)
     },
     resetTimer () {
       this.timer.remaining = this.timer.length
+
       // Broadcast event timer-end
-      this.$emit('timer-reset', { timer: this.timer })
+      console.log('[GameMaster] Emit event timer-reset')
+      EventBus.$emit('timer-reset', { timer: this.timer })
 
       setTimeout(this.startTimer, this.resetLength)
     },
 
     // Event handlers
-    onTimerStop () {
-      console.log('[GameMaster] Receiving event timer-stop')
-      // Broadcast event timer-end
-      this.$emit('timer-end', { timer: this.timer })
+    onTimer_stop () {
+      console.log('[GameMaster] On event timer-stop')
 
-      setTimeout(this.startTimer, this.endLength)
+      this.endTimer()
+    },
+    onTrivia_success () {
+      console.log('[GameMaster] On event trivia-success')
+      this.enemyHp -= 1
+    },
+    onTrivia_failure () {
+      console.log('[GameMaster] On event trivia-failure')
+      this.playerHp -= 1
     }
+  },
+  created () {
+    EventBus.$on('timer-stop', ({ timer }) => this.onTimer_stop({ timer }))
+    EventBus.$on('trivia-success', this.onTrivia_success)
+    EventBus.$on('trivia-failure', this.onTrivia_failure)
   },
   mounted () {
     console.log('GAMEMASTER')
     this.resetTimer()
+  },
+  watch: {
+    enemyHp: function (newValue, oldValue) {
+      console.log('[GameMaster] Emit event enemyHp-update')
+      EventBus.$emit('enemyHp-update', { enemyHp: this.enemyHp })
+    },
+    playerHp: function (newValue, oldValue) {
+      console.log('[GameMaster] Emit event playerHp-update')
+      EventBus.$emit('playerHp-update', { playerHp: this.playerHp })
+    }
   }
 }
 

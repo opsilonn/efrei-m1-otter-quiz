@@ -1,10 +1,6 @@
 <template>
   <div>
     <GameMaster
-      @timer-start="onStartTimer"
-      @timer-update="onUpdateTimer"
-      @timer-end="onEndTimer"
-      @timer-reset="onResetTimer"
       :playerId="player.id"
     />
 
@@ -58,6 +54,13 @@
         </v-container>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        Player hp : {{ playerHp }}
+        <br/>
+        Enemy hp : {{ enemyHp }}
+      </v-col>
+    </v-row>
     </v-container>
   </div>
 </template>
@@ -65,25 +68,28 @@
 <script>
 // @ is an alias to /src
 import GameMaster from '@/components/GameMaster.vue'
+import EventBus from '@/EventBus.js'
 
 import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'TestEddy',
+  name: 'TestFrancois',
   components: {
     GameMaster
   },
   data: () => ({
     player: {},
     timer: {
-      length: 2000,
-      begin: null,
-      end: null,
-      remaining: null
+      length: 0,
+      begin: 0,
+      end: 0,
+      remaining: 0
     },
     trivia: {},
     step: 1,
-    yourAnswer: { answer: '' }
+    yourAnswer: { answer: '' },
+    playerHp: 10,
+    enemyHp: 10
   }),
   computed: {
     // States
@@ -123,32 +129,55 @@ export default {
 
     // Custom
     validate () {
-      console.log('emit timer-stop')
-      this.$emit('timer-stop')
+      console.log('[Eddy] Emit timer-stop')
+      EventBus.$emit('timer-stop', { timer: this.timer })
     },
 
     // Event handlers
-    onStartTimer ({ timer, trivia }) {
+    onTimer_start ({ timer, trivia }) {
+      console.log('[Eddy] On event timer-start')
       this.yourAnswer = { answer: 'none' }
       this.timer = timer
       this.trivia = trivia
       this.step = 1
     },
-    onUpdateTimer ({ timer }) {
+    onTimer_update ({ timer }) {
       this.timer = timer
     },
-    onEndTimer ({ timer }) {
-      console.log('[Eddy] Receiving event timer-end')
+    onTimer_end ({ timer }) {
+      console.log('[Eddy] On event timer-end')
       this.timer = timer
       this.step = 0
     },
-    onResetTimer ({ timer }) {
+    onTimer_reset ({ timer }) {
+      console.log('[Eddy] On event timer-reset')
       this.timer = timer
       this.step = 2
+
+      if (this.yourAnswer.value === true) {
+        console.log('[Eddy] Emit event trivia-success')
+        EventBus.$emit('trivia-success')
+      } else {
+        console.log('[Eddy] Emit event trivia-failure')
+        EventBus.$emit('trivia-failure')
+      }
     },
-    onStopTimer ({ timer }) {
-      console.log('[Eddy] Receiving event timer-stop')
+    onEnemyHp_update ({ enemyHp }) {
+      console.log('[Eddy] On event enemyHp-update')
+      this.enemyHp = enemyHp
+    },
+    onPlayerHp_update ({ playerHp }) {
+      console.log('[Eddy] On event playerHp-update')
+      this.playerHp = playerHp
     }
+  },
+  created () {
+    EventBus.$on('timer-start', ({ timer, trivia }) => this.onTimer_start({ timer, trivia }))
+    EventBus.$on('timer-update', ({ timer }) => this.onTimer_update({ timer }))
+    EventBus.$on('timer-end', ({ timer }) => this.onTimer_end({ timer }))
+    EventBus.$on('timer-reset', ({ timer }) => this.onTimer_reset({ timer }))
+    EventBus.$on('enemyHp-update', ({ enemyHp }) => this.onEnemyHp_update({ enemyHp }))
+    EventBus.$on('playerHp-update', ({ playerHp }) => this.onPlayerHp_update({ playerHp }))
   },
   mounted () {
     const newPlayer = {
