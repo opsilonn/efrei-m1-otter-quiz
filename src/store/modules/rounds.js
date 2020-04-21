@@ -97,10 +97,10 @@ const mutations = {
     }
     mutations.addRound(state, { round: nextRound })
   },
-  setRoundResult (state, { round, result }) {
+  setRoundResult (state, { roundId, result }) {
     console.log('changing round s result')
-    console.log(round.id)
-    updateProp(state, { id: round.id, prop: 'result', value: result })
+    console.log(roundId)
+    updateProp(state, { id: roundId, prop: 'result', value: result })
     // Second update or it don't work
     // updateProp(state, { id: round.id, prop: '', value: '' })
   },

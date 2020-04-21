@@ -44,10 +44,6 @@ export default {
     data: null
   }),
   computed: {
-    // Customs
-    playerId () {
-      return parseInt(this.$route.params.playerId)
-    }
   }
 }
 </script>

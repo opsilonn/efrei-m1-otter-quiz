@@ -104,31 +104,31 @@
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  name: 'GamePlayers',
+  name: 'GameParties',
   props: ['isPlayer', 'doAnim'],
   data: () => ({
   }),
   computed: {
     // States
-    ...mapState('players', ['players']),
+    ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
-    ...mapGetters('players', ['getPlayerById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
+    ...mapGetters('parties', ['getPartyById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
     ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
 
     // Custom
-    playerId () {
-      return this.$route.params.playerId
+    partyId () {
+      return this.$route.params.partyId
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: '9', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: '9', difficulty: 'none', number: '0' }
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }

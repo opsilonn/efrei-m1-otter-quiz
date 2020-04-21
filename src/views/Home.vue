@@ -36,34 +36,36 @@ export default {
   }),
   computed: {
     // States
-    ...mapState('players', ['players']),
+    ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
+    ...mapState('playerStats', ['playerStats']),
+    ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
-    ...mapGetters('dunjons', ['getDunjonsByPlayerId', 'getLastDunjonByPlayerId'])
+    ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId'])
   },
   methods: {
     // Mutations
-    ...mapMutations('players', ['addPlayer']),
+    ...mapMutations('parties', ['addParty']),
     ...mapMutations('dunjons', ['addDunjon']),
     ...mapMutations('rounds', ['addRound']),
     ...mapMutations('playerStats', ['addPlayerStat']),
     ...mapMutations('enemyStats', ['addEnemyStat']),
 
     startGame () {
-      // Player
-      const newPlayer = {
+      // Party
+      const newParty = {
         accountId: 1,
         seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-        isFinished: 0
+        isFinished: false
       }
 
-      this.addPlayer({ player: newPlayer })
+      this.addParty({ party: newParty })
 
       // Dunjon
       const newDunjon = {
-        playerId: newPlayer.id,
+        partyId: newParty.id,
         category: 9,
         difficulty: 'easy',
         number: 1
@@ -102,7 +104,7 @@ export default {
       this.addPlayerStat({ playerStat: newPlayerStat })
 
       // Go to Game page
-      this.$router.push({ name: 'Game', params: { playerId: newPlayer.id } })
+      this.$router.push({ name: 'Game', params: { partyId: newParty.id } })
     }
   }
 }

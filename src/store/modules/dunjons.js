@@ -14,22 +14,22 @@ const getters = {
   },
 
   /**
-   * Get all the dunjons with a specific player id
-   * @param {number} playerId - The id of the player
+   * Get all the dunjons with a specific party id
+   * @param {number} partyId - The id of the party
    */
-  getDunjonsByPlayerId: state => (playerId) => {
-    const result = state.dunjons.filter(dunjon => dunjon.playerId === playerId)
+  getDunjonsByPartyId: state => (partyId) => {
+    const result = state.dunjons.filter(dunjon => dunjon.partyId === partyId)
     return result
   },
 
   /**
-   * Get the last dunjon with a specific player id
-   * @param {number} playerId - The id of the player
+   * Get the last dunjon with a specific party id
+   * @param {number} partyId - The id of the party
    */
-  getLastDunjonByPlayerId: state => (playerId) => {
-    console.log(`player.id : ${playerId}`)
-    const dunjonsForPlayerId = getters.getDunjonsByPlayerId(state)(playerId) || []
-    return dunjonsForPlayerId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  getLastDunjonByPartyId: state => (partyId) => {
+    console.log(`party.id : ${partyId}`)
+    const dunjonsForPartyId = getters.getDunjonsByPartyId(state)(partyId) || []
+    return dunjonsForPartyId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
 
   /**

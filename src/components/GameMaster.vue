@@ -1,5 +1,104 @@
 <template>
-  <div/>
+  <div>
+    <v-dialog
+      v-model="dialogEnding"
+      persistent
+      max-width="130vh"
+    >
+      <v-card
+        v-if="!!party"
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <h2
+            class='font-weight-black blue-grey--text text--lighten-4'
+            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+          >
+            Game over !
+          </h2>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            You managed to beat <b>x dunjons</b>.
+            <br/>
+            You went through <b>x rounds</b> and anwsered good to <b>x questions</b>.
+          </p>
+
+          <h1 class="pt-5" style="font-size: 5vh; line-height: 5vh">Your score is <b>X pts</b>.</h1>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #A53532'"
+            @click="$router.push({ name: 'Home' })"
+          >
+            Exit
+          </v-btn>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #46A65D'"
+            @click="startNewGame"
+          >
+            Retry
+          </v-btn>
+          <v-spacer/>
+        </v-card-actions>
+      </v-card>
+      <v-card
+        v-else
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <h2
+            class='font-weight-black blue-grey--text text--lighten-4'
+            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+          >
+            Oups ! You got lost !
+          </h2>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            You seems to be on a party that doesn't exist or that is already finished.
+          </p>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #A53532'"
+            @click="$router.push({ name: 'Home' })"
+          >
+            Exit
+          </v-btn>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #46A65D'"
+            @click="startNewGame"
+          >
+            Retry
+          </v-btn>
+          <v-spacer/>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 </template>
 
 <script>
@@ -18,46 +117,50 @@ export default {
     },
     endLength: 1000,
     resetLength: 3000,
-    playerHp: 5,
-    enemyHp: 7
+    dialogEnding: false
   }),
   computed: {
     // States
-    ...mapState('players', ['players']),
+    ...mapState('themes', ['themes']),
+    ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
+    ...mapState('playerStats', ['playerStats']),
+    ...mapState('enemyStats', ['enemyStats']),
     ...mapState('trivias', ['trivias']),
 
     // Getters
-    ...mapGetters('players', ['getPlayerById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
+    ...mapGetters('parties', ['getPartyById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
     ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
     ...mapGetters('trivias', ['getLastTrivia']),
 
     // Custom
-    playerId () {
-      return this.$route.params.playerId
+    partyId () {
+      return this.$route.params.partyId
+    },
+    party () {
+      return this.getPartyById(this.partyId)
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId)
+      return this.getLastDunjonByPartyId(this.partyId)
     },
     round () {
-      console.log(`dunjon.id ${this.dunjon.id}`)
-      return this.getLastRoundByDunjonId(this.dunjon.id)
+      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) : {}
     },
     playerStat () {
-      return this.getPlayerStatByRoundId(this.round.id)
+      return this.round ? this.getPlayerStatByRoundId(this.round.id) : {}
     },
     playerStat_HP () {
-      return this.playerStat.HP
+      return this.playerStat ? this.playerStat.HP : 0
     },
     enemyStat () {
-      return this.getEnemyStatByRoundId(this.round.id)
+      return this.round ? this.getEnemyStatByRoundId(this.round.id) : {}
     },
     enemyStat_HP () {
-      return this.enemyStat.HP
+      return this.enemyStat ? this.enemyStat.HP : 0
     },
     lastTrivia () {
       return this.getLastTrivia() || {}
@@ -66,15 +169,74 @@ export default {
 
   methods: {
     // Mutations
-    ...mapMutations('rounds', ['nextRound', 'setRoundResult']),
-    ...mapMutations('playerStats', ['nextPlayerStat', 'setPlayerStatHP']),
-    ...mapMutations('enemyStats', ['nextEnemyStat', 'setEnemyStatHP']),
+    ...mapMutations('parties', ['addParty', 'partyFinish']),
+    ...mapMutations('dunjons', ['addDunjon']),
+    ...mapMutations('rounds', ['addRound', 'nextRound', 'setRoundResult']),
+    ...mapMutations('playerStats', ['addPlayerStat', 'nextPlayerStat', 'setPlayerStatHP']),
+    ...mapMutations('enemyStats', ['addEnemyStat', 'nextEnemyStat', 'setEnemyStatHP']),
 
     // Actions
     ...mapActions('trivias', ['fetchTrivias']),
 
     // Customs
+    startNewGame () {
+      // Party
+      const newParty = {
+        accountId: 1,
+        seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+        isFinished: false
+      }
+
+      this.addParty({ party: newParty })
+
+      // Dunjon
+      const newDunjon = {
+        partyId: newParty.id,
+        category: 9,
+        difficulty: 'easy',
+        number: 1
+      }
+
+      this.addDunjon({ dunjon: newDunjon })
+
+      // Round
+      const newRound = {
+        dunjonId: newDunjon.id,
+        roundTime: 20000,
+        number: 1
+      }
+
+      this.addRound({ round: newRound })
+
+      // Enemy Stat
+      const newEnemyStat = {
+        roundId: newRound.id,
+        maxHP: 5,
+        HP: 3
+      }
+
+      this.addEnemyStat({ enemyStat: newEnemyStat })
+
+      // Player Stat
+      const newPlayerStat = {
+        roundId: newRound.id,
+        maxHP: 10,
+        HP: 8,
+        maxMana: 5,
+        mana: 5,
+        gold: 1
+      }
+
+      this.addPlayerStat({ playerStat: newPlayerStat })
+
+      // Go to Game page
+      this.$router.push({ name: 'Game', params: { partyId: newParty.id } })
+    },
     async startTimer () {
+      if (this.party.isFinished) {
+        return
+      }
+      console.log('start timer')
       await this.fetchTrivias({ amount: 1, category: 9 })
       const oldPlayerStat = this.playerStat
       const oldEnemyStat = this.enemyStat
@@ -94,7 +256,7 @@ export default {
       this.updateTimer(this.round)
     },
     updateTimer () {
-      if (this.round.result) {
+      if (this.round.result || this.party.isFinished) {
         return
       }
 
@@ -117,7 +279,7 @@ export default {
       }
     },
     endTimer () {
-      this.setRoundResult({ round: this.round, result: 'Pending' })
+      this.setRoundResult({ roundId: this.round.id, result: 'Pending' })
       this.timer.remaining = 0
 
       // Broadcast event timer-end
@@ -144,25 +306,43 @@ export default {
     },
     onTrivia_success () {
       console.log('[GameMaster] On event trivia-success')
-      this.setRoundResult({ round: this.round, result: 'Succeded' })
+      this.setRoundResult({ roundId: this.round.id, result: 'Succeded' })
       this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
     },
     onTrivia_failure () {
       console.log('[GameMaster] On event trivia-failure')
-      this.setRoundResult({ round: this.round, result: 'Failed' })
+      this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
       this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
+    },
+    onPlayer_death () {
+      console.log('[GameMaster] On event player-death')
+      this.partyFinish({ partyId: this.partyId })
+      this.dialogEnding = true
     }
   },
   created () {
     EventBus.$on('timer-stop', ({ timer }) => this.onTimer_stop({ timer }))
     EventBus.$on('trivia-success', this.onTrivia_success)
     EventBus.$on('trivia-failure', this.onTrivia_failure)
+    EventBus.$on('player-death', this.onPlayer_death)
   },
   mounted () {
-    console.log('GAMEMASTER')
-    this.resetTimer()
+    if (this.party === undefined) {
+      this.dialogEnding = true
+    } else {
+      this.dialogEnding = false
+      this.resetTimer()
+    }
   },
   watch: {
+    partyId: function (newValue, oldValue) {
+      if (this.party === undefined) {
+        this.dialogEnding = true
+      } else {
+        this.dialogEnding = false
+        this.resetTimer()
+      }
+    },
     playerStat_HP: function (newValue, oldValue) {
       if (newValue <= 0) {
         console.log('[GameMaster] Emit event player-death')

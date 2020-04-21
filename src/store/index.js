@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import themesStore from './modules/themes'
 import AccountStore from './modules/accounts'
-import PlayerStore from './modules/players'
+import PartyStore from './modules/parties'
 import DunjonStore from './modules/dunjons'
 import RoundStore from './modules/rounds'
 import EnemyStatStore from './modules/enemyStats'
@@ -22,7 +22,7 @@ export default new Vuex.Store({
   modules: {
     themes: themesStore,
     accounts: AccountStore,
-    players: PlayerStore,
+    parties: PartyStore,
     dunjons: DunjonStore,
     rounds: RoundStore,
     enemyStats: EnemyStatStore,

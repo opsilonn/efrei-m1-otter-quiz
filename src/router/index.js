@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/game/:playerId',
+    path: '/game/:partyId',
     name: 'Game',
     component: () => import('../views/Game.vue')
   },

@@ -46,21 +46,21 @@ export default {
   },
   computed: {
     // States
-    ...mapState('players', ['players']),
+    ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
 
     // Getters
-    ...mapGetters('players', ['getPlayerById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPlayerId']),
+    ...mapGetters('parties', ['getPartyById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    playerId () {
-      return this.$route.params.playerId
+    partyId () {
+      return this.$route.params.partyId
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: 'none', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', number: '0' }
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }

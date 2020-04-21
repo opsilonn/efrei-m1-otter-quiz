@@ -79,21 +79,21 @@ export default {
   computed: {
     // States
     ...mapState('themes', ['themes']),
-    ...mapState('players', ['players']),
+    ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
 
     // Getters
-    ...mapGetters('players', ['getPlayerById']),
-    ...mapGetters('dunjons', ['getDunjonsByPlayerId', 'getLastDunjonByPlayerId']),
+    ...mapGetters('parties', ['getPartyById']),
+    ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
 
     // Custom
-    playerId () {
-      return this.$route.param.playerId
+    partyId () {
+      return this.$route.param.partyId
     },
     dunjon () {
-      return this.getLastDunjonByPlayerId(this.playerId) || { category: '0', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', number: '0' }
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
@@ -151,7 +151,7 @@ export default {
       this.step = 2
       this.showResults = true
 
-      // If the player answered correctly or not (wrong answer / no answer at all)
+      // If the party answered correctly or not (wrong answer / no answer at all)
       if (this.yourAnswer.value === true) {
         console.log('[GameQuestion] Emit event trivia-success')
         EventBus.$emit('trivia-success')
