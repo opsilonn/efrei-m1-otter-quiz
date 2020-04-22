@@ -261,7 +261,8 @@ export default {
     resetLength: 3000,
     dialogEnding: false,
     dialogNextDunjon: false,
-    gameReaload: true
+    gameReaload: true,
+    chooseDungeon: false
   }),
   computed: {
     // States
@@ -294,11 +295,10 @@ export default {
     round () {
       return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
     },
+    roundAnswer () {
+      return this.round ? this.round.answer : undefined
+    },
     playerStat () {
-      console.log('getting playerStat')
-      console.log(`getPlayerStatByPartyId(${this.partyId})`)
-      console.log(this.getPlayerStatByPartyId(this.partyId))
-      console.log(`Hp : ${(this.getPlayerStatByPartyId(this.partyId) || {}).HP}`)
       return this.getPlayerStatByPartyId(this.partyId)
     },
     playerStat_HP () {
@@ -363,6 +363,7 @@ export default {
     },
     enterNewDunjon (dunjon) {
       this.dialogNextDunjon = false
+      this.chooseDungeon = false
       const defaultEnemyStat = {
         maxHP: parseInt(this.enemyStat.maxHP) + 1,
         HP: parseInt(this.enemyStat.maxHP) + 1
@@ -372,7 +373,7 @@ export default {
       this.startTimer()
     },
     async startTimer () {
-      if (this.party.isFinished || this.dialogNextDunjon) {
+      if (this.party.isFinished || this.chooseDungeon) {
         return
       }
       await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
@@ -434,28 +435,15 @@ export default {
     onTimer_stop () {
       this.endTimer()
     },
-    onTrivia_success () {
-      this.setRoundResult({ roundId: this.round.id, result: 'Succeeded' })
-      console.log('enemy hp from : ' + parseInt(this.enemyStat_HP))
-      console.log('enemy hp to : ' + (parseInt(this.enemyStat_HP) - 1))
-      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat_HP) - 1 })
-      console.log('enemy hp at : ' + parseInt(this.enemyStat_HP))
-      this.addPartyScore({ partyId: this.partyId, score: 100 })
-    },
-    onTrivia_failure () {
-      this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
-      console.log('player hp from : ' + parseInt(this.playerStat_HP))
-      console.log('player hp to : ' + (parseInt(this.playerStat_HP) - 1))
-      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) - 1 })
-      console.log('player hp at : ' + (parseInt(this.playerStat_HP) - 1))
-    },
     onPlayer_death () {
       this.partyFinish({ partyId: this.partyId })
       this.dialogEnding = true
     },
     onEnemy_death () {
-      this.dialogNextDunjon = true
+      this.chooseDungeon = true
       this.addPartyScore({ partyId: this.partyId, score: 500 })
+
+      setTimeout(() => { this.dialogNextDunjon = true }, this.resetLength)
     }
   },
   created () {
@@ -482,6 +470,24 @@ export default {
       } else {
         this.dialogEnding = false
         this.startTimer()
+      }
+    },
+    roundAnswer: function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        if (newValue.value) {
+          this.setRoundResult({ roundId: this.round.id, result: 'Succeeded' })
+          console.log('enemy hp from : ' + parseInt(this.enemyStat_HP))
+          console.log('enemy hp to : ' + (parseInt(this.enemyStat_HP) - 1))
+          this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat_HP) - 1 })
+          console.log('enemy hp at : ' + parseInt(this.enemyStat_HP))
+          this.addPartyScore({ partyId: this.partyId, score: 100 })
+        } else {
+          this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
+          console.log('player hp from : ' + parseInt(this.playerStat_HP))
+          console.log('player hp to : ' + (parseInt(this.playerStat_HP) - 1))
+          this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) - 1 })
+          console.log('player hp at : ' + (parseInt(this.playerStat_HP)))
+        }
       }
     },
     playerStat_HP: function (newValue, oldValue) {

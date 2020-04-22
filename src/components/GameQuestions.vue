@@ -60,7 +60,7 @@
 <script>
 import EventBus from '@/EventBus.js'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'GameQuestions',
@@ -90,13 +90,13 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.param.partyId
+      return this.$route.params.partyId
     },
     dunjon () {
       return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', number: '0' }
     },
     timerRemainingSec () {
       return Math.abs((this.timer.remaining || 0.0) / 1000)
@@ -118,6 +118,9 @@ export default {
     }
   },
   methods: {
+    // Mutations
+    ...mapMutations('rounds', ['setRoundAnswer']),
+
     // Method called when the user chooses an answer
     chooseAnswer (answer) {
       this.yourAnswer = answer
@@ -129,7 +132,7 @@ export default {
     // Event handlers
     onTimer_start ({ timer, trivia }) {
       this.showResults = false
-      this.yourAnswer = { answer: 'none' }
+      this.yourAnswer = {}
       this.timer = timer
       this.trivia = trivia
       this.step = 1
@@ -142,17 +145,14 @@ export default {
       this.step = 0
     },
     onTimer_reset ({ timer }) {
-      this.showResults = true
       this.timer = timer
       this.step = 2
-      this.showResults = true
 
-      // If the party answered correctly or not (wrong answer / no answer at all)
-      if (this.yourAnswer.value === true) {
-        EventBus.$emit('trivia-success')
-      } else {
-        EventBus.$emit('trivia-failure')
-      }
+      console.log('[GameQuestions] Setting round.answer to ')
+      console.log(this.yourAnswer)
+      this.setRoundAnswer({ roundId: this.round.id, answer: this.yourAnswer })
+      console.log('[GameQuestions] round.answer : ')
+      console.log(this.round.answer)
     }
   },
   created () {

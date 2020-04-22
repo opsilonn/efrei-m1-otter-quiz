@@ -83,8 +83,14 @@ const mutations = {
   },
   setRoundResult (state, { roundId, result }) {
     updateProp(state, { id: roundId, prop: 'result', value: result })
-    // Second update or it don't work
-    // updateProp(state, { id: round.id, prop: '', value: '' })
+  },
+  setRoundAnswer (state, { roundId, answer }) {
+    console.log(roundId)
+    console.log('[rounds] Setting round.answer to ')
+    console.log(answer)
+    updateProp(state, { id: roundId, prop: 'answer', value: answer })
+    console.log('[rounds] round.answer : ')
+    console.log(getters.getRoundById(state)(roundId).answer)
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
