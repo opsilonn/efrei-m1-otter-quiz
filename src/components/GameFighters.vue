@@ -14,14 +14,13 @@
     <!-- Display the players -->
     <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
       <v-row no-gutters class="d-flex align-end">
-        <GamePlayers
-          :isPlayer="true"
-          :doAnim="doAnim"
-        />
-        <GamePlayers
-          :isPlayer="false"
-          :doAnim="doAnim"
-        />
+
+        <!-- First player : the user -->
+        <GamePlayers :isPlayer="true"/>
+
+        <!-- Second player : the bot -->
+        <GamePlayers :isPlayer="false"/>
+
       </v-row>
     </div>
   </div>
@@ -37,11 +36,6 @@ export default {
   name: 'GameFighters',
   components: {
     GamePlayers
-  },
-  data: () => {
-    return {
-      doAnim: false
-    }
   },
   computed: {
     // States
