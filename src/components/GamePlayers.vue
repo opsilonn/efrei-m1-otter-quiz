@@ -11,7 +11,7 @@
             class="font-weight-black blue-grey--text text--lighten-5"
             style="text-shadow: 2px 2px 5px black; font-size: 2.5vh"
             align="center">
-            "name"
+            {{ isPlayer ? 'Player' : 'Enemy' + dunjon.id }}
           </h3>
 
           <!-- Health bar -->

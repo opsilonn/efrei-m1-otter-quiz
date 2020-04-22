@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- Dialog at the end -->
     <v-dialog
       v-model="dialogEnding"
       persistent
@@ -100,6 +101,145 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- Dialog to choose next dunjon -->
+    <v-dialog
+      v-model="dialogNextDunjon"
+      persistent
+      max-width="150vh"
+    >
+      <v-card
+        v-if="!!party"
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <label>
+            <h2
+              class='font-weight-black blue-grey--text text--lighten-4'
+              style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+            >
+              Next dungeon !
+            </h2>
+          </label>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            Choose one :
+          </p>
+          <v-row>
+            <v-col cols="12" :sm="4">
+              <v-card
+                class="blue-grey lighten-3"
+                @click="enterNewDunjon({
+                  category: 9,
+                  difficulty: 'Easy'
+                 })"
+              >
+                <v-card-title>
+                  Dungeon 1
+                </v-card-title>
+                <v-card-text>
+                  Category : {{ this.getTriviaCategoryNameById(9) }}
+                  <br/>
+                  Difficulty : Easy
+                  <br/>
+                  Round timer : 20s
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" :sm="4">
+              <v-card
+                class="blue-grey lighten-3"
+                @click="enterNewDunjon({
+                  category: 10,
+                  difficulty: 'Easy'
+                 })"
+              >
+                <v-card-title>
+                  Dungeon 2
+                </v-card-title>
+                <v-card-text>
+                  Category : {{ this.getTriviaCategoryNameById(10) }}
+                  <br/>
+                  Difficulty : Easy
+                  <br/>
+                  Round timer : 18s
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col cols="12" :sm="4">
+              <v-card
+                class="blue-grey lighten-3"
+                @click="enterNewDunjon({
+                  category: 11,
+                  difficulty: 'Medium'
+                 })"
+              >
+                <v-card-title>
+                  Dungeon 3
+                </v-card-title>
+                <v-card-text>
+                  Category : {{ this.getTriviaCategoryNameById(11) }}
+                  <br/>
+                  Difficulty : Medium
+                  <br/>
+                  Round timer : 20s
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+      <v-card
+        v-else
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <h2
+            class='font-weight-black blue-grey--text text--lighten-4'
+            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+          >
+            Oups ! You got lost !
+          </h2>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            You seems to be on a party that doesn't exist or that is already finished.
+          </p>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #A53532'"
+            @click="$router.push({ name: 'Home' })"
+          >
+            Exit
+          </v-btn>
+          <v-spacer/>
+          <v-btn
+            x-large
+            dark
+            :style="'background-color: #46A65D'"
+            @click="startNewGame"
+          >
+            Retry
+          </v-btn>
+          <v-spacer/>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -120,6 +260,7 @@ export default {
     endLength: 1000,
     resetLength: 3000,
     dialogEnding: false,
+    dialogNextDunjon: false,
     gameReaload: true
   }),
   computed: {
@@ -138,7 +279,7 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
-    ...mapGetters('trivias', ['getLastTrivia']),
+    ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById']),
 
     // Custom
     partyId () {
@@ -179,10 +320,10 @@ export default {
     ...mapMutations('enemyStats', ['addEnemyStat', 'setEnemyStatHP']),
 
     // Actions
-    ...mapActions('trivias', ['fetchTrivias']),
     ...mapActions('parties', ['createParty']),
     ...mapActions('dunjons', ['nextDunjon']),
     ...mapActions('rounds', ['nextRound']),
+    ...mapActions('trivias', ['fetchTrivias', 'fetchTriviaCategories']),
 
     // Customs
     startNewGame () {
@@ -208,9 +349,22 @@ export default {
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
         })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    enterNewDunjon (dunjon) {
+      this.dialogNextDunjon = false
+      const defaultEnemyStat = {
+        maxHP: parseInt(this.enemyStat.maxHP) + 1,
+        HP: parseInt(this.enemyStat.maxHP) + 1
+      }
+      this.nextDunjon({ partyId: this.partyId, dunjon, defaultEnemyStat })
+      EventBus.$emit('dunjon-enter')
+      this.startTimer()
     },
     async startTimer () {
-      if (this.party.isFinished) {
+      if (this.party.isFinished || this.dialogNextDunjon) {
         return
       }
       console.log('start timer')
@@ -297,12 +451,7 @@ export default {
     },
     onEnemy_death () {
       console.log('[GameMaster] On event enemy-death')
-      const defaultEnemyStat = {
-        maxHP: parseInt(this.enemyStat.maxHP) + 1,
-        HP: parseInt(this.enemyStat.maxHP) + 1
-      }
-      this.nextDunjon({ partyId: this.partyId, dunjon: this.dunjon, defaultEnemyStat })
-      EventBus.$emit('dunjon-enter')
+      this.dialogNextDunjon = true
     }
   },
   created () {
@@ -312,7 +461,9 @@ export default {
     EventBus.$on('player-death', this.onPlayer_death)
     EventBus.$on('enemy-death', this.onEnemy_death)
   },
-  mounted () {
+  async mounted () {
+    this.fetchTriviaCategories()
+
     if (this.party === undefined) {
       this.dialogEnding = true
     } else {

@@ -4,7 +4,7 @@
     <div>
       <label>
         <h2 align="center" style="font-size: 3vh">
-            Dunjon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
+            Dungeon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
             <br/>
             Round n° {{ round.number }} : {{ round.result }}
         </h2>
@@ -30,7 +30,7 @@
 // import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'GameFighters',
@@ -64,11 +64,6 @@ export default {
     }
   },
   methods: {
-    // Actions
-    ...mapActions('trivias', ['fetchTriviaCategories'])
-  },
-  created () {
-    this.fetchTriviaCategories()
   }
 }
 </script>
