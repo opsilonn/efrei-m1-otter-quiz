@@ -4,7 +4,7 @@
     <div>
       <label>
         <h2 align="center" style="font-size: 3vh">
-            Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
+            Dunjon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
             <br/>
             Round n° {{ round.number }} : {{ round.result }}
         </h2>
@@ -30,7 +30,7 @@
 // import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'GameFighters',
@@ -47,6 +47,7 @@ export default {
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('trivias', ['getTriviaCategoryNameById']),
 
     // Custom
     partyId () {
@@ -57,9 +58,17 @@ export default {
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+    },
+    dunjonCategoryName () {
+      return this.dunjon ? this.getTriviaCategoryNameById(this.dunjon.category) : 'none'
     }
   },
   methods: {
+    // Actions
+    ...mapActions('trivias', ['fetchTriviaCategories'])
+  },
+  created () {
+    this.fetchTriviaCategories()
   }
 }
 </script>

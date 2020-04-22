@@ -9,10 +9,20 @@ function api (path) {
 }
 
 const state = {
+  triviaCategories: [],
   trivias: []
 }
 
 const getters = {
+  /**
+   * Get the last trivia fetched
+   */
+  getTriviaCategoryNameById: state => (id) => {
+    const triviaCategory = state.triviaCategories.find((trivia) => trivia.id === id) || {}
+    console.log(`triviaCategory.name: ${triviaCategory.name}`)
+    return triviaCategory.name
+  },
+
   /**
    * Get the last trivia fetched
    */
@@ -86,6 +96,14 @@ const mutations = {
       state.trivias.push(trivia)
     }
   },
+  /**
+   * Add a new trivia or update an existing one
+   * @param {object} state  - The trivias state
+   * @param {object} trivia - The trivia to be added
+   */
+  addTriviaCategories (state, { triviaCategories }) {
+    state.triviaCategories = triviaCategories
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
   },
@@ -112,6 +130,13 @@ const actions = {
     console.log('data :')
     console.log(data)
     data.results.forEach(d => commit('addTrivia', { trivia: d }))
+  },
+
+  async fetchTriviaCategories ({ commit }) {
+    const { data } = await axios.get('https://opentdb.com/api_category.php')
+    console.log('data :')
+    console.log(data)
+    commit('addTriviaCategories', { triviaCategories: data.trivia_categories })
   }
 }
 

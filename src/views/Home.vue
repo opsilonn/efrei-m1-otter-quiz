@@ -63,8 +63,8 @@ export default {
         gold: 1
       }
       const defaultEnemyStat = {
-        maxHP: 5,
-        HP: 5
+        maxHP: 3,
+        HP: 3
       }
 
       this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
