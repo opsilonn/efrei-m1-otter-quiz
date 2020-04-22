@@ -11,7 +11,7 @@
             class="font-weight-black blue-grey--text text--lighten-5"
             style="text-shadow: 2px 2px 5px black; font-size: 2.5vh"
             align="center">
-            "name"
+            {{ isPlayer ? account.username : 'Enemy' + dunjon.id }}
           </h3>
 
           <!-- Health bar -->
@@ -122,6 +122,7 @@ export default {
   },
   computed: {
     // States
+    ...mapState('accounts', ['accounts']),
     ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
@@ -129,13 +130,17 @@ export default {
     ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
+    ...mapGetters('accounts', ['getConnectedAccount']),
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
-    ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
-    ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
+    ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
 
     // Custom
+    account () {
+      return this.getConnectedAccount()
+    },
     partyId () {
       return this.$route.params.partyId
     },
@@ -146,10 +151,10 @@ export default {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     },
     playerStat () {
-      return this.getPlayerStatByRoundId(this.round.id) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
+      return this.getPlayerStatByPartyId(this.partyId) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
     },
     enemyStat () {
-      return this.getEnemyStatByRoundId(this.round.id) || { maxHP: '0', HP: '0' }
+      return this.dunjon ? this.getEnemyStatByDunjonId(this.dunjon.id) || { maxHP: '0', HP: '0' } : { maxHP: '0', HP: '0' }
     },
     maxHP () {
       return this.isPlayer ? this.playerStat.maxHP : this.enemyStat.maxHP
@@ -216,6 +221,8 @@ export default {
 
     EventBus.$on('player-death', () => this.playerDeath())
     EventBus.$on('enemy-death', () => this.enemyDeath())
+
+    EventBus.$on('dunjon-enter', () => this.resetAnimations())
   }
 }
 </script>

@@ -1,7 +1,13 @@
 import Vue from 'vue'
 
 const state = {
-  accounts: []
+  connectedAccount: { id: 0, username: 'anonymous' },
+  accounts: [{
+    id: 1,
+    username: 'user1',
+    password: 'test'
+  }],
+  register: false
 }
 
 const getters = {
@@ -17,19 +23,31 @@ const getters = {
    * Get the last account fetched
    */
   getLastAccount: state => () => {
-    return state.account.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+    return state.accounts.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
 
   /**
    * Get accont by its login and password
    */
   getAccountByLoginAndPassword: state => (login, password) => {
-    var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
+    console.log('balise 1')
+    console.log(login)
+    console.log(password)
+    var logged = state.accounts.find(account => (account.username === login) && (account.password === password))
     if (logged === undefined) {
       return logged
     }
-    logged.connected = true
+    // logged.connected = true
     return logged
+  },
+
+  getConnectedAccount: state => () => {
+    const logged = state.connectedAccount
+    return logged
+  },
+
+  getRegistration: state => () => {
+    return state.register
   }
 }
 
@@ -57,8 +75,9 @@ const mutations = {
     if (!account.id) {
       const lastAccount = getters.getLastAccount(state)()
       account.id = (lastAccount) ? lastAccount.id + 1 : 0
+      console.log(lastAccount)
     }
-
+    console.log(account)
     const existing = state.accounts.findIndex(e => e.id === account.id)
     if (existing !== -1) {
       const keys = Object.keys(account)
@@ -67,16 +86,43 @@ const mutations = {
         updateProp(state, { id: account.id, prop: key, value: account[key] })
       }
     } else {
+      console.log('registering')
       state.accounts.push(account)
+      console.log(state.accounts)
     }
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
+  },
+  connectedTo (state, { account }) {
+    state.connectedAccount = account
+  },
+  registered (state, { registration }) {
+    state.register = registration
   }
-
 }
 
 const actions = {
+  connection ({ commit, getters }, { login, password }) {
+    const account = getters.getAccountByLoginAndPassword(login, password)
+    console.log('balise2')
+    console.log(login)
+    console.log(password)
+    console.log(account)
+    if (account !== undefined) {
+      console.log('entrering the if ')
+      commit('connectedTo', { account })
+      return account
+    }
+  },
+  register ({ commit, getters }, { login, password }) {
+    const already = getters.getAccountByLoginAndPassword({ login, password })
+    if (already === undefined) {
+      const account = { username: login, password: password }
+      commit('addAccount', { account })
+      commit('registered', { registration: true })
+    }
+  }
 }
 
 export default {

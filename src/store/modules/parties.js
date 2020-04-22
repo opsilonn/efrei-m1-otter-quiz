@@ -72,6 +72,10 @@ const mutations = {
       state.parties.push(party)
     }
   },
+  addPartyScore (state, { partyId, score }) {
+    const party = getters.getPartyById(state)(partyId)
+    updateProp(state, { id: partyId, prop: 'score', value: parseInt(party.score) + parseInt(score) })
+  },
   partyFinish (state, { partyId }) {
     updateProp(state, { id: partyId, prop: 'isFinished', value: true })
   },
@@ -84,17 +88,28 @@ const mutations = {
 }
 
 const actions = {
-  createParty ({ commit, dispatch }, { accountId }) {
+  createParty ({ commit, dispatch }, { accountId, defaultPlayerStat, defaultEnemyStat }) {
     console.log('[parties] createParty')
+    console.log('defaultPlayerStat')
+    console.log(defaultPlayerStat)
+    console.log('defaultEnemyStat')
+    console.log(defaultEnemyStat)
     // Party
     const newParty = {
       accountId,
+      score: 0,
       seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       isFinished: false
     }
     console.log(`[parties] commit addParty: ${newParty.id}`)
     commit('addParty', { party: newParty })
     console.log(`[parties] commited addParty: ${newParty.id}`)
+
+    defaultPlayerStat.partyId = newParty.id
+
+    // Stats
+    console.log('[parties] commit playerStats/addPlayerStat')
+    commit('playerStats/addPlayerStat', { playerStat: defaultPlayerStat }, { root: true })
 
     // Dunjon
     const newDunjon = {
@@ -103,7 +118,7 @@ const actions = {
       difficulty: 'easy'
     }
     console.log(`[parties] dispatch dunjons/nextDunjon ${newDunjon.id}`)
-    return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon }, { root: true })
+    return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon, defaultEnemyStat }, { root: true })
       .then((dunjonId) => {
         console.log(`[parties] dispatched dunjons/nextDunjon: ${dunjonId}`)
 
