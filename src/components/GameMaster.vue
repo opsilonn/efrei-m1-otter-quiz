@@ -368,7 +368,7 @@ export default {
         return
       }
       console.log('start timer')
-      await this.fetchTrivias({ amount: 1, category: 9 })
+      await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
       console.log('before nextRound')
       this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
       console.log('after nextRound')

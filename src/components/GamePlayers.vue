@@ -11,7 +11,7 @@
             class="font-weight-black blue-grey--text text--lighten-5"
             style="text-shadow: 2px 2px 5px black; font-size: 2.5vh"
             align="center">
-            {{ isPlayer ? 'Player' : 'Enemy' + dunjon.id }}
+            {{ isPlayer ? account.username : 'Enemy' + dunjon.id }}
           </h3>
 
           <!-- Health bar -->
@@ -117,6 +117,7 @@ export default {
   }),
   computed: {
     // States
+    ...mapState('accounts', ['accounts']),
     ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
@@ -124,6 +125,7 @@ export default {
     ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
+    ...mapGetters('accounts', ['getConnectedAccount']),
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
@@ -131,6 +133,9 @@ export default {
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
 
     // Custom
+    account () {
+      return this.getConnectedAccount()
+    },
     partyId () {
       return this.$route.params.partyId
     },
