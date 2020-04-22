@@ -27,7 +27,6 @@ const getters = {
    * @param {number} partyId - The id of the party
    */
   getLastDunjonByPartyId: state => (partyId) => {
-    console.log(`party.id : ${partyId}`)
     const dunjonsForPartyId = getters.getDunjonsByPartyId(state)(partyId) || []
     return dunjonsForPartyId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
@@ -84,7 +83,7 @@ const mutations = {
 }
 
 const actions = {
-  nextDunjon ({ commit, rootGetters, getters }, { partyId, dunjon }) {
+  nextDunjon ({ commit, rootGetters, getters }, { partyId, dunjon, defaultEnemyStat }) {
     console.log('[dunjons] nextDunjon')
     console.log(`[dunjons] getting parties/getPartyById: ${partyId}`)
     const party = rootGetters['parties/getPartyById'](partyId)
@@ -106,6 +105,10 @@ const actions = {
     console.log(`[dunjons] commit addDunjon: ${newDunjon.id}`)
     commit('addDunjon', { dunjon: newDunjon })
     console.log(`[dunjons] commited addDunjon: ${newDunjon.id}`)
+
+    defaultEnemyStat.dunjonId = newDunjon.id
+    console.log('[parties] commit enemyStats/addEnemyStat')
+    commit('enemyStats/nextEnemyStat', { dunjonId: newDunjon.id, enemyStat: defaultEnemyStat }, { root: true })
 
     console.log(`[dunjons] return dunjonId: ${newDunjon.id}`)
     return newDunjon.id

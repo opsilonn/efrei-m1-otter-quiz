@@ -6,8 +6,7 @@
         <h2 align="center" style="font-size: 3vh">
             Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
             <br/>
-            {{ round.id }} Round n° {{ round.number }} :
-            {{ round.result }}
+            Round n° {{ round.number }} : {{ round.result }}
         </h2>
       </label>
     </div>

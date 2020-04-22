@@ -127,8 +127,8 @@ export default {
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
-    ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
-    ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
+    ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
 
     // Custom
     partyId () {
@@ -141,10 +141,10 @@ export default {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
     },
     playerStat () {
-      return this.getPlayerStatByRoundId(this.round.id) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
+      return this.getPlayerStatByPartyId(this.partyId) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
     },
     enemyStat () {
-      return this.getEnemyStatByRoundId(this.round.id) || { maxHP: '0', HP: '0' }
+      return this.dunjon ? this.getEnemyStatByDunjonId(this.dunjon.id) || { maxHP: '0', HP: '0' } : { maxHP: '0', HP: '0' }
     },
     maxHP () {
       return this.isPlayer ? this.playerStat.maxHP : this.enemyStat.maxHP

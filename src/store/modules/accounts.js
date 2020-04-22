@@ -1,7 +1,12 @@
 import Vue from 'vue'
 
 const state = {
-  accounts: []
+  connectedAccount: {},
+  accounts: [{
+    id: -1,
+    username: 'none',
+    password: 'none'
+  }]
 }
 
 const getters = {
@@ -25,10 +30,11 @@ const getters = {
    */
   getAccountByLoginAndPassword: state => (login, password) => {
     var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
+
     if (logged === undefined) {
       return logged
     }
-    logged.connected = true
+
     return logged
   }
 }

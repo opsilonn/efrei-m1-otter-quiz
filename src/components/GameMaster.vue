@@ -12,12 +12,14 @@
         <v-card-title
           class="blue-grey darken-4"
         >
-          <h2
-            class='font-weight-black blue-grey--text text--lighten-4'
-            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
-          >
-            Game over !
-          </h2>
+          <label>
+            <h2
+              class='font-weight-black blue-grey--text text--lighten-4'
+              style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+            >
+              Game over !
+            </h2>
+          </label>
         </v-card-title>
         <v-card-text
           class="blue-grey darken-2 blue-grey--text text--lighten-4"
@@ -117,7 +119,8 @@ export default {
     },
     endLength: 1000,
     resetLength: 3000,
-    dialogEnding: false
+    dialogEnding: false,
+    gameReaload: true
   }),
   computed: {
     // States
@@ -133,8 +136,8 @@ export default {
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
-    ...mapGetters('playerStats', ['getPlayerStatByRoundId']),
-    ...mapGetters('enemyStats', ['getEnemyStatByRoundId']),
+    ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
     ...mapGetters('trivias', ['getLastTrivia']),
 
     // Custom
@@ -151,13 +154,13 @@ export default {
       return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
     },
     playerStat () {
-      return this.round ? this.getPlayerStatByRoundId(this.round.id) : {}
+      return this.getPlayerStatByPartyId(this.partyId)
     },
     playerStat_HP () {
       return this.playerStat ? this.playerStat.HP : 0
     },
     enemyStat () {
-      return this.round ? this.getEnemyStatByRoundId(this.round.id) : {}
+      return this.dunjon ? this.getEnemyStatByDunjonId(this.dunjon.id) : {}
     },
     enemyStat_HP () {
       return this.enemyStat ? this.enemyStat.HP : 0
@@ -183,7 +186,19 @@ export default {
 
     // Customs
     startNewGame () {
-      this.createParty({ accountId: 1 })
+      const defaultPlayerStat = {
+        maxHP: 10,
+        HP: 10,
+        maxMana: 5,
+        mana: 5,
+        gold: 1
+      }
+      const defaultEnemyStat = {
+        maxHP: 5,
+        HP: 5
+      }
+
+      this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
           const dunjonId = this.getLastDunjonByPartyId(partyId).id
 
@@ -203,6 +218,7 @@ export default {
       console.log('before nextRound')
       this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
       console.log('after nextRound')
+      this.gameReaload = false
 
       // Reset localy
       this.timer.begin = Date.now()
@@ -281,7 +297,11 @@ export default {
     },
     onEnemy_death () {
       console.log('[GameMaster] On event enemy-death')
-      this.nextDunjon({ partyId: this.partyId, dunjon: this.dunjon })
+      const defaultEnemyStat = {
+        maxHP: parseInt(this.enemyStat.maxHP) + 1,
+        HP: parseInt(this.enemyStat.maxHP) + 1
+      }
+      this.nextDunjon({ partyId: this.partyId, dunjon: this.dunjon, defaultEnemyStat })
     }
   },
   created () {
@@ -309,31 +329,35 @@ export default {
       }
     },
     playerStat_HP: function (newValue, oldValue) {
-      if (newValue <= 0) {
-        console.log('[GameMaster] Emit event player-death')
-        EventBus.$emit('player-death')
-        return
-      }
-      if (newValue > oldValue) {
-        console.log('[GameMaster] Emit event player-heal')
-        EventBus.$emit('player-heal', { oldValue })
-      } else {
-        console.log('[GameMaster] Emit event player-damage')
-        EventBus.$emit('player-damage', { oldValue })
+      if (!this.gameReaload) {
+        if (newValue <= 0) {
+          console.log('[GameMaster] Emit event player-death')
+          EventBus.$emit('player-death')
+          return
+        }
+        if (newValue > oldValue) {
+          console.log('[GameMaster] Emit event player-heal')
+          EventBus.$emit('player-heal', { oldValue })
+        } else {
+          console.log('[GameMaster] Emit event player-damage')
+          EventBus.$emit('player-damage', { oldValue })
+        }
       }
     },
     enemyStat_HP: function (newValue, oldValue) {
-      if (newValue <= 0) {
-        console.log('[GameMaster] Emit event enemy-death')
-        EventBus.$emit('enemy-death')
-        return
-      }
-      if (newValue > oldValue) {
-        console.log('[GameMaster] Emit event enemy-heal')
-        EventBus.$emit('enemy-heal', { oldValue })
-      } else {
-        console.log('[GameMaster] Emit event enemy-damage')
-        EventBus.$emit('enemy-damage', { oldValue })
+      if (!this.gameReaload) {
+        if (newValue <= 0) {
+          console.log('[GameMaster] Emit event enemy-death')
+          EventBus.$emit('enemy-death')
+          return
+        }
+        if (newValue > oldValue) {
+          console.log('[GameMaster] Emit event enemy-heal')
+          EventBus.$emit('enemy-heal', { oldValue })
+        } else {
+          console.log('[GameMaster] Emit event enemy-damage')
+          EventBus.$emit('enemy-damage', { oldValue })
+        }
       }
     }
   }

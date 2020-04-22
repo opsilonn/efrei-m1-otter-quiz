@@ -14,11 +14,11 @@ const getters = {
   },
 
   /**
-   * Get all the player stats with a specific round id
-   * @param {number} roundId - The id of the round
+   * Get all the player stats with a specific party id
+   * @param {number} partyId - The id of the party
    */
-  getPlayerStatByRoundId: state => (roundId) => {
-    return state.playerStats.find(playerStat => playerStat.roundId === roundId)
+  getPlayerStatByPartyId: state => (partyId) => {
+    return state.playerStats.find(playerStat => playerStat.partyId === partyId)
   },
 
   /**
@@ -71,21 +71,21 @@ const mutations = {
   },
   setPlayerStatHP (state, { playerStat, HP }) {
     if (HP < 0) {
-      HP = 0
+      updateProp(state, { id: playerStat.id, prop: 'HP', value: 0 })
     } else if (HP > playerStat.maxHP) {
-      HP = playerStat.maxHP
+      updateProp(state, { id: playerStat.id, prop: 'HP', value: playerStat.maxHP })
+    } else {
+      updateProp(state, { id: playerStat.id, prop: 'HP', value: HP })
     }
-
-    updateProp(state, { id: playerStat.id, prop: 'HP', value: HP })
   },
   setPlayerStatMana (state, { playerStat, mana }) {
     if (mana < 0) {
-      mana = 0
-    } else if (mana > playerStat.maxmana) {
-      mana = playerStat.maxmana
+      updateProp(state, { id: playerStat.id, prop: 'mana', value: 0 })
+    } else if (mana > playerStat.maxMana) {
+      updateProp(state, { id: playerStat.id, prop: 'mana', value: playerStat.maxMana })
+    } else {
+      updateProp(state, { id: playerStat.id, prop: 'mana', value: mana })
     }
-
-    updateProp(state, { id: playerStat.id, prop: 'mana', value: mana })
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
@@ -94,20 +94,6 @@ const mutations = {
 }
 
 const actions = {
-  nextPlayerStat ({ commit }, { playerStat, roundId }) {
-    console.log('[playerStats] nextPlayerStat')
-    console.log(playerStat)
-    const nextPlayerStat = {
-      roundId: roundId,
-      maxHP: playerStat.maxHP,
-      HP: playerStat.HP,
-      maxMana: playerStat.maxMana,
-      mana: playerStat.mana,
-      gold: playerStat.gold
-    }
-    commit('addPlayerStat', { playerStat: nextPlayerStat })
-    console.log(nextPlayerStat)
-  }
 }
 
 export default {
