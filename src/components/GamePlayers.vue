@@ -108,7 +108,12 @@ export default {
   props: ['isPlayer'],
   data: () => ({
     animPlayer: '',
-    animEnemy: ''
+    animEnemy: '',
+    animationKey: {
+      HAPPY: 'anim-happy',
+      DAMAGE: 'anim-damage',
+      DEATH: 'anim-death'
+    }
   }),
   computed: {
     // States
@@ -175,25 +180,25 @@ export default {
     // DAMAGE
     // When the player takes damage
     playerTakesDamage () {
-      this.animPlayer = 'anim-damage'
-      this.animEnemy = 'anim-happy'
+      this.animPlayer = this.animationKey.DAMAGE
+      this.animEnemy = this.animationKey.HAPPY
     },
     // When the enemy takes damage
     enemyTakesDamage () {
-      this.animPlayer = 'anim-happy'
-      this.animEnemy = 'anim-damage'
+      this.animPlayer = this.animationKey.HAPPY
+      this.animEnemy = this.animationKey.DAMAGE
     },
 
     // DEATH
     // When the player dies
     playerDeath () {
-      this.animPlayer = 'anim-death'
-      this.animEnemy = 'anim-happy'
+      this.animPlayer = this.animationKey.DEATH
+      this.animEnemy = this.animationKey.HAPPY
     },
     // When the enemy dies
     enemyDeath () {
-      this.animPlayer = 'anim-happy'
-      this.animEnemy = 'anim-death'
+      this.animPlayer = this.animationKey.HAPPY
+      this.animEnemy = this.animationKey.DEATH
     }
   },
   created () {
