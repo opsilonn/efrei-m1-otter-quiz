@@ -148,11 +148,11 @@ const actions = {
         HP: 10,
         maxMana: 5,
         mana: 5,
-        gold: 1
+        gold: 20
       }
       const defaultEnemyStat = {
-        maxHP: 5,
-        HP: 5
+        maxHP: 3,
+        HP: 3
       }
       console.log('[rounds] dispatch playerStats/nextPlayerStat')
       dispatch('playerStats/nextPlayerStat', { playerStat: defaultPlayerStat, roundId: newRound.id }, { root: true })

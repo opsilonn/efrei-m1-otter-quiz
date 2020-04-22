@@ -8,21 +8,21 @@
       <v-card
         v-if="!!party"
         class="blue-grey darken-3"
-      >
+        >
         <v-card-title
           class="blue-grey darken-4"
-        >
+          >
           <h2
             class='font-weight-black blue-grey--text text--lighten-4'
             style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
-          >
+            >
             Game over !
           </h2>
         </v-card-title>
         <v-card-text
           class="blue-grey darken-2 blue-grey--text text--lighten-4"
           style="padding: 30px 70px"
-        >
+          >
           <p style="font-size: 3.5vh; line-height: 3.5vh">
             You managed to beat <b>x dunjons</b>.
             <br/>
@@ -38,7 +38,7 @@
             dark
             :style="'background-color: #A53532'"
             @click="$router.push({ name: 'Home' })"
-          >
+            >
             Exit
           </v-btn>
           <v-spacer/>
@@ -47,7 +47,7 @@
             dark
             :style="'background-color: #46A65D'"
             @click="startNewGame"
-          >
+            >
             Retry
           </v-btn>
           <v-spacer/>

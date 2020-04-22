@@ -7,55 +7,52 @@
     <!-- The next line adds a Label, but I'm not sure we really need it -->
     <!-- <v-subheader dark><label>History</label></v-subheader> -->
 
-    <!-- We iterate through the questions -->
+    <!-- We iterate through the rounds -->
     <div
-      v-for="(question, index) in aLotOfQuestions()" :key="question.id"
-    >
-      <!-- A divider between each question -->
+      v-for="(round, index) in roundsPlayed()" :key="round.id"
+      >
+      <!-- A divider between each round -->
       <v-divider/>
 
-      <!-- We create a dropdown for the current question -->
+      <!-- We create a dropdown for the current round -->
       <v-list-item
-        :style="'background-color: ' + (isPlayerCorrect(question) ? '#56966D' : '#954542')"
+        :style="'background-color: ' + (isPlayerCorrect(round.trivia) ? '#56966D' : '#954542')"
         @click="expendId == index ? expendId = null : expendId = index"
       >
         <!-- We create a dropdown for the current question -->
         <v-list-item-content>
 
-          <!-- Title -->
+          <!-- Trivia's question -->
           <v-list-item-title
-            class="font-weight-black grey--text text--darken-4"
-          >
-            {{ question.title }}
-          </v-list-item-title>
+            class="font-weight-black grey--text text--darken-4" v-html="round.trivia.question"/>
 
-          <!-- If the current question is selected -->
+          <!-- If the current trivia is selected -->
           <v-list
             v-if="expendId == index"
             dense
           >
-            <!-- We display all the answers -->
-            <v-list-item v-for="(answer) in question.answers" :key="answer.id">
+            <!-- We display all the trivia's answers -->
+            <v-list-item v-for="(answer) in round.trivia.answers" :key="answer.id">
               <v-list-item-icon>
                 <v-icon
                   :color="
-                  (isPlayerCorrect(question) && isTheAnswerCorrect(question, answer)) ? 'green darken-4' :
-                  (isPlayerCorrect(question) && !isTheAnswerCorrect(question, answer)) ? 'red darken-3' :
-                  (!isPlayerCorrect(question) && isTheAnswerCorrect(question, answer)) ? 'green darken-2' : 'red darken-5'"
+                  (isPlayerCorrect(round) && answer.value) ? 'green darken-4' :
+                  (isPlayerCorrect(round) && !answer.value) ? 'red darken-3' :
+                  (!isPlayerCorrect(round) && answer.value) ? 'green darken-2' : 'red darken-5'"
                 >
-                  {{isThePlayersAnswer(question, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
+                  {{isThePlayersAnswer(trivia, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
                 </v-icon>
               </v-list-item-icon>
+
               <v-list-item-content>
                 <div
-                  :style="(isThePlayersAnswer(question, answer) ? 'font-weight: bolder' : 'font-weight: normal')"
+                  v-html="answer.answer"
+                  :style="(isThePlayersAnswer(round.trivia, answer) ? 'font-weight: bolder' : 'font-weight: normal')"
                   :class="
-                  (isPlayerCorrect(question) && isTheAnswerCorrect(question, answer)) ? 'green--text text--darken-4' :
-                  (isPlayerCorrect(question) && !isTheAnswerCorrect(question, answer)) ? 'red--text text--darken-3' :
-                  (!isPlayerCorrect(question) && isTheAnswerCorrect(question, answer)) ? 'green--text text--darken-2' : 'red--text text--darken-5'"
-                >
-                  {{ question.answers[question.answers.indexOf(answer)] }}
-                </div>
+                  (isPlayerCorrect(round) && answer.value) ? 'green--text text--darken-4' :
+                  (isPlayerCorrect(round) && !answer.value) ? 'red--text text--darken-3' :
+                  (!isPlayerCorrect(round) && answer.value) ? 'green--text text--darken-2' : 'red--text text--darken-5'"
+                />
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -71,50 +68,19 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'GameSideBarLogs',
   data: () => ({
-    expendId: {},
-    questionItems: [
-      {
-        seeDetails: false,
-        title: 'Is Piplup the best pokémon ?',
-        answers: [
-          'Yes',
-          'No'
-        ],
-        correctAnswer: 0,
-        playerAnswer: 1
-      },
-      {
-        seeDetails: false,
-        title: 'What is Metallica\'s third album ?',
-        answers: [
-          'Metallica',
-          'Kill\'em all',
-          'Ride the Lightning',
-          'Master of Puppets'
-        ],
-        correctAnswer: 3,
-        playerAnswer: 3
-      },
-      {
-        seeDetails: false,
-        title: 'Who let the dogs out ?',
-        answers: [
-          'HOU',
-          'OU',
-          'OUH',
-          'HOUH'
-        ],
-        correctAnswer: 1,
-        playerAnswer: 2
-      }
-    ]
+    expendId: {}
   }),
   methods: {
-    isPlayerCorrect (question) {
-      return question.correctAnswer === question.playerAnswer
+    isPlayerCorrect (round) {
+      console.log('RESULT')
+      console.log(round)
+      console.log('RESULT')
+      return round.result === 'Succeded'
     },
     isTheAnswerCorrect (question, answer) {
       return question.correctAnswer === question.answers.indexOf(answer)
@@ -123,19 +89,42 @@ export default {
       return question.playerAnswer === question.answers.indexOf(answer)
     },
 
-    // Returns a list of items that is artificially inflated
-    aLotOfQuestions () {
+    // Returns a list of the Rounds, minus the last one that has not been answered yet
+    roundsPlayed () {
       // We initialize a List
       var list = []
 
       // We add all the questions to our List several times
-      var i
-      for (i = 0; i < 5; i++) {
-        list.push.apply(list, this.questionItems)
+      for (var i = 0; i < this.rounds.length - 1; i++) {
+        list.push(this.rounds[i])
       }
 
       // We return the List
       return list
+    }
+  },
+  computed: {
+    // State
+    ...mapState('parties', ['parties']),
+    ...mapState('dunjons', ['dunjons']),
+    ...mapState('rounds', ['rounds']),
+
+    // Getter
+    ...mapGetters('parties', ['getPartyById']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
+    ...mapGetters('rounds', ['getRoundsByDunjonId']),
+
+    partyId () {
+      return this.$route.params.partyId
+    },
+    party () {
+      return this.getPartyById(this.partyId)
+    },
+    dunjon () {
+      return this.getLastDunjonByPartyId(this.partyId)
+    },
+    rounds () {
+      return this.getRoundsByDunjonId(this.dunjon.id)
     }
   }
 }
