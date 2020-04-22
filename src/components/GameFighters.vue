@@ -56,7 +56,7 @@ export default {
       return this.$route.params.partyId
     },
     party () {
-      return this.getPartyById(this.partyId)
+      return this.getPartyById(this.partyId) || {}
     },
     dunjon () {
       return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', number: '0' }
