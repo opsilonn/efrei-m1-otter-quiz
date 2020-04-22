@@ -295,6 +295,10 @@ export default {
       return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
     },
     playerStat () {
+      console.log('getting playerStat')
+      console.log(`getPlayerStatByPartyId(${this.partyId})`)
+      console.log(this.getPlayerStatByPartyId(this.partyId))
+      console.log(`Hp : ${(this.getPlayerStatByPartyId(this.partyId) || {}).HP}`)
       return this.getPlayerStatByPartyId(this.partyId)
     },
     playerStat_HP () {
@@ -349,15 +353,11 @@ export default {
 
       this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
-          const dunjonId = this.getLastDunjonByPartyId(partyId).id
-
-          console.log(`[GameMaster] partyId: ${partyId}`)
-          console.log(`[GameMaster] dunjonId: ${dunjonId}`)
-
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
         })
         .catch((err) => {
+          console.log('Error in createParty')
           console.log(err)
         })
     },
@@ -375,11 +375,8 @@ export default {
       if (this.party.isFinished || this.dialogNextDunjon) {
         return
       }
-      console.log('start timer')
       await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
-      console.log('before nextRound')
       this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
-      console.log('after nextRound')
       this.gameReaload = false
 
       // Reset localy
@@ -387,7 +384,6 @@ export default {
       this.timer.end = this.timer.begin + this.timer.length
 
       // Broadcast timer-start
-      console.log('[GameMaster] Emit event timer-start')
       EventBus.$emit('timer-start', { timer: this.timer, trivia: this.lastTrivia })
 
       // Start update
@@ -421,7 +417,6 @@ export default {
       this.timer.remaining = 0
 
       // Broadcast event timer-end
-      console.log('[GameMaster] Emit timer-end')
       EventBus.$emit('timer-end', { timer: this.timer })
 
       setTimeout(this.resetTimer, this.endLength)
@@ -430,7 +425,6 @@ export default {
       this.timer.remaining = this.timer.length
 
       // Broadcast event timer-end
-      console.log('[GameMaster] Emit event timer-reset')
       EventBus.$emit('timer-reset', { timer: this.timer })
 
       setTimeout(this.startTimer, this.resetLength)
@@ -438,28 +432,28 @@ export default {
 
     // Event handlers
     onTimer_stop () {
-      console.log('[GameMaster] On event timer-stop')
-
       this.endTimer()
     },
     onTrivia_success () {
-      console.log('[GameMaster] On event trivia-success')
-      this.setRoundResult({ roundId: this.round.id, result: 'Succeded' })
-      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
+      this.setRoundResult({ roundId: this.round.id, result: 'Succeeded' })
+      console.log('enemy hp from : ' + parseInt(this.enemyStat_HP))
+      console.log('enemy hp to : ' + (parseInt(this.enemyStat_HP) - 1))
+      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat_HP) - 1 })
+      console.log('enemy hp at : ' + parseInt(this.enemyStat_HP))
       this.addPartyScore({ partyId: this.partyId, score: 100 })
     },
     onTrivia_failure () {
-      console.log('[GameMaster] On event trivia-failure')
       this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
-      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
+      console.log('player hp from : ' + parseInt(this.playerStat_HP))
+      console.log('player hp to : ' + (parseInt(this.playerStat_HP) - 1))
+      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) - 1 })
+      console.log('player hp at : ' + (parseInt(this.playerStat_HP) - 1))
     },
     onPlayer_death () {
-      console.log('[GameMaster] On event player-death')
       this.partyFinish({ partyId: this.partyId })
       this.dialogEnding = true
     },
     onEnemy_death () {
-      console.log('[GameMaster] On event enemy-death')
       this.dialogNextDunjon = true
       this.addPartyScore({ partyId: this.partyId, score: 500 })
     }
@@ -493,15 +487,12 @@ export default {
     playerStat_HP: function (newValue, oldValue) {
       if (!this.gameReaload) {
         if (newValue <= 0) {
-          console.log('[GameMaster] Emit event player-death')
           EventBus.$emit('player-death')
           return
         }
         if (newValue > oldValue) {
-          console.log('[GameMaster] Emit event player-heal')
           EventBus.$emit('player-heal', { oldValue })
         } else {
-          console.log('[GameMaster] Emit event player-damage')
           EventBus.$emit('player-damage', { oldValue })
         }
       }
@@ -509,15 +500,12 @@ export default {
     enemyStat_HP: function (newValue, oldValue) {
       if (!this.gameReaload) {
         if (newValue <= 0) {
-          console.log('[GameMaster] Emit event enemy-death')
           EventBus.$emit('enemy-death')
           return
         }
         if (newValue > oldValue) {
-          console.log('[GameMaster] Emit event enemy-heal')
           EventBus.$emit('enemy-heal', { oldValue })
         } else {
-          console.log('[GameMaster] Emit event enemy-damage')
           EventBus.$emit('enemy-damage', { oldValue })
         }
       }

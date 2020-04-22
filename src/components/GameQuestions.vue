@@ -123,14 +123,12 @@ export default {
       this.yourAnswer = answer
 
       // We stop the Timer
-      console.log('[GameQuestion] Emit timer-stop')
       EventBus.$emit('timer-stop', { timer: this.timer })
     },
 
     // Event handlers
     onTimer_start ({ timer, trivia }) {
       this.showResults = false
-      console.log('[GameQuestion] On event timer-start')
       this.yourAnswer = { answer: 'none' }
       this.timer = timer
       this.trivia = trivia
@@ -140,12 +138,10 @@ export default {
       this.timer = timer
     },
     onTimer_end ({ timer }) {
-      console.log('[GameQuestion] On event timer-end')
       this.timer = timer
       this.step = 0
     },
     onTimer_reset ({ timer }) {
-      console.log('[GameQuestion] On event timer-reset')
       this.showResults = true
       this.timer = timer
       this.step = 2
@@ -153,10 +149,8 @@ export default {
 
       // If the party answered correctly or not (wrong answer / no answer at all)
       if (this.yourAnswer.value === true) {
-        console.log('[GameQuestion] Emit event trivia-success')
         EventBus.$emit('trivia-success')
       } else {
-        console.log('[GameQuestion] Emit event trivia-failure')
         EventBus.$emit('trivia-failure')
       }
     }

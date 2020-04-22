@@ -117,7 +117,7 @@ export default {
   }),
   computed: {
     // States
-    ...mapState('accounts', ['accounts']),
+    ...mapState('accounts', ['accounts', 'connectedAccount']),
     ...mapState('parties', ['parties']),
     ...mapState('dunjons', ['dunjons']),
     ...mapState('rounds', ['rounds']),
@@ -125,7 +125,6 @@ export default {
     ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
-    ...mapGetters('accounts', ['getConnectedAccount']),
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
@@ -134,7 +133,7 @@ export default {
 
     // Custom
     account () {
-      return this.getConnectedAccount()
+      return this.connectedAccount
     },
     partyId () {
       return this.$route.params.partyId

@@ -27,7 +27,6 @@ const getters = {
    */
   getLastRoundByDunjonId: state => (dunjonId) => {
     const roundsForDunjonId = getters.getRoundsByDunjonId(state)(dunjonId) || []
-    console.log(roundsForDunjonId)
     return roundsForDunjonId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
 
@@ -48,17 +47,10 @@ const getters = {
  * @param {object}  roundPropValue.value - The new value for the prop of the round
  */
 function updateProp (state, { id, prop, value }) {
-  console.log('updateProp id :')
-  console.log(id)
   const round = getters.getRoundById(state)(id)
 
-  console.log('updateProp round : id')
-  console.log(round.id)
   if (round) {
-    console.log(`Update prop ${prop} with value ${value}`)
-    console.log(`from ${round[prop]}`)
     Vue.set(round, prop, value)
-    console.log(`to ${round[prop]}`)
   }
 }
 
@@ -90,8 +82,6 @@ const mutations = {
     }
   },
   setRoundResult (state, { roundId, result }) {
-    console.log('changing round s result')
-    console.log(roundId)
     updateProp(state, { id: roundId, prop: 'result', value: result })
     // Second update or it don't work
     // updateProp(state, { id: round.id, prop: '', value: '' })
@@ -107,15 +97,8 @@ const mutations = {
 
 const actions = {
   nextRound ({ commit, rootGetters, getters }, { dunjonId, round, trivia }) {
-    console.log('[rounds] nextRound')
-    console.log('[rounds] round :')
-    console.log(round)
-    console.log(`[rounds] dunjons/getDunjonById : ${dunjonId}`)
     const dunjon = rootGetters['dunjons/getDunjonById'](dunjonId)
-    console.log(`[rounds] dunjon.id : ${dunjon.id}`)
-    console.log(`[rounds] parties/getPartyById : ${dunjon.partyId}`)
     const party = rootGetters['parties/getPartyById'](dunjon.partyId)
-    console.log(`[rounds] party.id : ${party.id}`)
 
     if (party.isFinished === true) {
       return
@@ -129,11 +112,8 @@ const actions = {
       roundTime: round.roundTime,
       number
     }
-    console.log(`[rounds] commit addRound: ${newRound.id}`)
     commit('addRound', { round: newRound })
-    console.log(`[rounds] commited addRound: ${newRound.id}`)
 
-    console.log(`[rounds] return roundId: ${newRound.id}`)
     return newRound.id
   }
 }

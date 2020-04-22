@@ -19,7 +19,6 @@ const getters = {
    */
   getTriviaCategoryNameById: state => (id) => {
     const triviaCategory = state.triviaCategories.find((trivia) => trivia.id === id) || {}
-    console.log(`triviaCategory.name: ${triviaCategory.name}`)
     return triviaCategory.name
   },
 
@@ -125,17 +124,12 @@ const actions = {
    */
   async fetchTrivias ({ commit }, { amount, category, difficulty, type }) {
     const url = '' + ((amount) ? `amount=${amount}&` : '') + ((category) ? `category=${category}&` : '') + ((difficulty) ? `difficulty=${difficulty}&` : '' + ((type) ? `type=${type}&` : ''))
-    console.log(api(url))
     const { data } = await axios.get(api(url))
-    console.log('data :')
-    console.log(data)
     data.results.forEach(d => commit('addTrivia', { trivia: d }))
   },
 
   async fetchTriviaCategories ({ commit }) {
     const { data } = await axios.get('https://opentdb.com/api_category.php')
-    console.log('data :')
-    console.log(data)
     commit('addTriviaCategories', { triviaCategories: data.trivia_categories })
   }
 }

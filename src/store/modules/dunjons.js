@@ -84,10 +84,7 @@ const mutations = {
 
 const actions = {
   nextDunjon ({ commit, rootGetters, getters }, { partyId, dunjon, defaultEnemyStat }) {
-    console.log('[dunjons] nextDunjon')
-    console.log(`[dunjons] getting parties/getPartyById: ${partyId}`)
     const party = rootGetters['parties/getPartyById'](partyId)
-    console.log(`[dunjons] party.id: ${party.id}`)
 
     if (party.isFinished === true) {
       return
@@ -102,15 +99,11 @@ const actions = {
       number
     }
 
-    console.log(`[dunjons] commit addDunjon: ${newDunjon.id}`)
     commit('addDunjon', { dunjon: newDunjon })
-    console.log(`[dunjons] commited addDunjon: ${newDunjon.id}`)
 
     defaultEnemyStat.dunjonId = newDunjon.id
-    console.log('[parties] commit enemyStats/addEnemyStat')
     commit('enemyStats/nextEnemyStat', { dunjonId: newDunjon.id, enemyStat: defaultEnemyStat }, { root: true })
 
-    console.log(`[dunjons] return dunjonId: ${newDunjon.id}`)
     return newDunjon.id
   }
 }
