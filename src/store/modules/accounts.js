@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 const state = {
-  connectedAccount: { id: 0, username: 'default' },
+  connectedAccount: { id: 0, username: 'anonymous' },
   accounts: [{
     id: 1,
     username: 'user1',
