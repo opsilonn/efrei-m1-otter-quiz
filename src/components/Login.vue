@@ -29,8 +29,10 @@
               cols="12"
               md="12"
             >
-            <div class="my-2">
-              <v-btn small @click="log" :disabled=!valid>submit</v-btn>
+            <div class='d-flex'>
+              <v-btn small @click="log" :disabled=!valid>login</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn small @click="reg" :disabled=!valid>register</v-btn>
             </div>
             </v-col>
           </v-row>
@@ -44,7 +46,7 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'TestFrancois',
+  name: 'loginVue',
   data: () => ({
     state: false,
     valid: false,
@@ -71,8 +73,8 @@ export default {
       console.log('the button is cliked', this.login, this.password)
       await this.connection({ login: this.login, password: this.password }).then((success) => { console.log(success) })
     },
-    async register () {
-      await this.register({ login: this.login, password: this.password }).then((success) => { console.log(success) })
+    async reg () {
+      await this.register({ login: this.login, password: this.password })
     }
   }
 }
