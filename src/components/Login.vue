@@ -30,9 +30,9 @@
               md="12"
             >
             <div class='d-flex'>
-              <v-btn small @click="log" :disabled=!valid>submit</v-btn>
+              <v-btn small @click="log" :disabled=!valid>login</v-btn>
               <v-spacer></v-spacer>
-              <v-btn small @click="log" :disabled=!valid>submit</v-btn>
+              <v-btn small @click="log" :disabled=!valid>register</v-btn>
             </div>
             </v-col>
           </v-row>
