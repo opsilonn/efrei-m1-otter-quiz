@@ -70,7 +70,19 @@ export default {
     ...mapActions('accounts', ['register']),
 
     startGame () {
-      this.createParty({ accountId: 1 })
+      const defaultPlayerStat = {
+        maxHP: 10,
+        HP: 10,
+        maxMana: 5,
+        mana: 5,
+        gold: 1
+      }
+      const defaultEnemyStat = {
+        maxHP: 3,
+        HP: 3
+      }
+
+      this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
           const dunjonId = this.getLastDunjonByPartyId(partyId).id
 

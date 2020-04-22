@@ -4,10 +4,9 @@
     <div>
       <label>
         <h2 align="center" style="font-size: 3vh">
-            Dunjon n° {{ dunjon.number }} : {{ dunjon.category }}
+            Dunjon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
             <br/>
-            {{ round.id }} Round n° {{ round.number }} :
-            {{ round.result }}
+            Round n° {{ round.number }} : {{ round.result }}
         </h2>
       </label>
     </div>
@@ -15,14 +14,13 @@
     <!-- Display the players -->
     <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
       <v-row no-gutters class="d-flex align-end">
-        <GamePlayers
-          :isPlayer="true"
-          :doAnim="doAnim"
-        />
-        <GamePlayers
-          :isPlayer="false"
-          :doAnim="doAnim"
-        />
+
+        <!-- First player : the user -->
+        <GamePlayers :isPlayer="true"/>
+
+        <!-- Second player : the bot -->
+        <GamePlayers :isPlayer="false"/>
+
       </v-row>
     </div>
   </div>
@@ -32,17 +30,12 @@
 // import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'GameFighters',
   components: {
     GamePlayers
-  },
-  data: () => {
-    return {
-      doAnim: false
-    }
   },
   computed: {
     // States
@@ -54,6 +47,7 @@ export default {
     ...mapGetters('parties', ['getPartyById']),
     ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('trivias', ['getTriviaCategoryNameById']),
 
     // Custom
     partyId () {
@@ -64,9 +58,17 @@ export default {
     },
     round () {
       return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+    },
+    dunjonCategoryName () {
+      return this.dunjon ? this.getTriviaCategoryNameById(this.dunjon.category) : 'none'
     }
   },
   methods: {
+    // Actions
+    ...mapActions('trivias', ['fetchTriviaCategories'])
+  },
+  created () {
+    this.fetchTriviaCategories()
   }
 }
 </script>
