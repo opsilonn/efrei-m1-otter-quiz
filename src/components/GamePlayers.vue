@@ -56,7 +56,6 @@
       <div :class="'d-flex justify-center ' + (isPlayer ? animPlayer : animEnemy)">
         <v-img
           class="shrink d-none d-xl-flex"
-          :class="doAnim ? 'element-animation' : ''"
           :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
           :src="imagePath"
           contain
@@ -65,7 +64,6 @@
         />
         <v-img
           class="shrink d-none d-lg-flex d-xl-none"
-          :class="doAnim ? 'element-animation' : ''"
           :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
           :src="imagePath"
           contain
@@ -74,7 +72,6 @@
         />
         <v-img
           class="shrink d-none d-md-flex d-lg-none"
-          :class="doAnim ? 'element-animation' : ''"
           :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
           :src="imagePath"
           contain
@@ -83,7 +80,6 @@
         />
         <v-img
           class="shrink d-none d-sm-flex d-md-none"
-          :class="doAnim ? 'element-animation' : ''"
           :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
           :src="imagePath"
           contain
@@ -92,7 +88,6 @@
         />
         <v-img
           class="shrink d-xs-flex d-sm-none"
-          :class="doAnim ? 'element-animation' : ''"
           :style="!isPlayer ? 'transform:scaleX(-1)' : ''"
           :src="imagePath"
           contain
@@ -110,7 +105,7 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'GameParties',
-  props: ['isPlayer', 'doAnim'],
+  props: ['isPlayer'],
   data: () => ({
     animPlayer: '',
     animEnemy: ''
@@ -162,10 +157,15 @@ export default {
       return this.isPlayer ? this.playerStat.gold : 0
     },
     imagePath () {
-      return this.isPlayer ? require('@/assets/sprite_player_1.png') : require('@/assets/sprite_player_3.png')
+      return this.isPlayer ? require('@/assets/sprite_player_' + this.getRandomInt(3) + '.png') : require('@/assets/sprite_player_' + this.getRandomInt(3) + '.png')
     }
   },
   methods: {
+    // Returns a Random integer
+    getRandomInt (max) {
+      return Math.floor(Math.random() * Math.floor(max)) + 1
+    },
+
     // Resets all the animations
     resetAnimations () {
       this.animPlayer = ''
@@ -187,20 +187,18 @@ export default {
     // DEATH
     // When the player dies
     playerDeath () {
-      console.log('ME DED')
       this.animPlayer = 'anim-death'
       this.animEnemy = 'anim-happy'
     },
     // When the enemy dies
     enemyDeath () {
-      console.log('ENEMY DED')
       this.animPlayer = 'anim-happy'
       this.animEnemy = 'anim-death'
     }
   },
   created () {
     // Main listener : whenever the timer resets, we withdraw the animations
-    EventBus.$on('timer-reset', () => this.resetAnimations())
+    EventBus.$on('timer-end', () => this.resetAnimations())
 
     // Depending on the event, we call the corresponding animations
     EventBus.$on('player-damage', () => this.playerTakesDamage())
