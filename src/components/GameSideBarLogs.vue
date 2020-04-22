@@ -16,7 +16,7 @@
 
       <!-- We create a dropdown for the current round -->
       <v-list-item
-        :style="'background-color: ' + (isPlayerCorrect(round.trivia) ? '#56966D' : '#954542')"
+        :style="'background-color: ' + (isPlayerCorrect(round) ? '#56966D' : '#954542')"
         @click="expendId == index ? expendId = null : expendId = index"
       >
         <!-- We create a dropdown for the current question -->
@@ -40,7 +40,7 @@
                   (isPlayerCorrect(round) && !answer.value) ? 'red darken-3' :
                   (!isPlayerCorrect(round) && answer.value) ? 'green darken-2' : 'red darken-5'"
                 >
-                  {{isThePlayersAnswer(trivia, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
+                  {{isThePlayersAnswer(round, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
                 </v-icon>
               </v-list-item-icon>
 
@@ -77,16 +77,13 @@ export default {
   }),
   methods: {
     isPlayerCorrect (round) {
-      console.log('RESULT')
-      console.log(round)
-      console.log('RESULT')
       return round.result === 'Succeded'
     },
     isTheAnswerCorrect (question, answer) {
-      return question.correctAnswer === question.answers.indexOf(answer)
+      return true // question.correctAnswer === question.answers.indexOf(answer)
     },
     isThePlayersAnswer (question, answer) {
-      return question.playerAnswer === question.answers.indexOf(answer)
+      return true // question.playerAnswer === question.answers.indexOf(answer)
     },
 
     // Returns a list of the Rounds, minus the last one that has not been answered yet
