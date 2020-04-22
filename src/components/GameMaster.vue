@@ -132,61 +132,26 @@
             Choose one :
           </p>
           <v-row>
-            <v-col cols="12" :sm="4">
+            <v-col
+              v-for="(choosableDungeon, index) in choosableDungeons"
+              :key="index"
+              cols="12"
+              :sm="4"
+            >
               <v-card
                 class="blue-grey lighten-3"
                 @click="enterNewDunjon({
-                  category: 9,
-                  difficulty: 'Easy'
+                  category: choosableDungeon.category.id,
+                  difficulty: choosableDungeon.difficulty
                  })"
               >
                 <v-card-title>
-                  Dungeon 1
+                  Dungeon {{ index }}
                 </v-card-title>
                 <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(9) }}
+                  Category : {{ choosableDungeon.category.name }}
                   <br/>
-                  Difficulty : Easy
-                  <br/>
-                  Round timer : 20s
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" :sm="4">
-              <v-card
-                class="blue-grey lighten-3"
-                @click="enterNewDunjon({
-                  category: 10,
-                  difficulty: 'Easy'
-                 })"
-              >
-                <v-card-title>
-                  Dungeon 2
-                </v-card-title>
-                <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(10) }}
-                  <br/>
-                  Difficulty : Easy
-                  <br/>
-                  Round timer : 18s
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" :sm="4">
-              <v-card
-                class="blue-grey lighten-3"
-                @click="enterNewDunjon({
-                  category: 11,
-                  difficulty: 'Medium'
-                 })"
-              >
-                <v-card-title>
-                  Dungeon 3
-                </v-card-title>
-                <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(11) }}
-                  <br/>
-                  Difficulty : Medium
+                  Difficulty : {{ choosableDungeon.difficulty }}
                   <br/>
                   Round timer : 20s
                 </v-card-text>
@@ -251,6 +216,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'GameMaster',
   data: () => ({
+    // Timer
     timer: {
       length: 20000,
       begin: null,
@@ -259,10 +225,14 @@ export default {
     },
     endLength: 1000,
     resetLength: 3000,
+    // Dialog controller
     dialogEnding: false,
     dialogNextDunjon: false,
+    // Game controller
     gameReaload: true,
-    chooseDungeon: false
+    chooseDungeon: false,
+    // Random values
+    choosableDungeons: []
   }),
   computed: {
     // States
@@ -280,7 +250,7 @@ export default {
     ...mapGetters('rounds', ['getLastRoundByDunjonId', 'getRoundsByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
-    ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById']),
+    ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById', 'getRandomTriviasCategorySet', 'getRandomTriviasDifficulty']),
 
     // Custom
     partyId () {
@@ -347,8 +317,8 @@ export default {
         gold: 1
       }
       const defaultEnemyStat = {
-        maxHP: 3,
-        HP: 3
+        maxHP: 1,
+        HP: 1
       }
 
       this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
@@ -441,6 +411,19 @@ export default {
     },
     onEnemy_death () {
       this.chooseDungeon = true
+      this.choosableDungeons = []
+
+      const RandomTriviasCategorySet = Array.from(this.getRandomTriviasCategorySet(3))
+      RandomTriviasCategorySet.forEach((category, index) => {
+        this.choosableDungeons[index] = {}
+        this.choosableDungeons[index].category = category
+      })
+
+      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
+      RandomTriviasDifficulty.forEach((difficulty, index) => {
+        this.choosableDungeons[index].difficulty = difficulty
+      })
+
       this.addPartyScore({ partyId: this.partyId, score: 500 })
 
       setTimeout(() => { this.dialogNextDunjon = true }, this.resetLength)
@@ -476,17 +459,11 @@ export default {
       if (oldValue === undefined) {
         if (newValue.value) {
           this.setRoundResult({ roundId: this.round.id, result: 'Succeeded' })
-          console.log('enemy hp from : ' + parseInt(this.enemyStat_HP))
-          console.log('enemy hp to : ' + (parseInt(this.enemyStat_HP) - 1))
           this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat_HP) - 1 })
-          console.log('enemy hp at : ' + parseInt(this.enemyStat_HP))
           this.addPartyScore({ partyId: this.partyId, score: 100 })
         } else {
           this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
-          console.log('player hp from : ' + parseInt(this.playerStat_HP))
-          console.log('player hp to : ' + (parseInt(this.playerStat_HP) - 1))
           this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) - 1 })
-          console.log('player hp at : ' + (parseInt(this.playerStat_HP)))
         }
       }
     },

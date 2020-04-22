@@ -15,11 +15,42 @@ const state = {
 
 const getters = {
   /**
-   * Get the last trivia fetched
+   * Get the name of a category by it's id
    */
   getTriviaCategoryNameById: state => (id) => {
     const triviaCategory = state.triviaCategories.find((trivia) => trivia.id === id) || {}
     return triviaCategory.name
+  },
+
+  /**
+   * Get a random set of category for a specific size
+   */
+  getRandomTriviasCategorySet: state => (size) => {
+    const randomTriviasCategorySet = new Set()
+
+    while (randomTriviasCategorySet.size < size && randomTriviasCategorySet.size < state.triviaCategories.length) {
+      randomTriviasCategorySet.add(state.triviaCategories[Math.floor(Math.random() * state.triviaCategories.length)])
+    }
+
+    return randomTriviasCategorySet
+  },
+
+  getRandomTriviasDifficulty: state => (size, dungeonNumber) => {
+    const RandomTriviasDifficulty = []
+
+    while (RandomTriviasDifficulty.length < size) {
+      const rand = Math.random() * (1 + dungeonNumber / 10) + (dungeonNumber - 1) / 10
+
+      if (rand > 2) {
+        RandomTriviasDifficulty.push('hard')
+      } else if (rand > 1) {
+        RandomTriviasDifficulty.push('medium')
+      } else {
+        RandomTriviasDifficulty.push('easy')
+      }
+    }
+
+    return RandomTriviasDifficulty
   },
 
   /**

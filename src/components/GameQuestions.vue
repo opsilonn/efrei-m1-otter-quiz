@@ -148,11 +148,7 @@ export default {
       this.timer = timer
       this.step = 2
 
-      console.log('[GameQuestions] Setting round.answer to ')
-      console.log(this.yourAnswer)
       this.setRoundAnswer({ roundId: this.round.id, answer: this.yourAnswer })
-      console.log('[GameQuestions] round.answer : ')
-      console.log(this.round.answer)
     }
   },
   created () {

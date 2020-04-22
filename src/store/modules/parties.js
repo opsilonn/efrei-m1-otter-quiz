@@ -113,6 +113,10 @@ const actions = {
       .then((dunjonId) => {
         return newParty.id
       })
+      .catch((err) => {
+        console.log('[createParty] Error in dunjons/nextDunjon')
+        console.log(err)
+      })
   }
 }
 
