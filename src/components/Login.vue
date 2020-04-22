@@ -29,7 +29,9 @@
               cols="12"
               md="12"
             >
-            <div class="my-2">
+            <div class='d-flex'>
+              <v-btn small @click="log" :disabled=!valid>submit</v-btn>
+              <v-spacer></v-spacer>
               <v-btn small @click="log" :disabled=!valid>submit</v-btn>
             </div>
             </v-col>
@@ -44,7 +46,7 @@
 import { mapActions, mapGetters } from 'vuex'
 
 export default {
-  name: 'TestFrancois',
+  name: 'loginVue',
   data: () => ({
     state: false,
     valid: false,

@@ -1,7 +1,12 @@
 import Vue from 'vue'
 
 const state = {
-  accounts: []
+  connectedAccount: { id: 0, username: 'default' },
+  accounts: [{
+    id: 1,
+    username: 'user1',
+    password: 'test'
+  }]
 }
 
 const getters = {
@@ -24,11 +29,19 @@ const getters = {
    * Get accont by its login and password
    */
   getAccountByLoginAndPassword: state => (login, password) => {
-    var logged = state.accounts.find(account => (account.login === login) && (account.password === password))
+    console.log('balise 1')
+    console.log(login)
+    console.log(password)
+    var logged = state.accounts.find(account => (account.username === login) && (account.password === password))
     if (logged === undefined) {
       return logged
     }
-    logged.connected = true
+    // logged.connected = true
+    return logged
+  },
+
+  getConnectedAccount: state => () => {
+    const logged = state.connectedAccount
     return logged
   }
 }
@@ -72,11 +85,33 @@ const mutations = {
   },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
+  },
+  connectedTo (state, { account }) {
+    state.connectedAccount = account
   }
 
 }
 
 const actions = {
+  connection ({ commit, getters }, { login, password }) {
+    const account = getters.getAccountByLoginAndPassword(login, password)
+    console.log('balise2')
+    console.log(login)
+    console.log(password)
+    console.log(account)
+    if (account !== undefined) {
+      console.log('entrering the if ')
+      commit('connectedTo', { account })
+      return account
+    }
+  },
+  register ({ commit, getters }, { login, password }) {
+    const already = getters.getAccountByLoginAndPassword({ login, password })
+    if (already === undefined) {
+      const account = { login: login, password: password }
+      commit('addAccount', { account })
+    }
+  }
 }
 
 export default {
