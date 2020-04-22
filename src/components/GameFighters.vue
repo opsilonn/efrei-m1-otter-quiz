@@ -7,12 +7,14 @@
             Dungeon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
             <br/>
             Round n° {{ round.number }} : {{ round.result }}
+            <br/>
+            score: {{ party.score }}
         </h2>
       </label>
     </div>
 
     <!-- Display the players -->
-    <div class="d-flex align-end" style="height: 100%; padding-bottom: 9vh">
+    <div class="d-flex align-end" style="height: 100%; padding-bottom: 13vh">
       <v-row no-gutters class="d-flex align-end">
 
         <!-- First player : the user -->
@@ -52,6 +54,9 @@ export default {
     // Custom
     partyId () {
       return this.$route.params.partyId
+    },
+    party () {
+      return this.getPartyById(this.partyId)
     },
     dunjon () {
       return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', number: '0' }

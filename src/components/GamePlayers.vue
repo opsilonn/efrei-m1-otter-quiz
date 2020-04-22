@@ -216,6 +216,8 @@ export default {
 
     EventBus.$on('player-death', () => this.playerDeath())
     EventBus.$on('enemy-death', () => this.enemyDeath())
+
+    EventBus.$on('dunjon-enter', () => this.resetAnimations())
   }
 }
 </script>

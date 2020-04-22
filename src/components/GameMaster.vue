@@ -27,12 +27,12 @@
           style="padding: 30px 70px"
         >
           <p style="font-size: 3.5vh; line-height: 3.5vh">
-            You managed to beat <b>x dunjons</b>.
+            You managed to beat <b>{{ getDunjonsByPartyId(partyId).length - 1}} dungeon{{getDunjonsByPartyId(partyId).length - 1 > 1 ? 's' : ''}}</b>.
             <br/>
             You went through <b>x rounds</b> and answered good to <b>x questions</b>.
           </p>
 
-          <h1 class="pt-5" style="font-size: 5vh; line-height: 5vh">Your score is <b>X pts</b>.</h1>
+          <h1 class="pt-5" style="font-size: 5vh; line-height: 5vh">Your score is <b>{{ party.score }} pts</b>.</h1>
         </v-card-text>
         <v-card-actions>
           <v-spacer/>
@@ -275,8 +275,8 @@ export default {
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
-    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId']),
+    ...mapGetters('rounds', ['getLastRoundByDunjonId', 'getRoundsByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
     ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById']),
@@ -308,12 +308,20 @@ export default {
     },
     lastTrivia () {
       return this.getLastTrivia() || {}
+    },
+    totalRounds () {
+      let number = 0
+      const dunjons = this.getDunjonsByPartyId(this.partyId)
+      dunjons.forEach((dunjon) => {
+        number += this.getRoundsByDunjonId(dunjon.id)
+      })
+      return number
     }
   },
 
   methods: {
     // Mutations
-    ...mapMutations('parties', ['addParty', 'partyFinish']),
+    ...mapMutations('parties', ['addParty', 'addPartyScore', 'partyFinish']),
     ...mapMutations('dunjons', ['addDunjon']),
     ...mapMutations('rounds', ['addRound', 'setRoundResult']),
     ...mapMutations('playerStats', ['addPlayerStat', 'setPlayerStatHP']),
@@ -438,6 +446,7 @@ export default {
       console.log('[GameMaster] On event trivia-success')
       this.setRoundResult({ roundId: this.round.id, result: 'Succeded' })
       this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
+      this.addPartyScore({ partyId: this.partyId, score: 100 })
     },
     onTrivia_failure () {
       console.log('[GameMaster] On event trivia-failure')
@@ -452,6 +461,7 @@ export default {
     onEnemy_death () {
       console.log('[GameMaster] On event enemy-death')
       this.dialogNextDunjon = true
+      this.addPartyScore({ partyId: this.partyId, score: 500 })
     }
   },
   created () {

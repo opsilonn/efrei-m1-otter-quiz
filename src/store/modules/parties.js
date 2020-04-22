@@ -72,6 +72,10 @@ const mutations = {
       state.parties.push(party)
     }
   },
+  addPartyScore (state, { partyId, score }) {
+    const party = getters.getPartyById(state)(partyId)
+    updateProp(state, { id: partyId, prop: 'score', value: parseInt(party.score) + parseInt(score) })
+  },
   partyFinish (state, { partyId }) {
     updateProp(state, { id: partyId, prop: 'isFinished', value: true })
   },
@@ -93,6 +97,7 @@ const actions = {
     // Party
     const newParty = {
       accountId,
+      score: 0,
       seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       isFinished: false
     }
