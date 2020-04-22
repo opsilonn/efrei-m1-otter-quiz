@@ -7,7 +7,12 @@
       <div :class="isPlayer ? 'roundCornersPlayer' : 'roundCornersFoe'">
         <label>
           <!-- Name -->
-          <h3 class="font-weight-black blue-grey--text text--lighten-5" style="text-shadow: 2px 2px 5px black; font-size: 2.5vh" align="center"> "name" </h3>
+          <h3
+            class="font-weight-black blue-grey--text text--lighten-5"
+            style="text-shadow: 2px 2px 5px black; font-size: 2.5vh"
+            align="center">
+            "name"
+          </h3>
 
           <!-- Health bar -->
           <div style="background-color:#783D31" class="ma-2">
@@ -35,7 +40,7 @@
                 <!-- Gold -->
                 <span v-if='isPlayer' class="ma-2 amber--text text--lighten-2">
                   <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
-                  {{gold}}
+                  {{ gold }}
                 </span>
 
                 <!-- Mana -->
@@ -48,7 +53,7 @@
         </div>
       </div>
 
-      <div class="d-flex justify-center">
+      <div :class="'d-flex justify-center ' + (isPlayer ? animPlayer : animEnemy)">
         <v-img
           class="shrink d-none d-xl-flex"
           :class="doAnim ? 'element-animation' : ''"
@@ -100,13 +105,15 @@
 </template>
 
 <script>
-
+import EventBus from '@/EventBus.js'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
   name: 'GameParties',
   props: ['isPlayer', 'doAnim'],
   data: () => ({
+    animPlayer: '',
+    animEnemy: ''
   }),
   computed: {
     // States
@@ -157,6 +164,50 @@ export default {
     imagePath () {
       return this.isPlayer ? require('@/assets/sprite_player_1.png') : require('@/assets/sprite_player_3.png')
     }
+  },
+  methods: {
+    // Resets all the animations
+    resetAnimations () {
+      this.animPlayer = ''
+      this.animEnemy = ''
+    },
+
+    // DAMAGE
+    // When the player takes damage
+    playerTakesDamage () {
+      this.animPlayer = 'anim-damage'
+      this.animEnemy = 'anim-happy'
+    },
+    // When the enemy takes damage
+    enemyTakesDamage () {
+      this.animPlayer = 'anim-happy'
+      this.animEnemy = 'anim-damage'
+    },
+
+    // DEATH
+    // When the player dies
+    playerDeath () {
+      console.log('ME DED')
+      this.animPlayer = 'anim-death'
+      this.animEnemy = 'anim-happy'
+    },
+    // When the enemy dies
+    enemyDeath () {
+      console.log('ENEMY DED')
+      this.animPlayer = 'anim-happy'
+      this.animEnemy = 'anim-death'
+    }
+  },
+  created () {
+    // Main listener : whenever the timer resets, we withdraw the animations
+    EventBus.$on('timer-reset', () => this.resetAnimations())
+
+    // Depending on the event, we call the corresponding animations
+    EventBus.$on('player-damage', () => this.playerTakesDamage())
+    EventBus.$on('enemy-damage', () => this.enemyTakesDamage())
+
+    EventBus.$on('player-death', () => this.playerDeath())
+    EventBus.$on('enemy-death', () => this.enemyDeath())
   }
 }
 </script>
@@ -180,46 +231,159 @@ export default {
   margin-bottom: 1vh;
 }
 
-/*
-.playerAnimation {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  animation-name: playerMove;
-  animation-duration: 3s;
-  animation-iteration-count: 3;
-  animation-direction: alternate-reverse;
-}
-
-@keyframes playerMove {
-  0%   {left:0px}
-  25%  {left:50px}
-  50%  {left:0px}
-  75% {right:50px}
-  100% {right:0px}
-}*/
-
-/* A lot of stuff that I stole online */
-.element-animation{
-  animation: animationFrames linear 1s;
+/* Animation : happy */
+.anim-happy{
+  animation: animationHappy linear 0.8s;
   animation-iteration-count: 1;
   transform-origin: 50% 50%;
-  -webkit-animation: animationFrames linear 1s;
+  -webkit-animation: animationHappy linear 0.8s;
   -webkit-animation-iteration-count: 1;
   -webkit-transform-origin: 50% 50%;
-  -moz-animation: animationFrames linear 1s;
+  -moz-animation: animationHappy linear 0.8s;
   -moz-animation-iteration-count: 1;
   -moz-transform-origin: 50% 50%;
-  -o-animation: animationFrames linear 1s;
+  -o-animation: animationHappy linear 0.8s;
   -o-animation-iteration-count: 1;
   -o-transform-origin: 50% 50%;
-  -ms-animation: animationFrames linear 1s;
+  -ms-animation: animationHappy linear 0.8s;
   -ms-animation-iteration-count: 1;
   -ms-transform-origin: 50% 50%;
 }
+@keyframes animationHappy{
+  0% {
+    transform:  translate(0px,0px)  ;
+  }
+  15% {
+    transform:  translate(0px,-25px)  ;
+  }
+  30% {
+    transform:  translate(0px,0px)  ;
+  }
+  45% {
+    transform:  translate(0px,-15px)  ;
+  }
+  60% {
+    transform:  translate(0px,0px)  ;
+  }
+  75% {
+    transform:  translate(0px,-5px)  ;
+  }
+  100% {
+    transform:  translate(0px,0px)  ;
+  }
+}
+@-moz-keyframes animationHappy{
+  0% {
+    -moz-transform:  translate(0px,0px)  ;
+  }
+  15% {
+    -moz-transform:  translate(0px,-25px)  ;
+  }
+  30% {
+    -moz-transform:  translate(0px,0px)  ;
+  }
+  45% {
+    -moz-transform:  translate(0px,-15px)  ;
+  }
+  60% {
+    -moz-transform:  translate(0px,0px)  ;
+  }
+  75% {
+    -moz-transform:  translate(0px,-5px)  ;
+  }
+  100% {
+    -moz-transform:  translate(0px,0px)  ;
+  }
+}
+@-webkit-keyframes animationHappy {
+  0% {
+    -webkit-transform:  translate(0px,0px)  ;
+  }
+  15% {
+    -webkit-transform:  translate(0px,-25px)  ;
+  }
+  30% {
+    -webkit-transform:  translate(0px,0px)  ;
+  }
+  45% {
+    -webkit-transform:  translate(0px,-15px)  ;
+  }
+  60% {
+    -webkit-transform:  translate(0px,0px)  ;
+  }
+  75% {
+    -webkit-transform:  translate(0px,-5px)  ;
+  }
+  100% {
+    -webkit-transform:  translate(0px,0px)  ;
+  }
+}
+@-o-keyframes animationHappy {
+  0% {
+    -o-transform:  translate(0px,0px)  ;
+  }
+  15% {
+    -o-transform:  translate(0px,-25px)  ;
+  }
+  30% {
+    -o-transform:  translate(0px,0px)  ;
+  }
+  45% {
+    -o-transform:  translate(0px,-15px)  ;
+  }
+  60% {
+    -o-transform:  translate(0px,0px)  ;
+  }
+  75% {
+    -o-transform:  translate(0px,-5px)  ;
+  }
+  100% {
+    -o-transform:  translate(0px,0px)  ;
+  }
+}
+@-ms-keyframes animationHappy {
+  0% {
+    -ms-transform:  translate(0px,0px)  ;
+  }
+  15% {
+    -ms-transform:  translate(0px,-25px)  ;
+  }
+  30% {
+    -ms-transform:  translate(0px,0px)  ;
+  }
+  45% {
+    -ms-transform:  translate(0px,-15px)  ;
+  }
+  60% {
+    -ms-transform:  translate(0px,0px)  ;
+  }
+  75% {
+    -ms-transform:  translate(0px,-5px)  ;
+  }
+  100% {
+    -ms-transform:  translate(0px,0px)  ;
+  }
+}
 
-/* Stuff that I also stole online */
-@keyframes animationFrames{
+/* Animation : taking damage(s) */
+.anim-damage{
+  animation: animationDamage linear 1s;
+  animation-iteration-count: 1;
+  transform-origin: 50% 50%;
+  -webkit-animation: animationDamage linear 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-transform-origin: 50% 50%;
+  -moz-animation: animationDamage linear 1s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -o-animation: animationDamage linear 1s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
+  -ms-animation: animationHappy linear 1s;
+  -ms-animation-iteration-count: 1;
+  -ms-transform-origin: 50% 50%;
+}
+@keyframes animationDamage{
   0% {
     transform:  translate(0px,0px)  rotate(0deg) ;
   }
@@ -242,9 +406,7 @@ export default {
     transform:  translate(0px,0px)  rotate(0deg) ;
   }
 }
-
-/* Guess what ? I also stole that online ! */
-@-moz-keyframes animationFrames{
+@-moz-keyframes animationDamage{
   0% {
     -moz-transform:  translate(0px,0px)  rotate(0deg) ;
   }
@@ -267,8 +429,7 @@ export default {
     -moz-transform:  translate(0px,0px)  rotate(0deg) ;
   }
 }
-
-@-webkit-keyframes animationFrames {
+@-webkit-keyframes animationDamage {
   0% {
     -webkit-transform:  translate(0px,0px)  rotate(0deg) ;
   }
@@ -291,8 +452,7 @@ export default {
     -webkit-transform:  translate(0px,0px)  rotate(0deg) ;
   }
 }
-
-@-o-keyframes animationFrames {
+@-o-keyframes animationDamage {
   0% {
     -o-transform:  translate(0px,0px)  rotate(0deg) ;
   }
@@ -315,8 +475,7 @@ export default {
     -o-transform:  translate(0px,0px)  rotate(0deg) ;
   }
 }
-
-@-ms-keyframes animationFrames {
+@-ms-keyframes animationDamage {
   0% {
     -ms-transform:  translate(0px,0px)  rotate(0deg) ;
   }
@@ -337,6 +496,121 @@ export default {
   }
   100% {
     -ms-transform:  translate(0px,0px)  rotate(0deg) ;
+  }
+}
+
+/* Animation : Death */
+.anim-death{
+  animation: animationDeath linear 1s;
+  animation-iteration-count: 1;
+  transform-origin: 50% 50%;
+  animation-fill-mode:forwards; /* when the spec is finished */
+  -webkit-animation: animationDeath linear 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-transform-origin: 50% 50%;
+  -webkit-animation-fill-mode:forwards; /* Chrome 16+, Safari 4+ */
+  -moz-animation: animationDeath linear 1s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -moz-animation-fill-mode:forwards; /*FF 5+*/
+  -o-animation: animationDeath linear 1s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
+  -o-animation-fill-mode:forwards; /*Not implemented yet*/
+  -ms-animation: animationDeath linear 1s;
+  -ms-animation-iteration-count: 1;
+  -ms-transform-origin: 50% 50%;
+  -ms-animation-fill-mode:forwards; /*IE 10+*/
+}
+@keyframes animationDeath{
+  0% {
+    opacity:1;
+    transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    opacity:1;
+    transform:  scaleX(0.95) scaleY(0.95) ;
+  }
+  50% {
+    opacity:1;
+    transform:  scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    opacity:0;
+    transform:  scaleX(0.30) scaleY(0.30) ;
+  }
+}
+@-moz-keyframes animationDeath{
+  0% {
+    opacity:1;
+    -moz-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    opacity:1;
+    -moz-transform:  scaleX(0.95) scaleY(0.95) ;
+  }
+  50% {
+    opacity:1;
+    -moz-transform:  scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    opacity:0;
+    -moz-transform:  scaleX(0.30) scaleY(0.30) ;
+  }
+}
+
+@-webkit-keyframes animationDeath {
+  0% {
+    opacity:1;
+    -webkit-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    opacity:1;
+    -webkit-transform:  scaleX(0.95) scaleY(0.95) ;
+  }
+  50% {
+    opacity:1;
+    -webkit-transform:  scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    opacity:0;
+    -webkit-transform:  scaleX(0.30) scaleY(0.30) ;
+  }
+}
+@-o-keyframes animationDeath {
+  0% {
+    opacity:1;
+    -o-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    opacity:1;
+    -o-transform:  scaleX(0.95) scaleY(0.95) ;
+  }
+  50% {
+    opacity:1;
+    -o-transform:  scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    opacity:0;
+    -o-transform:  scaleX(0.30) scaleY(0.30) ;
+  }
+}
+@-ms-keyframes animationDeath {
+  0% {
+    opacity:1;
+    -ms-transform:  scaleX(1.00) scaleY(1.00) ;
+  }
+  25% {
+    opacity:1;
+    -ms-transform:  scaleX(0.95) scaleY(0.95) ;
+  }
+  50% {
+    opacity:1;
+    -ms-transform:  scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    opacity:0;
+    -ms-transform:  scaleX(0.30) scaleY(0.30) ;
   }
 }
 </style>
