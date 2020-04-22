@@ -84,6 +84,32 @@ const mutations = {
 }
 
 const actions = {
+  nextDunjon ({ commit, rootGetters, getters }, { partyId, dunjon }) {
+    console.log('[dunjons] nextDunjon')
+    console.log(`[dunjons] getting parties/getPartyById: ${partyId}`)
+    const party = rootGetters['parties/getPartyById'](partyId)
+    console.log(`[dunjons] party.id: ${party.id}`)
+
+    if (party.isFinished === true) {
+      return
+    }
+
+    const lastDunjon = getters.getLastDunjonByPartyId(partyId)
+    const number = (lastDunjon) ? parseInt(lastDunjon.number) + 1 : 1
+    const newDunjon = {
+      partyId,
+      category: dunjon.category,
+      difficulty: dunjon.difficulty,
+      number
+    }
+
+    console.log(`[dunjons] commit addDunjon: ${newDunjon.id}`)
+    commit('addDunjon', { dunjon: newDunjon })
+    console.log(`[dunjons] commited addDunjon: ${newDunjon.id}`)
+
+    console.log(`[dunjons] return dunjonId: ${newDunjon.id}`)
+    return newDunjon.id
+  }
 }
 
 export default {

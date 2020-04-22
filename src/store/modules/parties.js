@@ -84,6 +84,33 @@ const mutations = {
 }
 
 const actions = {
+  createParty ({ commit, dispatch }, { accountId }) {
+    console.log('[parties] createParty')
+    // Party
+    const newParty = {
+      accountId,
+      seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+      isFinished: false
+    }
+    console.log(`[parties] commit addParty: ${newParty.id}`)
+    commit('addParty', { party: newParty })
+    console.log(`[parties] commited addParty: ${newParty.id}`)
+
+    // Dunjon
+    const newDunjon = {
+      partyId: newParty.id,
+      category: 9,
+      difficulty: 'easy'
+    }
+    console.log(`[parties] dispatch dunjons/nextDunjon ${newDunjon.id}`)
+    return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon }, { root: true })
+      .then((dunjonId) => {
+        console.log(`[parties] dispatched dunjons/nextDunjon: ${dunjonId}`)
+
+        console.log(`[parties] return partyId: ${newParty.id}`)
+        return newParty.id
+      })
+  }
 }
 
 export default {

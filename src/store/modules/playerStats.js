@@ -69,17 +69,6 @@ const mutations = {
       state.playerStats.push(playerStat)
     }
   },
-  nextPlayerStat (state, { playerStat, roundId }) {
-    const nextPlayerStat = {
-      roundId: roundId,
-      maxHP: playerStat.maxHP,
-      HP: playerStat.HP,
-      maxMana: playerStat.maxMana,
-      mana: playerStat.mana,
-      gold: playerStat.gold
-    }
-    mutations.addPlayerStat(state, { playerStat: nextPlayerStat })
-  },
   setPlayerStatHP (state, { playerStat, HP }) {
     if (HP < 0) {
       HP = 0
@@ -105,6 +94,20 @@ const mutations = {
 }
 
 const actions = {
+  nextPlayerStat ({ commit }, { playerStat, roundId }) {
+    console.log('[playerStats] nextPlayerStat')
+    console.log(playerStat)
+    const nextPlayerStat = {
+      roundId: roundId,
+      maxHP: playerStat.maxHP,
+      HP: playerStat.HP,
+      maxMana: playerStat.maxMana,
+      mana: playerStat.mana,
+      gold: playerStat.gold
+    }
+    commit('addPlayerStat', { playerStat: nextPlayerStat })
+    console.log(nextPlayerStat)
+  }
 }
 
 export default {

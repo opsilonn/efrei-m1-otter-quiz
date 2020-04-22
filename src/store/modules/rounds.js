@@ -89,14 +89,6 @@ const mutations = {
       state.rounds.push(round)
     }
   },
-  nextRound (state, { round }) {
-    const nextRound = {
-      dunjonId: round.dunjonId,
-      roundTime: round.roundTime,
-      number: parseInt(round.number) + 1
-    }
-    mutations.addRound(state, { round: nextRound })
-  },
   setRoundResult (state, { roundId, result }) {
     console.log('changing round s result')
     console.log(roundId)
@@ -114,6 +106,63 @@ const mutations = {
 }
 
 const actions = {
+  nextRound ({ commit, dispatch, rootGetters, getters }, { dunjonId, round, trivia }) {
+    console.log('[rounds] nextRound')
+    console.log('[rounds] round :')
+    console.log(round)
+    console.log(`[rounds] dunjons/getDunjonById : ${dunjonId}`)
+    const dunjon = rootGetters['dunjons/getDunjonById'](dunjonId)
+    console.log(`[rounds] dunjon.id : ${dunjon.id}`)
+    console.log(`[rounds] parties/getPartyById : ${dunjon.partyId}`)
+    const party = rootGetters['parties/getPartyById'](dunjon.partyId)
+    console.log(`[rounds] party.id : ${party.id}`)
+
+    if (party.isFinished === true) {
+      return
+    }
+
+    const lastRound = getters.getLastRoundByDunjonId(dunjonId)
+    const number = (lastRound) ? parseInt(lastRound.number) + 1 : 1
+    const newRound = {
+      dunjonId,
+      trivia,
+      roundTime: round.roundTime,
+      number
+    }
+    console.log(`[rounds] commit addRound: ${newRound.id}`)
+    commit('addRound', { round: newRound })
+    console.log(`[rounds] commited addRound: ${newRound.id}`)
+
+    if (lastRound) {
+      console.log('[rounds] cloning stats')
+      const oldPlayerStat = rootGetters['playerStats/getPlayerStatByRoundId'](lastRound.id)
+      const oldEnemyStat = rootGetters['enemyStats/getEnemyStatByRoundId'](lastRound.id)
+      console.log('[rounds] dispatch playerStats/nextPlayerStat')
+      dispatch('playerStats/nextPlayerStat', { playerStat: oldPlayerStat, roundId: newRound.id }, { root: true })
+      console.log('[rounds] commit enemyStats/nextEnemyStat')
+      commit('enemyStats/nextEnemyStat', { enemyStat: oldEnemyStat, roundId: newRound.id }, { root: true })
+    } else {
+      console.log('[rounds] default stats')
+      const defaultPlayerStat = {
+        maxHP: 10,
+        HP: 10,
+        maxMana: 5,
+        mana: 5,
+        gold: 1
+      }
+      const defaultEnemyStat = {
+        maxHP: 5,
+        HP: 5
+      }
+      console.log('[rounds] dispatch playerStats/nextPlayerStat')
+      dispatch('playerStats/nextPlayerStat', { playerStat: defaultPlayerStat, roundId: newRound.id }, { root: true })
+      console.log('[rounds] commit enemyStats/nextEnemyStat')
+      commit('enemyStats/nextEnemyStat', { enemyStat: defaultEnemyStat, roundId: newRound.id }, { root: true })
+    }
+
+    console.log(`[rounds] return roundId: ${newRound.id}`)
+    return newRound.id
+  }
 }
 
 export default {
