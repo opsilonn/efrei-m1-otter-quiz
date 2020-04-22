@@ -148,7 +148,7 @@ export default {
       return this.getLastDunjonByPartyId(this.partyId)
     },
     round () {
-      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) : {}
+      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
     },
     playerStat () {
       return this.round ? this.getPlayerStatByRoundId(this.round.id) : {}
@@ -171,68 +171,28 @@ export default {
     // Mutations
     ...mapMutations('parties', ['addParty', 'partyFinish']),
     ...mapMutations('dunjons', ['addDunjon']),
-    ...mapMutations('rounds', ['addRound', 'nextRound', 'setRoundResult']),
-    ...mapMutations('playerStats', ['addPlayerStat', 'nextPlayerStat', 'setPlayerStatHP']),
-    ...mapMutations('enemyStats', ['addEnemyStat', 'nextEnemyStat', 'setEnemyStatHP']),
+    ...mapMutations('rounds', ['addRound', 'setRoundResult']),
+    ...mapMutations('playerStats', ['addPlayerStat', 'setPlayerStatHP']),
+    ...mapMutations('enemyStats', ['addEnemyStat', 'setEnemyStatHP']),
 
     // Actions
     ...mapActions('trivias', ['fetchTrivias']),
+    ...mapActions('parties', ['createParty']),
+    ...mapActions('dunjons', ['nextDunjon']),
+    ...mapActions('rounds', ['nextRound']),
 
     // Customs
     startNewGame () {
-      // Party
-      const newParty = {
-        accountId: 1,
-        seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-        isFinished: false
-      }
+      this.createParty({ accountId: 1 })
+        .then((partyId) => {
+          const dunjonId = this.getLastDunjonByPartyId(partyId).id
 
-      this.addParty({ party: newParty })
+          console.log(`[GameMaster] partyId: ${partyId}`)
+          console.log(`[GameMaster] dunjonId: ${dunjonId}`)
 
-      // Dunjon
-      const newDunjon = {
-        partyId: newParty.id,
-        category: 9,
-        difficulty: 'easy',
-        number: 1
-      }
-
-      this.addDunjon({ dunjon: newDunjon })
-
-      // Round
-      const newRound = {
-        dunjonId: newDunjon.id,
-        roundTime: 20000,
-        number: 1
-      }
-
-      this.addRound({ round: newRound })
-
-      // Enemy Stat
-      const newEnemyStat = {
-        name: 'I\'m a bot !',
-        roundId: newRound.id,
-        maxHP: 5,
-        HP: 5
-      }
-
-      this.addEnemyStat({ enemyStat: newEnemyStat })
-
-      // Player Stat
-      const newPlayerStat = {
-        name: 'John Doe',
-        roundId: newRound.id,
-        maxHP: 10,
-        HP: 10,
-        maxMana: 5,
-        mana: 5,
-        gold: 1
-      }
-
-      this.addPlayerStat({ playerStat: newPlayerStat })
-
-      // Go to Game page
-      this.$router.push({ name: 'Game', params: { partyId: newParty.id } })
+          // Go to Game page
+          this.$router.push({ name: 'Game', params: { partyId } })
+        })
     },
     async startTimer () {
       if (this.party.isFinished) {
@@ -240,11 +200,9 @@ export default {
       }
       console.log('start timer')
       await this.fetchTrivias({ amount: 1, category: 9 })
-      const oldPlayerStat = this.playerStat
-      const oldEnemyStat = this.enemyStat
-      this.nextRound({ round: this.round })
-      this.nextPlayerStat({ playerStat: oldPlayerStat, roundId: this.round.id })
-      this.nextEnemyStat({ enemyStat: oldEnemyStat, roundId: this.round.id })
+      console.log('before nextRound')
+      this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
+      console.log('after nextRound')
 
       // Reset localy
       this.timer.begin = Date.now()
@@ -320,6 +278,10 @@ export default {
       console.log('[GameMaster] On event player-death')
       this.partyFinish({ partyId: this.partyId })
       this.dialogEnding = true
+    },
+    onEnemy_death () {
+      console.log('[GameMaster] On event enemy-death')
+      this.nextDunjon({ partyId: this.partyId, dunjon: this.dunjon })
     }
   },
   created () {
@@ -327,13 +289,14 @@ export default {
     EventBus.$on('trivia-success', this.onTrivia_success)
     EventBus.$on('trivia-failure', this.onTrivia_failure)
     EventBus.$on('player-death', this.onPlayer_death)
+    EventBus.$on('enemy-death', this.onEnemy_death)
   },
   mounted () {
     if (this.party === undefined) {
       this.dialogEnding = true
     } else {
       this.dialogEnding = false
-      this.resetTimer()
+      this.startTimer()
     }
   },
   watch: {
@@ -342,7 +305,7 @@ export default {
         this.dialogEnding = true
       } else {
         this.dialogEnding = false
-        this.resetTimer()
+        this.startTimer()
       }
     },
     playerStat_HP: function (newValue, oldValue) {

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'Home',
@@ -47,64 +47,24 @@ export default {
   },
   methods: {
     // Mutations
-    ...mapMutations('parties', ['addParty']),
-    ...mapMutations('dunjons', ['addDunjon']),
     ...mapMutations('rounds', ['addRound']),
     ...mapMutations('playerStats', ['addPlayerStat']),
     ...mapMutations('enemyStats', ['addEnemyStat']),
 
+    // Actions
+    ...mapActions('parties', ['createParty']),
+
     startGame () {
-      // Party
-      const newParty = {
-        accountId: 1,
-        seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
-        isFinished: false
-      }
+      this.createParty({ accountId: 1 })
+        .then((partyId) => {
+          const dunjonId = this.getLastDunjonByPartyId(partyId).id
 
-      this.addParty({ party: newParty })
+          console.log(`[Home] partyId: ${partyId}`)
+          console.log(`[Home] dunjonId: ${dunjonId}`)
 
-      // Dunjon
-      const newDunjon = {
-        partyId: newParty.id,
-        category: 9,
-        difficulty: 'easy',
-        number: 1
-      }
-
-      this.addDunjon({ dunjon: newDunjon })
-
-      // Round
-      const newRound = {
-        dunjonId: newDunjon.id,
-        roundTime: 20000,
-        number: 1
-      }
-
-      this.addRound({ round: newRound })
-
-      // Enemy Stat
-      const newEnemyStat = {
-        roundId: newRound.id,
-        maxHP: 5,
-        HP: 3
-      }
-
-      this.addEnemyStat({ enemyStat: newEnemyStat })
-
-      // Player Stat
-      const newPlayerStat = {
-        roundId: newRound.id,
-        maxHP: 10,
-        HP: 8,
-        maxMana: 5,
-        mana: 5,
-        gold: 1
-      }
-
-      this.addPlayerStat({ playerStat: newPlayerStat })
-
-      // Go to Game page
-      this.$router.push({ name: 'Game', params: { partyId: newParty.id } })
+          // Go to Game page
+          this.$router.push({ name: 'Game', params: { partyId } })
+        })
     }
   }
 }

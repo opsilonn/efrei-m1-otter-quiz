@@ -46,7 +46,7 @@
                 <!-- Mana -->
                 <span v-if='isPlayer' class="ma-2 blue--text text--accent-3">
                   <v-icon size="4vh" class="blue--text text--accent-3">mdi-water</v-icon>
-                  {{ mana }}
+                  {{mana}} / {{maxMana}}
                 </span>
               </h4>
           </label>
