@@ -26,7 +26,7 @@
           <p style="font-size: 3.5vh; line-height: 3.5vh">
             You managed to beat <b>x dunjons</b>.
             <br/>
-            You went through <b>x rounds</b> and anwsered good to <b>x questions</b>.
+            You went through <b>x rounds</b> and answered good to <b>x questions</b>.
           </p>
 
           <h1 class="pt-5" style="font-size: 5vh; line-height: 5vh">Your score is <b>X pts</b>.</h1>
@@ -210,18 +210,20 @@ export default {
 
       // Enemy Stat
       const newEnemyStat = {
+        name: 'I\'m a bot !',
         roundId: newRound.id,
         maxHP: 5,
-        HP: 3
+        HP: 5
       }
 
       this.addEnemyStat({ enemyStat: newEnemyStat })
 
       // Player Stat
       const newPlayerStat = {
+        name: 'John Doe',
         roundId: newRound.id,
         maxHP: 10,
-        HP: 8,
+        HP: 10,
         maxMana: 5,
         mana: 5,
         gold: 1
