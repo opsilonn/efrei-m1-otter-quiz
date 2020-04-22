@@ -11,6 +11,9 @@
           </v-toolbar>
 
           <!-- Form -->
+          <v-card-text v-if="!register">
+            you havent register yet
+          </v-card-text>
           <v-card-text>
             you are loged as {{account.username}}
           </v-card-text>
@@ -52,10 +55,13 @@ export default {
 
     // Getters
     ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
-    ...mapGetters('accounts', ['getConnectedAccount']),
+    ...mapGetters('accounts', ['getConnectedAccount', 'getRegistration']),
 
     account () {
       return this.getConnectedAccount()
+    },
+    register () {
+      return this.getRegistration()
     }
   },
   methods: {

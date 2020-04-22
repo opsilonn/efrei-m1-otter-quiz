@@ -70,6 +70,9 @@ export default {
     async log () {
       console.log('the button is cliked', this.login, this.password)
       await this.connection({ login: this.login, password: this.password }).then((success) => { console.log(success) })
+    },
+    async register () {
+      await this.register({ login: this.login, password: this.password }).then((success) => { console.log(success) })
     }
   }
 }
