@@ -5,17 +5,40 @@
   >
 
     <!-- Login Form -->
-    <v-dialog v-model="dialogLogin" max-width="600px">
+    <v-dialog v-model="isDialogActive" max-width="600px">
 
       <!-- Login Dialog -->
       <v-card>
-        <!-- Title -->
-        <v-card-title>
-          <span class="headline">Login</span>
-        </v-card-title>
+        <v-tabs
+          background-color="blue-grey darken-4"
+          v-model="tabModel"
+          grow
+          dark
+        >
+        <!-- All the menus Tabs-->
+        <!-- 1 - Login -->
+        <v-tab>
+          <v-icon left>mdi-login</v-icon>
+          <div class="shrink mt-1 d-none d-lg-flex">
+            Login
+          </div>
+        </v-tab>
 
-        <v-card-text>
-          <v-container>
+        <!-- 2 - Sign in -->
+        <v-tab>
+          <v-icon left>mdi-account-plus</v-icon>
+          <div class="shrink mt-1 d-none d-lg-flex">
+            Sign in
+          </div>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items v-model="tabModel">
+        <!-- All the menu's contents -->
+        <!-- 1 - Login -->
+        <v-tab-item>
+          <v-card-text>
+            <v-container>
               <v-form>
                 <!-- Text -->
                 <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
@@ -24,7 +47,7 @@
                 <!-- Field : Username -->
                 <v-text-field
                   class="pa-4"
-                  v-model="username"
+                  v-model="loginUsername"
                   label="Username"
                   prepend-icon="mdi-face"
                   :rules="[rules.required]"
@@ -36,7 +59,7 @@
                 <!-- Field : Password -->
                 <v-text-field
                   class="pa-4"
-                  v-model="password"
+                  v-model="loginPassword"
                   label="Password"
                   type="password"
                   prepend-icon="mdi-lock"
@@ -44,14 +67,92 @@
                   required
                 />
               </v-form>
-          </v-container>
-        </v-card-text>
+
+              <br><br><br>
+
+              <!-- ALERT - displayed if the credentials are incorrect -->
+              <v-alert
+                :value="loginFailed"
+                dense
+                outlined
+                dismissible
+                prominent
+                type="error"
+                transition="scale-transition"
+              >
+                Please fill the form accordingly
+              </v-alert>
+            </v-container>
+          </v-card-text>
+        </v-tab-item>
+
+        <!-- 2 - Sign up -->
+        <v-tab-item>
+          <v-card-text>
+            <v-container>
+              <v-form>
+                <!-- Text -->
+                <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
+                <v-spacer/>
+
+                <!-- Field : Username -->
+                <v-text-field
+                  class="pa-4"
+                  v-model="signUpUsername"
+                  label="Username"
+                  prepend-icon="mdi-face"
+                  :rules="[rules.required]"
+                  clearable
+                  counter
+                  maxlength="15"
+                />
+
+                <!-- Field : Password -->
+                <v-text-field
+                  class="pa-4"
+                  v-model="signUpPassword"
+                  label="Password"
+                  type="password"
+                  prepend-icon="mdi-lock"
+                  :rules="[rules.required]"
+                  required
+                />
+
+                <!-- Field : E-mail -->
+                <v-text-field
+                  class="pa-4"
+                  v-model="signUpEmail"
+                  label="E-mail"
+                  prepend-icon="mdi-at"
+                  :rules="[rules.required, rules.email]"
+                  required
+                  clearable
+                />
+              </v-form>
+              <br><br><br>
+
+              <!-- ALERT - displayed if the credentials are incorrect -->
+              <v-alert
+                :value="signUpFailed"
+                dense
+                outlined
+                dismissible
+                prominent
+                type="error"
+                transition="scale-transition"
+              >
+                Please fill the form accordingly
+              </v-alert>
+            </v-container>
+          </v-card-text>
+        </v-tab-item>
+      </v-tabs-items>
 
         <!-- Buttons -->
         <v-card-actions>
           <v-spacer/>
-          <v-btn color="secondary" text @click="dialogLogin = false">Close</v-btn>
-          <v-btn color="success" text @click="dialogLogin = false; login()">Login !</v-btn>
+          <v-btn color="secondary" text @click="isDialogActive = false">Close</v-btn>
+          <v-btn color="success" text @click="tabModel == 0 ? logIn() : signUp()"> {{ tabModel == 0 ? 'Login !' : 'Sign up !'}} </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -101,40 +202,24 @@
         </v-col>
 
       <!-- Button Login -->
-      <!--
         <v-col v-else>
           <v-row align="center" justify="center">
-            <!/-- Login Button -/->
-            <v-btn
-              dark
-              color="secondary"
-              rounded
-              x-large
-              @click="dialogLogin = true"
-            >
+            <!-- Login Button -->
+            <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 0">
               <v-icon left>mdi-login</v-icon>
-              LogIn - SignUp
+              LogIn
             </v-btn>
           </v-row>
-        </v-col>
-        -->
-        <v-col v-else>
-          <v-row
-            align="center"
-            justify="center"
-            @click="dialogLogin = true"
-          >
-            <v-card elevation="10">
-              <v-card-actions class="mx-0 pa-0">
-                <label class="blue pa-3">
-                  <v-icon class="pb-1" left small>mdi-login</v-icon>
-                  LogIn
-                </label>
-                <label class="orange pa-3">
-                  SignUp
-                </label>
-              </v-card-actions>
-            </v-card>
+
+          <br>
+          <br>
+
+          <v-row align="center" justify="center">
+            <!-- Login Button -->
+            <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 1">
+              <v-icon left>mdi-account-plus</v-icon>
+              SignUp
+            </v-btn>
           </v-row>
         </v-col>
 
@@ -227,11 +312,21 @@ export default {
   data: () => ({
     data: null,
     isUserLoggedIn: false,
-    dialogLogin: false,
-    username: '',
-    password: '',
+    isDialogActive: false,
+    tabModel: null,
+    loginUsername: '',
+    loginPassword: '',
+    signUpUsername: '',
+    signUpPassword: '',
+    signUpEmail: '',
+    loginFailed: false,
+    signUpFailed: false,
     rules: {
-      required: value => !!value || 'Required.'
+      required: value => !!value || 'Required.',
+      email: value => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return pattern.test(value) || 'Invalid e-mail.'
+      }
     },
     scoreboardHeaders: [
       {
@@ -297,16 +392,40 @@ export default {
     ...mapActions('parties', ['createParty']),
     ...mapActions('accounts', ['signIn', 'signUp']),
 
-    // Method to Log in
-    login () {
-      console.log('the button is cliked', this.username, this.password)
-      /*
-      this.signIn({ username: this.username, password: this.password })
+    // Method to Log in (connect to account)
+    logIn () {
+      // We ask the login method
+      this.signIn({ username: this.loginUsername, password: this.loginPassword })
         .then((success) => {
+          console.log('LOG IN - success')
           console.log(success)
+          this.isDialogActive = false
+          // this.$router.push({ name: 'Home' })
         })
-      */
+        .catch((err) => {
+          console.log('LOGIN - error')
+          console.log(err)
+          this.loginFailed = true
+        })
     },
+
+    // Method to Sign in (create new account)
+    signUp () {
+      // We ask the login method
+      this.signUp({ username: this.signUpUsername, password: this.signUpPassword })
+        .then((success) => {
+          console.log('SIGN UP - success')
+          console.log(success)
+          this.isDialogActive = false
+          // this.$router.push({ name: 'Home' })
+        })
+        .catch((err) => {
+          console.log('SIGN UP - error')
+          console.log(err)
+          this.signUpFailed = true
+        })
+    },
+
     startGame () {
       const defaultPlayerStat = {
         maxHP: 10,

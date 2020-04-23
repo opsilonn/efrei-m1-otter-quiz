@@ -86,7 +86,11 @@ export default {
       var list = []
 
       // We add all the questions to our List, starting by the most recents
-      for (var i = this.rounds.length - 1; i < 0; i--) {
+      // Why minus 2 ?
+      // - because we draw one from the array length (array of size 10 -> from 0 to 9, with 10 minus 1 is 9)
+      // - because we don't keep the current round, which is located at the end of the array
+      // Hence the minus 2
+      for (var i = this.rounds.length - 2; i > 0; i--) {
         list.push(this.rounds[i])
       }
 
