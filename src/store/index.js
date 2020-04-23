@@ -8,7 +8,7 @@ import DunjonStore from './modules/dunjons'
 import RoundStore from './modules/rounds'
 import EnemyStatStore from './modules/enemyStats'
 import PlayerStatStore from './modules/playerStats'
-import InventoryStore from './modules/inventories'
+import InventoryItemStore from './modules/inventoryItems'
 import SpellStore from './modules/spells'
 import TriviasStore from './modules/trivias'
 
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     rounds: RoundStore,
     enemyStats: EnemyStatStore,
     playerStats: PlayerStatStore,
-    inventories: InventoryStore,
+    inventoryItems: InventoryItemStore,
     spells: SpellStore,
     trivias: TriviasStore
   }
