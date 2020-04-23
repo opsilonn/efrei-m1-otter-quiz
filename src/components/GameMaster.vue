@@ -18,7 +18,7 @@
               class='font-weight-black blue-grey--text text--lighten-4'
               style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
             >
-              Game over !
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-skull-crossbones</v-icon>Game over !
             </h2>
           </label>
         </v-card-title>
@@ -42,6 +42,7 @@
             :style="'background-color: #A53532'"
             @click="$router.push({ name: 'Home' })"
           >
+            <v-icon class="pr-2">mdi-exit-run</v-icon>
             Exit
           </v-btn>
           <v-spacer/>
@@ -51,6 +52,7 @@
             :style="'background-color: #46A65D'"
             @click="startNewGame"
           >
+            <v-icon class="pr-2">mdi-restore</v-icon>
             Retry
           </v-btn>
           <v-spacer/>
@@ -67,7 +69,7 @@
             class='font-weight-black blue-grey--text text--lighten-4'
             style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
           >
-            Oups ! You got lost !
+            <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-cloud-question</v-icon>Oups ! You got lost !
           </h2>
         </v-card-title>
         <v-card-text
@@ -85,7 +87,8 @@
             dark
             :style="'background-color: #A53532'"
             @click="$router.push({ name: 'Home' })"
-            >
+          >
+            <v-icon class="pr-2">mdi-exit-run</v-icon>
             Exit
           </v-btn>
           <v-spacer/>
@@ -94,7 +97,8 @@
             dark
             :style="'background-color: #46A65D'"
             @click="startNewGame"
-            >
+          >
+            <v-icon class="pr-2">mdi-restore</v-icon>
             Retry
           </v-btn>
           <v-spacer/>
@@ -102,14 +106,13 @@
       </v-card>
     </v-dialog>
 
-    <!-- Dialog to choose next dunjon -->
+    <!-- Dialog to choose a loot -->
     <v-dialog
-      v-model="dialogNextDunjon"
+      v-model="dialogLoot"
       persistent
       max-width="150vh"
     >
       <v-card
-        v-if="!!party"
         class="blue-grey darken-3"
       >
         <v-card-title
@@ -120,7 +123,144 @@
               class='font-weight-black blue-grey--text text--lighten-4'
               style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
             >
-              Next dungeon !
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-trophy</v-icon>Dungeon finished !
+            </h2>
+          </label>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            Choose one loot :
+          </p>
+          <v-row>
+            <!-- Loot Heal -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
+              >
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('heal')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'green--text': hover }">
+                      Heal 1 HP
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'green' : ''">mdi-medical-bag</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Mana -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
+              >
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('mana')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'blue--text': hover }">
+                      Recover 1 Mana
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'blue' : ''">mdi-head-snowflake</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Golds -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
+              >
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('golds')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'yellow--text': hover }">
+                      Take 2 Golds
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'yellow' : ''">mdi-circle-multiple</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Time -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
+              >
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('time')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'red--text': hover }">
+                      Recover 1 sec
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'red' : ''">mdi-run-fast</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- Dialog to choose next dunjon -->
+    <v-dialog
+      v-model="dialogNextDunjon"
+      persistent
+      max-width="150vh"
+    >
+      <v-card
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <label>
+            <h2
+              class='font-weight-black blue-grey--text text--lighten-4'
+              style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+            >
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-sword-cross</v-icon>Next dungeon !
             </h2>
           </label>
         </v-card-title>
@@ -132,112 +272,36 @@
             Choose one :
           </p>
           <v-row>
-            <v-col cols="12" :sm="4">
+            <v-col
+              v-for="(choosableDungeon, index) in choosableDungeons"
+              :key="index"
+              cols="12"
+              :sm="4"
+              class="zoom-sm pa-3 d-flex flex-column"
+            >
               <v-card
-                class="blue-grey lighten-3"
+                class="blue-grey lighten-3 flex d-flex flex-column"
                 @click="enterNewDunjon({
-                  category: 9,
-                  difficulty: 'Easy'
+                  category: choosableDungeon.category.id,
+                  difficulty: choosableDungeon.difficulty,
+                  roundTime: choosableDungeon.roundTime
                  })"
               >
-                <v-card-title>
-                  Dungeon 1
+                <v-card-title style="font-size: 2.8vh; line-height: 2.8vh">
+                  <v-icon class="pb-1 pr-2">mdi-castle</v-icon> &nbsp; Dungeon {{ index + 1 }}
                 </v-card-title>
-                <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(9) }}
+                <v-divider/>
+                <v-card-text style="font-size: 1.9vh; line-height: 3vh">
+                  <v-icon class="pb-1" small>mdi-shape</v-icon> <b class="pr-2">Category</b> {{ choosableDungeon.category.name }}
                   <br/>
-                  Difficulty : Easy
+                  <v-icon class="pb-1" small>mdi-fire</v-icon> <b class="pr-2">Difficulty</b> {{ choosableDungeon.difficulty }}
                   <br/>
-                  Round timer : 20s
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" :sm="4">
-              <v-card
-                class="blue-grey lighten-3"
-                @click="enterNewDunjon({
-                  category: 10,
-                  difficulty: 'Easy'
-                 })"
-              >
-                <v-card-title>
-                  Dungeon 2
-                </v-card-title>
-                <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(10) }}
-                  <br/>
-                  Difficulty : Easy
-                  <br/>
-                  Round timer : 18s
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" :sm="4">
-              <v-card
-                class="blue-grey lighten-3"
-                @click="enterNewDunjon({
-                  category: 11,
-                  difficulty: 'Medium'
-                 })"
-              >
-                <v-card-title>
-                  Dungeon 3
-                </v-card-title>
-                <v-card-text>
-                  Category : {{ this.getTriviaCategoryNameById(11) }}
-                  <br/>
-                  Difficulty : Medium
-                  <br/>
-                  Round timer : 20s
+                  <v-icon class="pb-1" small>mdi-timer</v-icon> <b class="pr-2">Round timer</b> {{ ((choosableDungeon.roundTime) / 1000).toFixed(1) }}s
                 </v-card-text>
               </v-card>
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card>
-      <v-card
-        v-else
-        class="blue-grey darken-3"
-      >
-        <v-card-title
-          class="blue-grey darken-4"
-        >
-          <h2
-            class='font-weight-black blue-grey--text text--lighten-4'
-            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
-          >
-            Oups ! You got lost !
-          </h2>
-        </v-card-title>
-        <v-card-text
-          class="blue-grey darken-2 blue-grey--text text--lighten-4"
-          style="padding: 30px 70px"
-        >
-          <p style="font-size: 3.5vh; line-height: 3.5vh">
-            You seems to be on a party that doesn't exist or that is already finished.
-          </p>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer/>
-          <v-btn
-            x-large
-            dark
-            :style="'background-color: #A53532'"
-            @click="$router.push({ name: 'Home' })"
-          >
-            Exit
-          </v-btn>
-          <v-spacer/>
-          <v-btn
-            x-large
-            dark
-            :style="'background-color: #46A65D'"
-            @click="startNewGame"
-          >
-            Retry
-          </v-btn>
-          <v-spacer/>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -251,6 +315,7 @@ import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'GameMaster',
   data: () => ({
+    // Timer
     timer: {
       length: 20000,
       begin: null,
@@ -259,9 +324,15 @@ export default {
     },
     endLength: 1000,
     resetLength: 3000,
+    // Dialog controller
     dialogEnding: false,
+    dialogLoot: false,
     dialogNextDunjon: false,
-    gameReaload: true
+    // Game controller
+    gameReaload: true,
+    chooseDungeon: false,
+    // Random values
+    choosableDungeons: []
   }),
   computed: {
     // States
@@ -275,15 +346,15 @@ export default {
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId', 'getRandomRoundTime']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId', 'getRoundsByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
-    ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById']),
+    ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById', 'getRandomTriviasCategorySet', 'getRandomTriviasDifficulty']),
 
     // Custom
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     party () {
       return this.getPartyById(this.partyId)
@@ -292,7 +363,10 @@ export default {
       return this.getLastDunjonByPartyId(this.partyId)
     },
     round () {
-      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
+      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) : {}
+    },
+    roundAnswer () {
+      return this.round ? this.round.answer : undefined
     },
     playerStat () {
       return this.getPlayerStatByPartyId(this.partyId)
@@ -334,6 +408,14 @@ export default {
     ...mapActions('trivias', ['fetchTrivias', 'fetchTriviaCategories']),
 
     // Customs
+    beginPlay () {
+      if (this.party === undefined) {
+        this.dialogEnding = true
+      } else {
+        this.dialogEnding = false
+        this.startTimer()
+      }
+    },
     startNewGame () {
       const defaultPlayerStat = {
         maxHP: 10,
@@ -349,20 +431,41 @@ export default {
 
       this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
-          const dunjonId = this.getLastDunjonByPartyId(partyId).id
-
-          console.log(`[GameMaster] partyId: ${partyId}`)
-          console.log(`[GameMaster] dunjonId: ${dunjonId}`)
-
           // Go to Game page
-          this.$router.push({ name: 'Game', params: { partyId } })
+          EventBus.$emit('party-start')
+          if (parseInt(this.partyId) === partyId) {
+            this.beginPlay()
+          } else {
+            this.$router.replace({ name: 'Game', params: { partyId } })
+          }
         })
         .catch((err) => {
+          console.log('Error in createParty')
           console.log(err)
         })
     },
+    applyingLoot (selection) {
+      console.log(`selected loot is ${selection}`)
+      this.dialogLoot = false
+      this.choosableDungeons = []
+
+      const RandomTriviasCategorySet = Array.from(this.getRandomTriviasCategorySet(3))
+      RandomTriviasCategorySet.forEach((category, index) => {
+        this.choosableDungeons[index] = {}
+        this.choosableDungeons[index].category = category
+      })
+
+      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
+      RandomTriviasDifficulty.forEach((difficulty, index) => {
+        this.choosableDungeons[index].difficulty = difficulty
+        this.choosableDungeons[index].roundTime = this.getRandomRoundTime(this.dunjon.roundTime, difficulty)
+      })
+
+      this.dialogNextDunjon = true
+    },
     enterNewDunjon (dunjon) {
       this.dialogNextDunjon = false
+      this.chooseDungeon = false
       const defaultEnemyStat = {
         maxHP: parseInt(this.enemyStat.maxHP) + 1,
         HP: parseInt(this.enemyStat.maxHP) + 1
@@ -372,22 +475,19 @@ export default {
       this.startTimer()
     },
     async startTimer () {
-      if (this.party.isFinished || this.dialogNextDunjon) {
+      if (this.party.isFinished || this.chooseDungeon) {
         return
       }
-      console.log('start timer')
       await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
-      console.log('before nextRound')
-      this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
-      console.log('after nextRound')
+      this.nextRound({ dunjonId: this.dunjon.id, trivia: this.lastTrivia })
       this.gameReaload = false
 
       // Reset localy
+      this.timer.length = this.dunjon.roundTime
       this.timer.begin = Date.now()
       this.timer.end = this.timer.begin + this.timer.length
 
       // Broadcast timer-start
-      console.log('[GameMaster] Emit event timer-start')
       EventBus.$emit('timer-start', { timer: this.timer, trivia: this.lastTrivia })
 
       // Start update
@@ -421,7 +521,6 @@ export default {
       this.timer.remaining = 0
 
       // Broadcast event timer-end
-      console.log('[GameMaster] Emit timer-end')
       EventBus.$emit('timer-end', { timer: this.timer })
 
       setTimeout(this.resetTimer, this.endLength)
@@ -430,7 +529,6 @@ export default {
       this.timer.remaining = this.timer.length
 
       // Broadcast event timer-end
-      console.log('[GameMaster] Emit event timer-reset')
       EventBus.$emit('timer-reset', { timer: this.timer })
 
       setTimeout(this.startTimer, this.resetLength)
@@ -438,30 +536,18 @@ export default {
 
     // Event handlers
     onTimer_stop () {
-      console.log('[GameMaster] On event timer-stop')
-
       this.endTimer()
     },
-    onTrivia_success () {
-      console.log('[GameMaster] On event trivia-success')
-      this.setRoundResult({ roundId: this.round.id, result: 'Succeded' })
-      this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat.HP) - 1 })
-      this.addPartyScore({ partyId: this.partyId, score: 100 })
-    },
-    onTrivia_failure () {
-      console.log('[GameMaster] On event trivia-failure')
-      this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
-      this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat.HP) - 1 })
-    },
     onPlayer_death () {
-      console.log('[GameMaster] On event player-death')
       this.partyFinish({ partyId: this.partyId })
       this.dialogEnding = true
     },
     onEnemy_death () {
-      console.log('[GameMaster] On event enemy-death')
-      this.dialogNextDunjon = true
+      this.chooseDungeon = true
+
       this.addPartyScore({ partyId: this.partyId, score: 500 })
+
+      setTimeout(() => { this.dialogLoot = true }, this.resetLength)
     }
   },
   created () {
@@ -474,34 +560,33 @@ export default {
   async mounted () {
     this.fetchTriviaCategories()
 
-    if (this.party === undefined) {
-      this.dialogEnding = true
-    } else {
-      this.dialogEnding = false
-      this.startTimer()
-    }
+    this.beginPlay()
   },
   watch: {
     partyId: function (newValue, oldValue) {
-      if (this.party === undefined) {
-        this.dialogEnding = true
-      } else {
-        this.dialogEnding = false
-        this.startTimer()
+      this.beginPlay()
+    },
+    roundAnswer: function (newValue, oldValue) {
+      if (oldValue === undefined) {
+        if (newValue.value) {
+          this.setRoundResult({ roundId: this.round.id, result: 'Succeeded' })
+          this.setEnemyStatHP({ enemyStat: this.enemyStat, HP: parseInt(this.enemyStat_HP) - 1 })
+          this.addPartyScore({ partyId: this.partyId, score: 100 })
+        } else {
+          this.setRoundResult({ roundId: this.round.id, result: 'Failed' })
+          this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) - 1 })
+        }
       }
     },
     playerStat_HP: function (newValue, oldValue) {
       if (!this.gameReaload) {
         if (newValue <= 0) {
-          console.log('[GameMaster] Emit event player-death')
           EventBus.$emit('player-death')
           return
         }
         if (newValue > oldValue) {
-          console.log('[GameMaster] Emit event player-heal')
           EventBus.$emit('player-heal', { oldValue })
         } else {
-          console.log('[GameMaster] Emit event player-damage')
           EventBus.$emit('player-damage', { oldValue })
         }
       }
@@ -509,15 +594,12 @@ export default {
     enemyStat_HP: function (newValue, oldValue) {
       if (!this.gameReaload) {
         if (newValue <= 0) {
-          console.log('[GameMaster] Emit event enemy-death')
           EventBus.$emit('enemy-death')
           return
         }
         if (newValue > oldValue) {
-          console.log('[GameMaster] Emit event enemy-heal')
           EventBus.$emit('enemy-heal', { oldValue })
         } else {
-          console.log('[GameMaster] Emit event enemy-damage')
           EventBus.$emit('enemy-damage', { oldValue })
         }
       }

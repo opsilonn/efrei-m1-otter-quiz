@@ -51,11 +51,8 @@ const mutations = {
    */
   addPlayerStat (state, { playerStat }) {
     if (!playerStat.id) {
-      console.log('adding new id')
       const lastPlayerStat = getters.getLastPlayerStat(state)()
-      console.log(`lastPlayerStat : ${lastPlayerStat}`)
       playerStat.id = (lastPlayerStat) ? lastPlayerStat.id + 1 : 0
-      console.log(`playerStat id: ${playerStat.id}`)
     }
 
     const existing = state.playerStats.findIndex(e => e.id === playerStat.id)

@@ -89,11 +89,6 @@ const mutations = {
 
 const actions = {
   createParty ({ commit, dispatch }, { accountId, defaultPlayerStat, defaultEnemyStat }) {
-    console.log('[parties] createParty')
-    console.log('defaultPlayerStat')
-    console.log(defaultPlayerStat)
-    console.log('defaultEnemyStat')
-    console.log(defaultEnemyStat)
     // Party
     const newParty = {
       accountId,
@@ -101,29 +96,27 @@ const actions = {
       seed: Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
       isFinished: false
     }
-    console.log(`[parties] commit addParty: ${newParty.id}`)
     commit('addParty', { party: newParty })
-    console.log(`[parties] commited addParty: ${newParty.id}`)
 
     defaultPlayerStat.partyId = newParty.id
 
     // Stats
-    console.log('[parties] commit playerStats/addPlayerStat')
     commit('playerStats/addPlayerStat', { playerStat: defaultPlayerStat }, { root: true })
 
     // Dunjon
     const newDunjon = {
       partyId: newParty.id,
       category: 9,
-      difficulty: 'easy'
+      difficulty: 'easy',
+      roundTime: 20000
     }
-    console.log(`[parties] dispatch dunjons/nextDunjon ${newDunjon.id}`)
     return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon, defaultEnemyStat }, { root: true })
       .then((dunjonId) => {
-        console.log(`[parties] dispatched dunjons/nextDunjon: ${dunjonId}`)
-
-        console.log(`[parties] return partyId: ${newParty.id}`)
         return newParty.id
+      })
+      .catch((err) => {
+        console.log('[createParty] Error in dunjons/nextDunjon')
+        console.log(err)
       })
   }
 }

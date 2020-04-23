@@ -34,6 +34,12 @@ export default {
 .zoom:hover {
   transform: scale(1.2);
 }
+.zoom-sm {
+  transition: transform .2s;
+}
+.zoom-sm:hover {
+  transform: scale(1.1);
+}
 
 /* Changes the Width or the Height to fill a given percentage */
 .width100 { width:100% }

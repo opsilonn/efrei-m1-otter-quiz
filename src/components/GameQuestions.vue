@@ -18,7 +18,7 @@
         </label>
 
         <!-- Questions -->
-        <h3 v-html="trivia.question" class="pa-0" align="center"/>
+        <h3 v-html="trivia.question" class="pa-0 pl-5 pr-5" align="center"/>
         <v-row>
           <v-col
             cols="6"
@@ -60,7 +60,7 @@
 <script>
 import EventBus from '@/EventBus.js'
 
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'GameQuestions',
@@ -90,13 +90,13 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.param.partyId
+      return parseInt(this.$route.params.partyId)
     },
     dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { number: '0' }
     },
     timerRemainingSec () {
       return Math.abs((this.timer.remaining || 0.0) / 1000)
@@ -118,20 +118,21 @@ export default {
     }
   },
   methods: {
+    // Mutations
+    ...mapMutations('rounds', ['setRoundAnswer']),
+
     // Method called when the user chooses an answer
     chooseAnswer (answer) {
       this.yourAnswer = answer
 
       // We stop the Timer
-      console.log('[GameQuestion] Emit timer-stop')
       EventBus.$emit('timer-stop', { timer: this.timer })
     },
 
     // Event handlers
     onTimer_start ({ timer, trivia }) {
       this.showResults = false
-      console.log('[GameQuestion] On event timer-start')
-      this.yourAnswer = { answer: 'none' }
+      this.yourAnswer = {}
       this.timer = timer
       this.trivia = trivia
       this.step = 1
@@ -140,25 +141,14 @@ export default {
       this.timer = timer
     },
     onTimer_end ({ timer }) {
-      console.log('[GameQuestion] On event timer-end')
       this.timer = timer
       this.step = 0
     },
     onTimer_reset ({ timer }) {
-      console.log('[GameQuestion] On event timer-reset')
-      this.showResults = true
       this.timer = timer
       this.step = 2
-      this.showResults = true
 
-      // If the party answered correctly or not (wrong answer / no answer at all)
-      if (this.yourAnswer.value === true) {
-        console.log('[GameQuestion] Emit event trivia-success')
-        EventBus.$emit('trivia-success')
-      } else {
-        console.log('[GameQuestion] Emit event trivia-failure')
-        EventBus.$emit('trivia-failure')
-      }
+      this.setRoundAnswer({ roundId: this.round.id, answer: this.yourAnswer })
     }
   },
   created () {

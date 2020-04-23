@@ -250,17 +250,13 @@ export default {
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
-    ...mapState('accounts', ['accounts']),
+    ...mapState('accounts', ['accounts', 'connectedAccount']),
 
     // Getters
     ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
-    ...mapGetters('accounts', ['getConnectedAccount', 'getRegistration']),
 
     account () {
-      return this.getConnectedAccount()
-    },
-    register () {
-      return this.getRegistration()
+      return this.connectedAccount
     }
   },
   methods: {
@@ -271,8 +267,6 @@ export default {
 
     // Actions
     ...mapActions('parties', ['createParty']),
-    ...mapActions('accounts', ['connection']),
-    ...mapActions('accounts', ['register']),
     ...mapActions('accounts', ['signIn', 'signUp']),
 
     // Method to Log in
@@ -298,7 +292,8 @@ export default {
         HP: 3
       }
 
-      this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
+      const accountId = this.connectedAccount ? this.connectedAccount.id : -1
+      this.createParty({ accountId, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
           const dunjonId = this.getLastDunjonByPartyId(partyId).id
 

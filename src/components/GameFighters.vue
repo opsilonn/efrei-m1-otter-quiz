@@ -29,7 +29,7 @@
 </template>
 
 <script>
-// import EventBus from '@/EventBus.js'
+import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 
 import { mapState, mapGetters } from 'vuex'
@@ -53,22 +53,25 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     party () {
       return this.getPartyById(this.partyId) || {}
     },
     dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { result: 'none', number: '0' }
     },
     dunjonCategoryName () {
       return this.dunjon ? this.getTriviaCategoryNameById(this.dunjon.category) : 'none'
     }
   },
   methods: {
+  },
+  created () {
+    EventBus.$on('party-start', this.$forceUpdate)
   }
 }
 </script>

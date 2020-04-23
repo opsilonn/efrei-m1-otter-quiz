@@ -15,12 +15,45 @@ const state = {
 
 const getters = {
   /**
-   * Get the last trivia fetched
+   * Get the name of a category by it's id
    */
   getTriviaCategoryNameById: state => (id) => {
     const triviaCategory = state.triviaCategories.find((trivia) => trivia.id === id) || {}
-    console.log(`triviaCategory.name: ${triviaCategory.name}`)
     return triviaCategory.name
+  },
+
+  /**
+   * Get a random set of category for a specific size
+   */
+  getRandomTriviasCategorySet: state => (size) => {
+    const randomTriviasCategorySet = new Set()
+
+    while (randomTriviasCategorySet.size < size && randomTriviasCategorySet.size < state.triviaCategories.length) {
+      randomTriviasCategorySet.add(state.triviaCategories[Math.floor(Math.random() * state.triviaCategories.length)])
+    }
+
+    return randomTriviasCategorySet
+  },
+
+  /**
+   * Get a random array of difficulty depending of the number of the current dungeon for a specific size
+   */
+  getRandomTriviasDifficulty: state => (size, dungeonNumber) => {
+    const RandomTriviasDifficulty = []
+
+    while (RandomTriviasDifficulty.length < size) {
+      const rand = Math.random() * (1 + dungeonNumber / 10) + (dungeonNumber - 1) / 10
+
+      if (rand > 2) {
+        RandomTriviasDifficulty.push('Hard')
+      } else if (rand > 1) {
+        RandomTriviasDifficulty.push('Medium')
+      } else {
+        RandomTriviasDifficulty.push('Easy')
+      }
+    }
+
+    return RandomTriviasDifficulty
   },
 
   /**
@@ -124,18 +157,13 @@ const actions = {
    * @param {('boolean'|'multiple')} option.type - The type of trivias to fetch
    */
   async fetchTrivias ({ commit }, { amount, category, difficulty, type }) {
-    const url = '' + ((amount) ? `amount=${amount}&` : '') + ((category) ? `category=${category}&` : '') + ((difficulty) ? `difficulty=${difficulty}&` : '' + ((type) ? `type=${type}&` : ''))
-    console.log(api(url))
+    const url = '' + ((amount) ? `amount=${amount}&` : '') + ((category) ? `category=${category}&` : '') + ((difficulty) ? `difficulty=${difficulty.toLowerCase()}&` : '' + ((type) ? `type=${type}&` : ''))
     const { data } = await axios.get(api(url))
-    console.log('data :')
-    console.log(data)
     data.results.forEach(d => commit('addTrivia', { trivia: d }))
   },
 
   async fetchTriviaCategories ({ commit }) {
     const { data } = await axios.get('https://opentdb.com/api_category.php')
-    console.log('data :')
-    console.log(data)
     commit('addTriviaCategories', { triviaCategories: data.trivia_categories })
   }
 }

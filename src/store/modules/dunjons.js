@@ -5,6 +5,22 @@ const state = {
 }
 
 const getters = {
+
+  /**
+   * Get a random roundTime depending of the one of the current dungeon and the difficulty of the next one
+   */
+  getRandomRoundTime: state => (currentDungeonRoundTime, nextDungeonDifficulty) => {
+    const rand = Math.random()
+
+    if (nextDungeonDifficulty.toLowerCase() === 'hard') {
+      Math.pow(rand, 3)
+    } else if (nextDungeonDifficulty.toLowerCase() === 'medium') {
+      Math.pow(rand, 2)
+    }
+
+    return currentDungeonRoundTime - (rand * 2 * 1000)
+  },
+
   /**
    * Get the dunjon by its id
    * @param {number} id - The id of the dunjon
@@ -84,10 +100,7 @@ const mutations = {
 
 const actions = {
   nextDunjon ({ commit, rootGetters, getters }, { partyId, dunjon, defaultEnemyStat }) {
-    console.log('[dunjons] nextDunjon')
-    console.log(`[dunjons] getting parties/getPartyById: ${partyId}`)
     const party = rootGetters['parties/getPartyById'](partyId)
-    console.log(`[dunjons] party.id: ${party.id}`)
 
     if (party.isFinished === true) {
       return
@@ -99,18 +112,15 @@ const actions = {
       partyId,
       category: dunjon.category,
       difficulty: dunjon.difficulty,
+      roundTime: dunjon.roundTime,
       number
     }
 
-    console.log(`[dunjons] commit addDunjon: ${newDunjon.id}`)
     commit('addDunjon', { dunjon: newDunjon })
-    console.log(`[dunjons] commited addDunjon: ${newDunjon.id}`)
 
     defaultEnemyStat.dunjonId = newDunjon.id
-    console.log('[parties] commit enemyStats/addEnemyStat')
     commit('enemyStats/nextEnemyStat', { dunjonId: newDunjon.id, enemyStat: defaultEnemyStat }, { root: true })
 
-    console.log(`[dunjons] return dunjonId: ${newDunjon.id}`)
     return newDunjon.id
   }
 }
