@@ -29,7 +29,7 @@
           <p style="font-size: 3.5vh; line-height: 3.5vh">
             You managed to beat <b>{{ getDunjonsByPartyId(partyId).length - 1}} dungeon{{getDunjonsByPartyId(partyId).length - 1 > 1 ? 's' : ''}}</b>.
             <br/>
-            You went through <b>x rounds</b> and answered good to <b>x questions</b>.
+            You went through <b>{{ totalRounds.length }} rounds</b> and answered good to <b>{{ totalRoundsSucceeded.length }} questions</b>.
           </p>
 
           <h1 class="pt-5" style="font-size: 5vh; line-height: 5vh">Your score is <b>{{ party.score }} pts</b>.</h1>
@@ -384,12 +384,25 @@ export default {
       return this.getLastTrivia() || {}
     },
     totalRounds () {
-      let number = 0
+      let rounds = []
       const dunjons = this.getDunjonsByPartyId(this.partyId)
       dunjons.forEach((dunjon) => {
-        number += this.getRoundsByDunjonId(dunjon.id)
+        rounds = rounds.concat(this.getRoundsByDunjonId(dunjon.id))
       })
-      return number
+      return rounds
+    },
+    totalRoundsSucceeded () {
+      const rounds = []
+
+      this.totalRounds.forEach((round) => {
+        if (round.answer) {
+          if (round.answer.value) {
+            rounds.push(round)
+          }
+        }
+      })
+
+      return rounds
     }
   },
 
@@ -398,7 +411,7 @@ export default {
     ...mapMutations('parties', ['addParty', 'addPartyScore', 'partyFinish']),
     ...mapMutations('dunjons', ['addDunjon']),
     ...mapMutations('rounds', ['addRound', 'setRoundResult']),
-    ...mapMutations('playerStats', ['addPlayerStat', 'setPlayerStatHP']),
+    ...mapMutations('playerStats', ['addPlayerStat', 'setPlayerStatHP', 'setPlayerStatMana', 'setPlayerStatGold']),
     ...mapMutations('enemyStats', ['addEnemyStat', 'setEnemyStatHP']),
 
     // Actions
@@ -419,10 +432,10 @@ export default {
     startNewGame () {
       const defaultPlayerStat = {
         maxHP: 10,
-        HP: 10,
+        HP: 2,
         maxMana: 5,
         mana: 5,
-        gold: 1
+        gold: 0
       }
       const defaultEnemyStat = {
         maxHP: 3,
@@ -445,7 +458,20 @@ export default {
         })
     },
     applyingLoot (selection) {
-      console.log(`selected loot is ${selection}`)
+      switch (selection) {
+        case 'heal':
+          this.setPlayerStatHP({ playerStat: this.playerStat, HP: parseInt(this.playerStat_HP) + 1 })
+          break
+
+        case 'mana':
+          this.setPlayerStatMana({ playerStat: this.playerStat, mana: parseInt(this.playerStat_mana) + 1 })
+          break
+
+        case 'golds':
+          this.setPlayerStatGold({ playerStat: this.playerStat, gold: parseInt(this.playerStat.gold) + 2 })
+          break
+      }
+
       this.dialogLoot = false
       this.choosableDungeons = []
 
@@ -458,7 +484,7 @@ export default {
       const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
       RandomTriviasDifficulty.forEach((difficulty, index) => {
         this.choosableDungeons[index].difficulty = difficulty
-        this.choosableDungeons[index].roundTime = this.getRandomRoundTime(this.dunjon.roundTime, difficulty)
+        this.choosableDungeons[index].roundTime = parseInt(this.getRandomRoundTime(this.dunjon.roundTime, difficulty)) + (selection === 'time' ? 1000 : 0)
       })
 
       this.dialogNextDunjon = true
