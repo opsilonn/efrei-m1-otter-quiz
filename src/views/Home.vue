@@ -4,7 +4,7 @@
   >
 
     <!-- Login Form -->
-    <v-dialog v-model="isDialogActive" max-width="600px">
+    <v-dialog v-model="isDialogActive" max-width="750px">
 
       <!-- Login Dialog -->
       <v-card>
@@ -173,10 +173,11 @@
           <v-card tile elevation="0" style="background: rgba(255, 220, 220, 0.7)" class="pa-5 pl-12 pr-12">
             <v-container class="text-justify">
               <h3>
-                This Website is a cross between a trivia game and a Rogue-like.<br/>
+                This Website is a cross between a trivia game and a Rogue-like.
+                <br>
                 You'll enter a dungeon composed of different levels :
-                on each level, you'll face an opponent which you can beat by answering trivia questions.<br/>
-                Depending on your answer, wrong or correct, you or your opponent will lose Health Points accordingly.<br/>
+                on each level, you'll face an opponent which you can beat by answering trivia questions.
+                Depending on your answer, wrong or correct, you or your opponent will lose Health Points accordingly.
                 Additionally, some objects and spells may also help you in different ways.
               </h3>
               <br>
