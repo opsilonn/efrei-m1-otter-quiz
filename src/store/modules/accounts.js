@@ -90,11 +90,15 @@ const mutations = {
 
 const actions = {
   signIn ({ commit, getters }, { username, password }) {
-    const account = getters.getAccountByUsernameAndPassword(username, password)
-    if (account !== undefined) {
-      commit('connectedTo', { account })
-      return account
-    }
+    return new Promise((resolve, reject) => {
+      const account = getters.getAccountByUsernameAndPassword(username, password)
+      if (account !== undefined) {
+        commit('connectedTo', { account })
+        resolve(account)
+      } else {
+        reject(new Error('User not found'))
+      }
+    })
   },
   signUp ({ commit, getters }, { username, password }) {
     const already = getters.getAccountByUsername({ username })
