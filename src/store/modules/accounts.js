@@ -84,10 +84,13 @@ const mutations = {
     updateProp(state, { id, prop, value })
   },
   connectedTo (state, { account }) {
-    state.connectedAccount = account
+    Vue.set(state.connectedAccount, 'id', account.id)
+    Vue.set(state.connectedAccount, 'username', account.username)
+    Vue.set(state.connectedAccount, 'password', account.password)
   },
   logOut (state) {
-    state.connectedAccount = {}
+    Vue.set(state.connectedAccount, 'id', -1)
+    Vue.set(state.connectedAccount, 'username', 'anonymous')
   }
 }
 
