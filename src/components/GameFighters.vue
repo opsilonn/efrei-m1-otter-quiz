@@ -29,7 +29,7 @@
 </template>
 
 <script>
-// import EventBus from '@/EventBus.js'
+import EventBus from '@/EventBus.js'
 import GamePlayers from '@/components/GamePlayers'
 
 import { mapState, mapGetters } from 'vuex'
@@ -53,7 +53,7 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     party () {
       return this.getPartyById(this.partyId) || {}
@@ -69,6 +69,9 @@ export default {
     }
   },
   methods: {
+  },
+  created () {
+    EventBus.$on('party-start', this.$forceUpdate)
   }
 }
 </script>

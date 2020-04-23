@@ -136,7 +136,7 @@ export default {
       return this.connectedAccount
     },
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     dunjon () {
       return this.getLastDunjonByPartyId(this.partyId) || { category: '9', difficulty: 'none', number: '0' }
@@ -206,17 +206,20 @@ export default {
     }
   },
   created () {
-    // Main listener : whenever the timer resets, we withdraw the animations
-    EventBus.$on('timer-end', () => this.resetAnimations())
+    // When the party start, we recompute everything (we may start a party without changin the page)
+    EventBus.$on('party-start', this.$forceUpdate)
+
+    // Main listener : whenever the timer resets, enter a dungeon or start a party, we withdraw the animations
+    EventBus.$on('timer-end', this.resetAnimations)
+    EventBus.$on('dunjon-enter', this.resetAnimations)
+    EventBus.$on('party-start', this.resetAnimations)
 
     // Depending on the event, we call the corresponding animations
-    EventBus.$on('player-damage', () => this.playerTakesDamage())
-    EventBus.$on('enemy-damage', () => this.enemyTakesDamage())
+    EventBus.$on('player-damage', this.playerTakesDamage)
+    EventBus.$on('enemy-damage', this.enemyTakesDamage)
 
-    EventBus.$on('player-death', () => this.playerDeath())
-    EventBus.$on('enemy-death', () => this.enemyDeath())
-
-    EventBus.$on('dunjon-enter', () => this.resetAnimations())
+    EventBus.$on('player-death', this.playerDeath)
+    EventBus.$on('enemy-death', this.enemyDeath)
   }
 }
 </script>

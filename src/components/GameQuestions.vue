@@ -90,7 +90,7 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     dunjon () {
       return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', roundTime: 0, number: '0' }

@@ -18,7 +18,7 @@
               class='font-weight-black blue-grey--text text--lighten-4'
               style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
             >
-              Game over !
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-skull-crossbones</v-icon>Game over !
             </h2>
           </label>
         </v-card-title>
@@ -42,6 +42,7 @@
             :style="'background-color: #A53532'"
             @click="$router.push({ name: 'Home' })"
           >
+            <v-icon class="pr-2">mdi-exit-run</v-icon>
             Exit
           </v-btn>
           <v-spacer/>
@@ -51,6 +52,7 @@
             :style="'background-color: #46A65D'"
             @click="startNewGame"
           >
+            <v-icon class="pr-2">mdi-restore</v-icon>
             Retry
           </v-btn>
           <v-spacer/>
@@ -67,7 +69,7 @@
             class='font-weight-black blue-grey--text text--lighten-4'
             style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
           >
-            Oups ! You got lost !
+            <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-cloud-question</v-icon>Oups ! You got lost !
           </h2>
         </v-card-title>
         <v-card-text
@@ -86,6 +88,7 @@
             :style="'background-color: #A53532'"
             @click="$router.push({ name: 'Home' })"
           >
+            <v-icon class="pr-2">mdi-exit-run</v-icon>
             Exit
           </v-btn>
           <v-spacer/>
@@ -95,6 +98,7 @@
             :style="'background-color: #46A65D'"
             @click="startNewGame"
           >
+            <v-icon class="pr-2">mdi-restore</v-icon>
             Retry
           </v-btn>
           <v-spacer/>
@@ -119,7 +123,7 @@
               class='font-weight-black blue-grey--text text--lighten-4'
               style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
             >
-              Dungeon finished !
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-trophy</v-icon>Dungeon finished !
             </h2>
           </label>
         </v-card-title>
@@ -131,94 +135,109 @@
             Choose one loot :
           </p>
           <v-row>
-            <v-col
-              cols="12"
-              :sm="6"
-              :md="3"
-              class="pa-3 d-flex flex-column"
-            >
-              <v-card
-                class="blue-grey lighten-3 flex d-flex flex-column"
-                @click="applyingLoot('heal')"
+            <!-- Loot Heal -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
               >
-                <v-card-title>
-                  <v-row justify="center">
-                    Heal 1 HP
-                  </v-row>
-                </v-card-title>
-                <v-card-text>
-                  <v-row justify="center">
-                    <v-icon x-large>mdi-medical-bag</v-icon>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              :sm="6"
-              :md="3"
-              class="pa-3 d-flex flex-column"
-            >
-              <v-card
-                class="blue-grey lighten-3 flex d-flex flex-column"
-                @click="applyingLoot('mana')"
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('heal')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'green--text': hover }">
+                      Heal 1 HP
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'green' : ''">mdi-medical-bag</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Mana -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
               >
-                <v-card-title>
-                  <v-row justify="center">
-                    Recover 1 Mana
-                  </v-row>
-                </v-card-title>
-                <v-card-text>
-                  <v-row justify="center">
-                    <v-icon x-large>mdi-head-snowflake</v-icon>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              :sm="6"
-              :md="3"
-              class="pa-3 d-flex flex-column"
-            >
-              <v-card
-                class="blue-grey lighten-3 flex d-flex flex-column"
-                @click="applyingLoot('golds')"
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('mana')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'blue--text': hover }">
+                      Recover 1 Mana
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'blue' : ''">mdi-head-snowflake</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Golds -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
               >
-                <v-card-title>
-                  <v-row justify="center">
-                    Take 2 Golds
-                  </v-row>
-                </v-card-title>
-                <v-card-text>
-                  <v-row justify="center">
-                    <v-icon x-large>mdi-circle-multiple</v-icon>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col
-              cols="12"
-              :sm="6"
-              :md="3"
-              class="pa-3 d-flex flex-column"
-            >
-              <v-card
-                class="blue-grey lighten-3 flex d-flex flex-column"
-                @click="applyingLoot('time')"
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('golds')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'yellow--text': hover }">
+                      Take 2 Golds
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'yellow' : ''">mdi-circle-multiple</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
+
+            <!-- Loot Time -->
+            <v-hover v-slot:default="{ hover }">
+              <v-col
+                cols="12"
+                :sm="6"
+                :md="3"
+                class="zoom pa-3 d-flex flex-column"
               >
-                <v-card-title>
-                  <v-row justify="center">
-                    Recover 1 sec
-                  </v-row>
-                </v-card-title>
-                <v-card-text>
-                  <v-row justify="center">
-                    <v-icon x-large>mdi-run-fast</v-icon>
-                  </v-row>
-                </v-card-text>
-              </v-card>
-            </v-col>
+                <v-card
+                  class="blue-grey lighten-3 flex d-flex flex-column"
+                  @click="applyingLoot('time')"
+                >
+                  <v-card-title>
+                    <v-row justify="center" :class="{ 'red--text': hover }">
+                      Recover 1 sec
+                    </v-row>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-row justify="center">
+                      <v-icon x-large :color="hover ? 'red' : ''">mdi-run-fast</v-icon>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-hover>
           </v-row>
         </v-card-text>
       </v-card>
@@ -241,7 +260,7 @@
               class='font-weight-black blue-grey--text text--lighten-4'
               style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
             >
-              Next dungeon !
+              <v-icon x-large class="pb-2 pr-3" color="blue-grey lighten-4">mdi-sword-cross</v-icon>Next dungeon !
             </h2>
           </label>
         </v-card-title>
@@ -258,7 +277,7 @@
               :key="index"
               cols="12"
               :sm="4"
-              class="pa-3 d-flex flex-column"
+              class="zoom-sm pa-3 d-flex flex-column"
             >
               <v-card
                 class="blue-grey lighten-3 flex d-flex flex-column"
@@ -268,15 +287,16 @@
                   roundTime: choosableDungeon.roundTime
                  })"
               >
-                <v-card-title>
-                  Dungeon {{ index + 1 }}
+                <v-card-title style="font-size: 2.8vh; line-height: 2.8vh">
+                  <v-icon class="pb-1 pr-2">mdi-castle</v-icon> &nbsp; Dungeon {{ index + 1 }}
                 </v-card-title>
-                <v-card-text>
-                  Category : {{ choosableDungeon.category.name }}
+                <v-divider/>
+                <v-card-text style="font-size: 1.9vh; line-height: 3vh">
+                  <v-icon class="pb-1" small>mdi-shape</v-icon> <b class="pr-2">Category</b> {{ choosableDungeon.category.name }}
                   <br/>
-                  Difficulty : {{ choosableDungeon.difficulty }}
+                  <v-icon class="pb-1" small>mdi-fire</v-icon> <b class="pr-2">Difficulty</b> {{ choosableDungeon.difficulty }}
                   <br/>
-                  Round timer : {{ ((choosableDungeon.roundTime) / 1000).toFixed(1) }}
+                  <v-icon class="pb-1" small>mdi-timer</v-icon> <b class="pr-2">Round timer</b> {{ ((choosableDungeon.roundTime) / 1000).toFixed(1) }}s
                 </v-card-text>
               </v-card>
             </v-col>
@@ -334,7 +354,7 @@ export default {
 
     // Custom
     partyId () {
-      return this.$route.params.partyId
+      return parseInt(this.$route.params.partyId)
     },
     party () {
       return this.getPartyById(this.partyId)
@@ -388,6 +408,14 @@ export default {
     ...mapActions('trivias', ['fetchTrivias', 'fetchTriviaCategories']),
 
     // Customs
+    beginPlay () {
+      if (this.party === undefined) {
+        this.dialogEnding = true
+      } else {
+        this.dialogEnding = false
+        this.startTimer()
+      }
+    },
     startNewGame () {
       const defaultPlayerStat = {
         maxHP: 10,
@@ -397,14 +425,19 @@ export default {
         gold: 1
       }
       const defaultEnemyStat = {
-        maxHP: 1,
-        HP: 1
+        maxHP: 3,
+        HP: 3
       }
 
       this.createParty({ accountId: 1, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
           // Go to Game page
-          this.$router.push({ name: 'Game', params: { partyId } })
+          EventBus.$emit('party-start')
+          if (parseInt(this.partyId) === partyId) {
+            this.beginPlay()
+          } else {
+            this.$router.replace({ name: 'Game', params: { partyId } })
+          }
         })
         .catch((err) => {
           console.log('Error in createParty')
@@ -527,21 +560,11 @@ export default {
   async mounted () {
     this.fetchTriviaCategories()
 
-    if (this.party === undefined) {
-      this.dialogEnding = true
-    } else {
-      this.dialogEnding = false
-      this.startTimer()
-    }
+    this.beginPlay()
   },
   watch: {
     partyId: function (newValue, oldValue) {
-      if (this.party === undefined) {
-        this.dialogEnding = true
-      } else {
-        this.dialogEnding = false
-        this.startTimer()
-      }
+      this.beginPlay()
     },
     roundAnswer: function (newValue, oldValue) {
       if (oldValue === undefined) {
