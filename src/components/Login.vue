@@ -1,7 +1,7 @@
 <template>
-    <v-form v-model="valid">
-      <v-container>
-        <v-card>
+    <v-container>
+      <v-card>
+        <v-form v-model="valid">
           <v-row>
             <v-col
               cols="12"
@@ -36,9 +36,9 @@
             </div>
             </v-col>
           </v-row>
-        </v-card>
-      </v-container>
-    </v-form>
+        </v-form>
+      </v-card>
+    </v-container>
 </template>
 
 <script>
