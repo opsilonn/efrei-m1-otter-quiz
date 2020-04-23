@@ -40,7 +40,7 @@
             <v-container>
               <v-form>
                 <!-- Text -->
-                <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
+                <h3 class="pa-4" align="center"> Have you tried "user1" and "test" ?</h3>
                 <v-spacer/>
 
                 <!-- Field : Username -->
@@ -91,7 +91,7 @@
             <v-container>
               <v-form>
                 <!-- Text -->
-                <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
+                <h3 class="pa-4" align="center"> Having an account allows you to keep track of your scores</h3>
                 <v-spacer/>
 
                 <!-- Field : Username -->
@@ -365,6 +365,7 @@ export default {
     ...mapMutations('rounds', ['addRound']),
     ...mapMutations('playerStats', ['addPlayerStat']),
     ...mapMutations('enemyStats', ['addEnemyStat']),
+    ...mapMutations('accounts', ['logOut']),
 
     // Actions
     ...mapActions('parties', ['createParty']),
@@ -377,8 +378,8 @@ export default {
         .then((success) => {
           console.log('LOG IN - success')
           console.log(success)
+          console.log(this.account.id)
           this.isDialogActive = false
-          // this.$router.push({ name: 'Home' })
         })
         .catch((err) => {
           console.log('LOGIN - error')
