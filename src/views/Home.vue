@@ -189,19 +189,8 @@
               align="center"
               justify="center"
             >
-              <!-- Button Logout -->
-              <!-- Button Logout -->
-              <v-col v-if="account.id === '-1'">
-                <v-row align="center" justify="center">
-                  <v-btn color="secondary" rounded x-large @click="logOut()">
-                      <v-icon left>mdi-logout</v-icon>
-                      LogOut
-                  </v-btn>
-                </v-row>
-              </v-col>
-
               <!-- Button Login -->
-              <v-col v-else>
+              <v-col v-if="account.id == '-1'">
                 <v-row align="center" justify="center">
                   <!-- Login Button -->
                   <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 0">
@@ -218,6 +207,16 @@
                   <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 1">
                     <v-icon left>mdi-account-plus</v-icon>
                     SignUp
+                  </v-btn>
+                </v-row>
+              </v-col>
+
+              <!-- Button Logout -->
+              <v-col v-else>
+                <v-row align="center" justify="center">
+                  <v-btn color="secondary" rounded x-large @click="logOut()">
+                      <v-icon left>mdi-logout</v-icon>
+                      LogOut
                   </v-btn>
                 </v-row>
               </v-col>
@@ -376,12 +375,15 @@ export default {
     // Method to Log in (connect to account)
     logIn () {
       // We ask the login method
+      console.log(`[Home] partyId: ${this.account.id}`)
+      console.log(`[BEFORE] ${this.account.id === '-1'}`)
       this.signIn({ username: this.loginUsername, password: this.loginPassword })
         .then((success) => {
           console.log('LOG IN - success')
           console.log(success)
           console.log(this.account.id)
           this.isDialogActive = false
+          console.log(`[AFTER] ${this.account.id === '-1'}`)
         })
         .catch((err) => {
           console.log('LOGIN - error')
