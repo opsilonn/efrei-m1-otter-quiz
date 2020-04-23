@@ -59,10 +59,10 @@ export default {
       return this.getPartyById(this.partyId) || {}
     },
     dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { result: 'none', number: '0' }
     },
     dunjonCategoryName () {
       return this.dunjon ? this.getTriviaCategoryNameById(this.dunjon.category) : 'none'

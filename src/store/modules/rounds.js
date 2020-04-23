@@ -97,7 +97,7 @@ const mutations = {
 }
 
 const actions = {
-  nextRound ({ commit, rootGetters, getters }, { dunjonId, round, trivia }) {
+  nextRound ({ commit, rootGetters, getters }, { dunjonId, trivia }) {
     const dunjon = rootGetters['dunjons/getDunjonById'](dunjonId)
     const party = rootGetters['parties/getPartyById'](dunjon.partyId)
 
@@ -110,7 +110,6 @@ const actions = {
     const newRound = {
       dunjonId,
       trivia,
-      roundTime: round.roundTime,
       number
     }
     commit('addRound', { round: newRound })

@@ -102,6 +102,128 @@
       </v-card>
     </v-dialog>
 
+    <!-- Dialog to choose a loot -->
+    <v-dialog
+      v-model="dialogLoot"
+      persistent
+      max-width="150vh"
+    >
+      <v-card
+        class="blue-grey darken-3"
+      >
+        <v-card-title
+          class="blue-grey darken-4"
+        >
+          <label>
+            <h2
+              class='font-weight-black blue-grey--text text--lighten-4'
+              style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
+            >
+              Dungeon finished !
+            </h2>
+          </label>
+        </v-card-title>
+        <v-card-text
+          class="blue-grey darken-2 blue-grey--text text--lighten-4"
+          style="padding: 30px 70px"
+        >
+          <p style="font-size: 3.5vh; line-height: 3.5vh">
+            Choose one loot :
+          </p>
+          <v-row>
+            <v-col
+              cols="12"
+              :sm="6"
+              :md="3"
+              class="pa-3 d-flex flex-column"
+            >
+              <v-card
+                class="blue-grey lighten-3 flex d-flex flex-column"
+                @click="applyingLoot('heal')"
+              >
+                <v-card-title>
+                  <v-row justify="center">
+                    Heal 1 HP
+                  </v-row>
+                </v-card-title>
+                <v-card-text>
+                  <v-row justify="center">
+                    <v-icon x-large>mdi-medical-bag</v-icon>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              :sm="6"
+              :md="3"
+              class="pa-3 d-flex flex-column"
+            >
+              <v-card
+                class="blue-grey lighten-3 flex d-flex flex-column"
+                @click="applyingLoot('mana')"
+              >
+                <v-card-title>
+                  <v-row justify="center">
+                    Recover 1 Mana
+                  </v-row>
+                </v-card-title>
+                <v-card-text>
+                  <v-row justify="center">
+                    <v-icon x-large>mdi-head-snowflake</v-icon>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              :sm="6"
+              :md="3"
+              class="pa-3 d-flex flex-column"
+            >
+              <v-card
+                class="blue-grey lighten-3 flex d-flex flex-column"
+                @click="applyingLoot('golds')"
+              >
+                <v-card-title>
+                  <v-row justify="center">
+                    Take 2 Golds
+                  </v-row>
+                </v-card-title>
+                <v-card-text>
+                  <v-row justify="center">
+                    <v-icon x-large>mdi-circle-multiple</v-icon>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col
+              cols="12"
+              :sm="6"
+              :md="3"
+              class="pa-3 d-flex flex-column"
+            >
+              <v-card
+                class="blue-grey lighten-3 flex d-flex flex-column"
+                @click="applyingLoot('time')"
+              >
+                <v-card-title>
+                  <v-row justify="center">
+                    Recover 1 sec
+                  </v-row>
+                </v-card-title>
+                <v-card-text>
+                  <v-row justify="center">
+                    <v-icon x-large>mdi-run-fast</v-icon>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <!-- Dialog to choose next dunjon -->
     <v-dialog
       v-model="dialogNextDunjon"
@@ -109,7 +231,6 @@
       max-width="150vh"
     >
       <v-card
-        v-if="!!party"
         class="blue-grey darken-3"
       >
         <v-card-title
@@ -137,72 +258,30 @@
               :key="index"
               cols="12"
               :sm="4"
+              class="pa-3 d-flex flex-column"
             >
               <v-card
-                class="blue-grey lighten-3"
+                class="blue-grey lighten-3 flex d-flex flex-column"
                 @click="enterNewDunjon({
                   category: choosableDungeon.category.id,
-                  difficulty: choosableDungeon.difficulty
+                  difficulty: choosableDungeon.difficulty,
+                  roundTime: choosableDungeon.roundTime
                  })"
               >
                 <v-card-title>
-                  Dungeon {{ index }}
+                  Dungeon {{ index + 1 }}
                 </v-card-title>
                 <v-card-text>
                   Category : {{ choosableDungeon.category.name }}
                   <br/>
                   Difficulty : {{ choosableDungeon.difficulty }}
                   <br/>
-                  Round timer : 20s
+                  Round timer : {{ ((choosableDungeon.roundTime) / 1000).toFixed(1) }}
                 </v-card-text>
               </v-card>
             </v-col>
           </v-row>
         </v-card-text>
-      </v-card>
-      <v-card
-        v-else
-        class="blue-grey darken-3"
-      >
-        <v-card-title
-          class="blue-grey darken-4"
-        >
-          <h2
-            class='font-weight-black blue-grey--text text--lighten-4'
-            style='font-size: 6vh; line-height: 6vh; font-variant: small-caps'
-          >
-            Oups ! You got lost !
-          </h2>
-        </v-card-title>
-        <v-card-text
-          class="blue-grey darken-2 blue-grey--text text--lighten-4"
-          style="padding: 30px 70px"
-        >
-          <p style="font-size: 3.5vh; line-height: 3.5vh">
-            You seems to be on a party that doesn't exist or that is already finished.
-          </p>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer/>
-          <v-btn
-            x-large
-            dark
-            :style="'background-color: #A53532'"
-            @click="$router.push({ name: 'Home' })"
-          >
-            Exit
-          </v-btn>
-          <v-spacer/>
-          <v-btn
-            x-large
-            dark
-            :style="'background-color: #46A65D'"
-            @click="startNewGame"
-          >
-            Retry
-          </v-btn>
-          <v-spacer/>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -227,6 +306,7 @@ export default {
     resetLength: 3000,
     // Dialog controller
     dialogEnding: false,
+    dialogLoot: false,
     dialogNextDunjon: false,
     // Game controller
     gameReaload: true,
@@ -246,7 +326,7 @@ export default {
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId']),
+    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId', 'getRandomRoundTime']),
     ...mapGetters('rounds', ['getLastRoundByDunjonId', 'getRoundsByDunjonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
     ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
@@ -263,7 +343,7 @@ export default {
       return this.getLastDunjonByPartyId(this.partyId)
     },
     round () {
-      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: 20000 } : { roundTime: 20000 }
+      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) : {}
     },
     roundAnswer () {
       return this.round ? this.round.answer : undefined
@@ -331,6 +411,25 @@ export default {
           console.log(err)
         })
     },
+    applyingLoot (selection) {
+      console.log(`selected loot is ${selection}`)
+      this.dialogLoot = false
+      this.choosableDungeons = []
+
+      const RandomTriviasCategorySet = Array.from(this.getRandomTriviasCategorySet(3))
+      RandomTriviasCategorySet.forEach((category, index) => {
+        this.choosableDungeons[index] = {}
+        this.choosableDungeons[index].category = category
+      })
+
+      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
+      RandomTriviasDifficulty.forEach((difficulty, index) => {
+        this.choosableDungeons[index].difficulty = difficulty
+        this.choosableDungeons[index].roundTime = this.getRandomRoundTime(this.dunjon.roundTime, difficulty)
+      })
+
+      this.dialogNextDunjon = true
+    },
     enterNewDunjon (dunjon) {
       this.dialogNextDunjon = false
       this.chooseDungeon = false
@@ -347,10 +446,11 @@ export default {
         return
       }
       await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
-      this.nextRound({ dunjonId: this.dunjon.id, round: this.round, trivia: this.lastTrivia })
+      this.nextRound({ dunjonId: this.dunjon.id, trivia: this.lastTrivia })
       this.gameReaload = false
 
       // Reset localy
+      this.timer.length = this.dunjon.roundTime
       this.timer.begin = Date.now()
       this.timer.end = this.timer.begin + this.timer.length
 
@@ -411,22 +511,10 @@ export default {
     },
     onEnemy_death () {
       this.chooseDungeon = true
-      this.choosableDungeons = []
-
-      const RandomTriviasCategorySet = Array.from(this.getRandomTriviasCategorySet(3))
-      RandomTriviasCategorySet.forEach((category, index) => {
-        this.choosableDungeons[index] = {}
-        this.choosableDungeons[index].category = category
-      })
-
-      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
-      RandomTriviasDifficulty.forEach((difficulty, index) => {
-        this.choosableDungeons[index].difficulty = difficulty
-      })
 
       this.addPartyScore({ partyId: this.partyId, score: 500 })
 
-      setTimeout(() => { this.dialogNextDunjon = true }, this.resetLength)
+      setTimeout(() => { this.dialogLoot = true }, this.resetLength)
     }
   },
   created () {

@@ -18,7 +18,7 @@
         </label>
 
         <!-- Questions -->
-        <h3 v-html="trivia.question" class="pa-0" align="center"/>
+        <h3 v-html="trivia.question" class="pa-0 pl-5 pr-5" align="center"/>
         <v-row>
           <v-col
             cols="6"
@@ -93,10 +93,10 @@ export default {
       return this.$route.params.partyId
     },
     dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', number: '0' }
+      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', number: '0' }
+      return this.getLastRoundByDunjonId(this.dunjon.id) || { number: '0' }
     },
     timerRemainingSec () {
       return Math.abs((this.timer.remaining || 0.0) / 1000)

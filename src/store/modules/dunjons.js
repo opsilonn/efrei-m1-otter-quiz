@@ -5,6 +5,22 @@ const state = {
 }
 
 const getters = {
+
+  /**
+   * Get a random roundTime depending of the one of the current dungeon and the difficulty of the next one
+   */
+  getRandomRoundTime: state => (currentDungeonRoundTime, nextDungeonDifficulty) => {
+    const rand = Math.random()
+
+    if (nextDungeonDifficulty.toLowerCase() === 'hard') {
+      Math.pow(rand, 3)
+    } else if (nextDungeonDifficulty.toLowerCase() === 'medium') {
+      Math.pow(rand, 2)
+    }
+
+    return currentDungeonRoundTime - (rand * 2 * 1000)
+  },
+
   /**
    * Get the dunjon by its id
    * @param {number} id - The id of the dunjon
@@ -96,6 +112,7 @@ const actions = {
       partyId,
       category: dunjon.category,
       difficulty: dunjon.difficulty,
+      roundTime: dunjon.roundTime,
       number
     }
 

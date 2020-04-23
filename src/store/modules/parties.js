@@ -107,7 +107,8 @@ const actions = {
     const newDunjon = {
       partyId: newParty.id,
       category: 9,
-      difficulty: 'easy'
+      difficulty: 'easy',
+      roundTime: 20000
     }
     return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon, defaultEnemyStat }, { root: true })
       .then((dunjonId) => {

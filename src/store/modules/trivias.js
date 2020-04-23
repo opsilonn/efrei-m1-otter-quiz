@@ -35,6 +35,9 @@ const getters = {
     return randomTriviasCategorySet
   },
 
+  /**
+   * Get a random array of difficulty depending of the number of the current dungeon for a specific size
+   */
   getRandomTriviasDifficulty: state => (size, dungeonNumber) => {
     const RandomTriviasDifficulty = []
 
@@ -42,11 +45,11 @@ const getters = {
       const rand = Math.random() * (1 + dungeonNumber / 10) + (dungeonNumber - 1) / 10
 
       if (rand > 2) {
-        RandomTriviasDifficulty.push('hard')
+        RandomTriviasDifficulty.push('Hard')
       } else if (rand > 1) {
-        RandomTriviasDifficulty.push('medium')
+        RandomTriviasDifficulty.push('Medium')
       } else {
-        RandomTriviasDifficulty.push('easy')
+        RandomTriviasDifficulty.push('Easy')
       }
     }
 
@@ -154,7 +157,7 @@ const actions = {
    * @param {('boolean'|'multiple')} option.type - The type of trivias to fetch
    */
   async fetchTrivias ({ commit }, { amount, category, difficulty, type }) {
-    const url = '' + ((amount) ? `amount=${amount}&` : '') + ((category) ? `category=${category}&` : '') + ((difficulty) ? `difficulty=${difficulty}&` : '' + ((type) ? `type=${type}&` : ''))
+    const url = '' + ((amount) ? `amount=${amount}&` : '') + ((category) ? `category=${category}&` : '') + ((difficulty) ? `difficulty=${difficulty.toLowerCase()}&` : '' + ((type) ? `type=${type}&` : ''))
     const { data } = await axios.get(api(url))
     data.results.forEach(d => commit('addTrivia', { trivia: d }))
   },
