@@ -432,7 +432,7 @@ export default {
     startNewGame () {
       const defaultPlayerStat = {
         maxHP: 10,
-        HP: 2,
+        HP: 10,
         maxMana: 5,
         mana: 5,
         gold: 0
