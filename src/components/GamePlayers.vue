@@ -37,16 +37,16 @@
                   {{ HP }} / {{ maxHP }}
                 </span>
 
-                <!-- Gold -->
-                <span v-if='isPlayer' class="ma-2 amber--text text--lighten-2">
-                  <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
-                  {{ gold }}
-                </span>
-
                 <!-- Mana -->
                 <span v-if='isPlayer' class="ma-2 blue--text text--accent-3">
                   <v-icon size="4vh" class="blue--text text--accent-3">mdi-water</v-icon>
                   {{mana}} / {{maxMana}}
+                </span>
+
+                <!-- Gold -->
+                <span v-if='isPlayer' class="ma-2 amber--text text--lighten-2">
+                  <v-icon size="4vh" class="amber--text text--lighten-2">mdi-currency-usd</v-icon>
+                  {{ gold }}
                 </span>
               </h4>
           </label>

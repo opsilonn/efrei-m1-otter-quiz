@@ -119,7 +119,15 @@ export default {
       return this.getLastDunjonByPartyId(this.partyId)
     },
     rounds () {
-      return this.getRoundsByDunjonId(this.dunjon.id)
+      return this.dunjon ? this.getRoundsByDunjonId(this.dunjon.id) : 0
+    },
+    totalRounds () {
+      let rounds = []
+      const dunjons = this.getDunjonsByPartyId(this.partyId)
+      dunjons.forEach((dunjon) => {
+        rounds = rounds.concat(this.getRoundsByDunjonId(dunjon.id))
+      })
+      return rounds
     }
   }
 }

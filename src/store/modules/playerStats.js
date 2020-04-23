@@ -84,6 +84,14 @@ const mutations = {
       updateProp(state, { id: playerStat.id, prop: 'mana', value: mana })
     }
   },
+  setPlayerStatGold (state, { playerStat, gold }) {
+    console.log(gold)
+    if (gold < 0) {
+      updateProp(state, { id: playerStat.id, prop: 'gold', value: 0 })
+    } else {
+      updateProp(state, { id: playerStat.id, prop: 'gold', value: gold })
+    }
+  },
   updateProp (state, { id, prop, value }) {
     updateProp(state, { id, prop, value })
   }
