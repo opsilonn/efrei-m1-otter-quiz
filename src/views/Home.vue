@@ -1,7 +1,6 @@
 <template>
-  <v-container
+  <div
     class="height100 prettyBackground"
-    fluid
   >
 
     <!-- Login Form -->
@@ -157,151 +156,130 @@
       </v-card>
     </v-dialog>
 
-    <!-- Text to welcome the Player -->
-    <v-container class="text-center">
-      <h1>Welcome to the <b> Otter Quiz </b> !</h1>
-      <h5 class="font-italic">(still searching for a better name)</h5>
-    </v-container>
+    <v-parallax
+      style="width: 100%; height: 800px"
+      :src="require('@/assets/parallax_1_sm.png')"
+      class="pa-0 mx-0"
+    >
+      <v-row justify="center" class="pa-0 mx-0">
+        <v-col class="pa-0 mx-0" :sm="12" :md="8">
+          <v-card tile elevation="4" style="background: rgba(220, 150, 150, 0.98)">
+            <!-- Text to welcome the Player -->
+            <v-container class="text-center">
+              <h1>Welcome to the <b> Otter Quiz </b> !</h1>
+            </v-container>
+          </v-card>
+          <!-- Text to display the essential rules of the game -->
+          <v-card tile elevation="0" style="background: rgba(255, 220, 220, 0.7)" class="pa-5 pl-12 pr-12">
+            <v-container class="text-justify">
+              <h3>
+                This Website is a cross between a trivia game and a Rogue-like.<br/>
+                You'll enter a dungeon composed of different levels :
+                on each level, you'll face an opponent which you can beat by answering trivia questions.<br/>
+                Depending on your answer, wrong or correct, you or your opponent will lose Health Points accordingly.<br/>
+                Additionally, some objects and spells may also help you in different ways.
+              </h3>
+              <br>
+              <h3 class="text-center">
+                  Defeat him, take your reward and choose which lair to face next !
+              </h3>
+            </v-container>
+            <!-- Buttons -->
+            <v-row
+              align="center"
+              justify="center"
+            >
+              <!-- Button Logout -->
+              <v-col v-if="isUserLoggedIn">
+                <v-row align="center" justify="center">
+                  <v-btn color="secondary" rounded x-large
+                    @click="logOut()"
+                  >
+                      <v-icon left>mdi-logout</v-icon>
+                      LogOut
+                  </v-btn>
+                </v-row>
+              </v-col>
+              <v-col v-else>
+                <v-row
+                  align="center"
+                  justify="center"
+                  @click="isDialogActive = true"
+                >
+                  <v-card elevation="10">
+                    <v-card-actions class="mx-0 pa-0">
+                      <label class="blue pa-3">
+                        <v-icon class="pb-1" left small>mdi-login</v-icon>
+                        LogIn
+                      </label>
+                      <label class="orange pa-3">
+                        SignUp
+                      </label>
+                    </v-card-actions>
+                  </v-card>
+                </v-row>
+              </v-col>
 
-    <!-- Text to display the essential rules of the game -->
-    <v-container class="text-justify">
-      <h3>
-        This Website is a cross between a trivia game and a Rogue-like.
-        You'll enter a dungeon composed of different levels :
-        on each level, you'll face an opponent which you can beat by answering trivia questions.
-        Depending on your answer, wrong or correct, you or your opponent will lose Health Points accordingly.
-        Additionally, some objects and spells may also help you in different ways.
-      </h3>
-      <br>
-      <h3 class="text-center">
-          Defeat him, take your reward and choose which lair to face next !
-      </h3>
-      <br>
-      <h5 class="text-center font-italic" v-if="!isUserLoggedIn">
-        You can play even if you're not logged in :)
-      </h5>
-      <h5 class="text-center font-italic" v-else>
-        Now that you're logged in, we'll remember your score :)
-      </h5>
-    </v-container>
+              <!-- Button Launch Game -->
+              <v-col>
+                <v-row align="center" justify="center">
+                  <v-btn color="success" tile rounded x-large @click="startGame()">
+                      <v-icon left>mdi-gamepad-variant</v-icon>
+                      Launch a Game !
+                  </v-btn>
+                </v-row>
+              </v-col>
+            </v-row>
+          </v-card>
 
-    <!-- Buttons -->
-    <v-row
-      no-gutters class="d-flex"
-      align="center"
-      justify="center">
-
-        <!-- Button Logout -->
-        <v-col v-if="isUserLoggedIn">
-          <v-row align="center" justify="center">
-            <v-btn color="secondary" rounded x-large>
-                <v-icon left>mdi-logout</v-icon>
-                LogOut
-            </v-btn>
-          </v-row>
+          <v-card height="100%" tile elevation="4" style="background: rgba(220, 150, 150, 0.7)">
+            <!-- ScoreBoard -->
+            <v-container class="text-center">
+              <h2>Best players</h2>
+              <br>
+              <v-data-table
+                :headers="scoreboardHeaders"
+                :items="scoreboardItems"
+                :items-per-page="5"
+              />
+            </v-container>
+          </v-card>
         </v-col>
+      </v-row>
+    </v-parallax>
 
-      <!-- Button Login -->
-        <v-col v-else>
-          <v-row align="center" justify="center">
-            <!-- Login Button -->
-            <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 0">
-              <v-icon left>mdi-login</v-icon>
-              LogIn
-            </v-btn>
-          </v-row>
-
-          <br>
-          <br>
-
-          <v-row align="center" justify="center">
-            <!-- Login Button -->
-            <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 1">
-              <v-icon left>mdi-account-plus</v-icon>
-              SignUp
-            </v-btn>
-          </v-row>
+    <v-parallax
+      style="width: 100%; height: 730px"
+      src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"
+      class="pa-0 mx-0"
+    >
+      <v-row justify="center" class="pa-0 mx-0">
+        <v-col class="pa-0 mx-0" :sm="12" :md="8">
+          <v-card tile elevation="4" style="background: rgba(150, 150, 220, 0.98)">
+            <!-- Text to welcome the Player -->
+            <v-container class="text-center">
+              <h1>How to play ?</h1>
+            </v-container>
+          </v-card>
+          <v-card height="100%" tile elevation="4" style="background: rgba(150, 150, 255, 0.7)" class="pa-5 pl-12 pr-12">
+            <!-- Text to display... stuff -->
+            <v-container class="text-justify">
+              <h3>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <br/>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <br/>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                <br/>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </h3>
+            </v-container>
+          </v-card>
         </v-col>
+      </v-row>
+    </v-parallax>
 
-      <!-- Logo :) -->
-      <v-col class="d-flex justify-center ">
-        <v-img
-          class="shrink d-none d-xl-flex"
-          :src="require('@/assets/logo.png')"
-          contain
-          height="17rem"
-          width="17rem"
-        />
-        <v-img
-          class="shrink d-none d-lg-flex d-xl-none"
-          :src="require('@/assets/logo.png')"
-          contain
-          height="12rem"
-          width="12rem"
-        />
-        <v-img
-          class="shrink d-none d-md-flex d-lg-none"
-          :src="require('@/assets/logo.png')"
-          contain
-          height="8rem"
-          width="8rem"
-        />
-        <v-img
-          class="shrink d-none d-sm-flex d-md-none"
-          :src="require('@/assets/logo.png')"
-          contain
-          height="4rem"
-          width="4rem"
-        />
-        <v-img
-          class="shrink d-xs-flex d-sm-none"
-          :src="require('@/assets/logo.png')"
-          contain
-          height="2rem"
-          width="2rem"
-        />
-      </v-col>
-
-     <!-- Button Launch Game -->
-      <v-col>
-        <v-row align="center" justify="center">
-          <v-btn color="success" rounded x-large @click="startGame()">
-            <v-icon left>mdi-gamepad-variant</v-icon>
-            Launch a Game !
-          </v-btn>
-        </v-row>
-      </v-col>
-    </v-row>
-
-    <br>
-    <br>
-
-    <!-- ScoreBoard -->
-    <v-container class="text-center">
-      <h2>ScoreBoard</h2>
-      <br>
-      <v-data-table
-        :headers="scoreboardHeaders"
-        :items="populateScoreBoard()"
-        :items-per-page="5"
-      />
-    </v-container>
-
-    <br>
-    <br>
-
-    <!-- Text to display... stuff -->
-    <v-container class="text-justify">
-      <h3>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </h3>
-    </v-container>
-
-  </v-container>
+  </div>
 </template>
 
 <script>
