@@ -23,6 +23,12 @@
           Defeat him, take your reward and choose which lair to face next !
       </h3>
       <br>
+      <h5 class="text-center font-italic" v-if="!isUserLoggedIn">
+        You can play even if you're not logged in :)
+      </h5>
+      <h5 class="text-center font-italic" v-else>
+        Now that you're logged in, we'll remember your score :)
+      </h5>
     </v-container>
 
     <!-- Buttons -->
@@ -148,8 +154,8 @@
       <v-col>
         <v-row align="center" justify="center">
           <v-btn color="success" rounded x-large @click="startGame()">
-              <v-icon left>mdi-gamepad-variant</v-icon>
-              Launch a Game !
+            <v-icon left>mdi-gamepad-variant</v-icon>
+            Launch a Game !
           </v-btn>
         </v-row>
       </v-col>
@@ -164,7 +170,7 @@
       <br>
       <v-data-table
         :headers="scoreboardHeaders"
-        :items="scoreboardItems"
+        :items="populateScoreBoard()"
         :items-per-page="5"
       />
     </v-container>
@@ -212,35 +218,30 @@ export default {
       { text: 'Rounds fought', value: 'roundsFought' },
       { text: 'Rounds Won', value: 'roundsWon' }
     ],
-    scoreboardItems: [
-      {
-        name: 'James Hetfield',
-        score: 14052,
-        dungeons: 4,
-        roundsFought: 38,
-        roundsWon: 33
-      },
-      {
-        name: 'Jim Root',
-        score: 13848,
-        dungeons: 3,
-        roundsFought: 29,
-        roundsWon: 22
-      },
-      {
-        name: 'Kirk Hammett',
-        score: 12745,
-        dungeons: 3,
-        roundsFought: 33,
-        roundsWon: 27
-      },
-      {
-        name: 'John Frusciante',
-        score: 10843,
-        dungeons: 2,
-        roundsFought: 24,
-        roundsWon: 12
-      }
+    names: [
+      'John Frusciante',
+      'James Hetlfield',
+      'Kirk Hammett',
+      'Cliff Burton',
+      'Tobias Forge',
+      'Synister Gate',
+      'Corey Taylor',
+      'Jim Root',
+      'Louka Diamond',
+      'Dawn Pearl',
+      'Luke Skywalker',
+      'Darth Maul',
+      'Darth Tyrannus',
+      'Darth Sidious',
+      'Darth Vader',
+      'Darth Nihilus',
+      'Kylo Ren',
+      'General Grievous',
+      'Karl Franz',
+      'Krog-Gar',
+      'Ulthuan',
+      'Archaon',
+      'Tobby-One-Eye'
     ]
   }),
   computed: {
@@ -303,6 +304,36 @@ export default {
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
         })
+    },
+
+    // Returns a random int
+    getRandomInt (max) {
+      return Math.floor(Math.random() * Math.floor(max)) + 1
+    },
+
+    // Populates the ScoreBoard
+    populateScoreBoard () {
+      // We initialize a List
+      var list = []
+
+      // We add all the questions to our List several times
+      for (var i = 0; i < 25; i++) {
+        var _dungeons = this.getRandomInt(5)
+        var _roundsFought = this.getRandomInt(_dungeons * 5)
+        var _roundsWon = this.getRandomInt(_roundsFought - 1)
+
+        list.push(
+          {
+            name: this.names[this.getRandomInt(this.names.length - 1)],
+            score: this.getRandomInt(_dungeons * 1000),
+            dungeons: _dungeons,
+            roundsFought: _roundsFought,
+            roundsWon: _roundsWon
+          })
+      }
+
+      // We return the List
+      return list
     }
   }
 }

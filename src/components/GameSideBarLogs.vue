@@ -36,22 +36,22 @@
               <v-list-item-icon>
                 <v-icon
                   :color="
-                  (isPlayerCorrect(round) && answer.value) ? 'green darken-4' :
-                  (isPlayerCorrect(round) && !answer.value) ? 'red darken-3' :
-                  (!isPlayerCorrect(round) && answer.value) ? 'green darken-2' : 'red darken-5'"
+                  (round.result === 'Succeeded' && answer.value) ? 'green darken-4' :
+                  (round.result === 'Succeeded' && !answer.value) ? 'red darken-3' :
+                  (round.result !== 'Succeeded' && answer.value) ? 'green darken-2' : 'red darken-5'"
                 >
-                  {{isThePlayersAnswer(round, answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
+                  {{ (round.answer === answer) ? 'mdi-check-box-outline' : 'mdi-checkbox-blank-outline'}}
                 </v-icon>
               </v-list-item-icon>
 
               <v-list-item-content>
                 <div
                   v-html="answer.answer"
-                  :style="(isThePlayersAnswer(round.trivia, answer) ? 'font-weight: bolder' : 'font-weight: normal')"
+                  :style="(round.answer === answer ? 'font-weight: bolder' : 'font-weight: normal')"
                   :class="
-                  (isPlayerCorrect(round) && answer.value) ? 'green--text text--darken-4' :
-                  (isPlayerCorrect(round) && !answer.value) ? 'red--text text--darken-3' :
-                  (!isPlayerCorrect(round) && answer.value) ? 'green--text text--darken-2' : 'red--text text--darken-5'"
+                  (round.result === 'Succeeded' && answer.value) ? 'green--text text--darken-4' :
+                  (round.result === 'Succeeded' && !answer.value) ? 'red--text text--darken-3' :
+                  (round.result !== 'Succeeded' && answer.value) ? 'green--text text--darken-2' : 'red--text text--darken-5'"
                 />
               </v-list-item-content>
             </v-list-item>
@@ -77,13 +77,7 @@ export default {
   }),
   methods: {
     isPlayerCorrect (round) {
-      return round.result === 'Succeded'
-    },
-    isTheAnswerCorrect (question, answer) {
-      return true // question.correctAnswer === question.answers.indexOf(answer)
-    },
-    isThePlayersAnswer (question, answer) {
-      return true // question.playerAnswer === question.answers.indexOf(answer)
+      return round.result === 'Succeeded'
     },
 
     // Returns a list of the Rounds, minus the last one that has not been answered yet
@@ -91,8 +85,8 @@ export default {
       // We initialize a List
       var list = []
 
-      // We add all the questions to our List several times
-      for (var i = 0; i < this.rounds.length - 1; i++) {
+      // We add all the questions to our List, starting by the most recents
+      for (var i = this.rounds.length - 1; i < 0; i--) {
         list.push(this.rounds[i])
       }
 
