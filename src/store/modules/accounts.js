@@ -85,6 +85,9 @@ const mutations = {
   },
   connectedTo (state, { account }) {
     state.connectedAccount = account
+  },
+  logOut (state) {
+    state.connectedAccount = {}
   }
 }
 
