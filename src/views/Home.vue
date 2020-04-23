@@ -157,7 +157,7 @@
     </v-dialog>
 
     <v-parallax
-      style="width: 100%; height: 800px"
+      style="width: 100%; height: 1000px"
       :src="require('@/assets/parallax_1_sm.png')"
       class="pa-0 mx-0"
     >
@@ -190,40 +190,42 @@
               justify="center"
             >
               <!-- Button Logout -->
-              <v-col v-if="isUserLoggedIn">
+              <!-- Button Logout -->
+              <v-col v-if="account.id === '-1'">
                 <v-row align="center" justify="center">
-                  <v-btn color="secondary" rounded x-large
-                    @click="logOut()"
-                  >
+                  <v-btn color="secondary" rounded x-large @click="logOut()">
                       <v-icon left>mdi-logout</v-icon>
                       LogOut
                   </v-btn>
                 </v-row>
               </v-col>
+
+              <!-- Button Login -->
               <v-col v-else>
-                <v-row
-                  align="center"
-                  justify="center"
-                  @click="isDialogActive = true"
-                >
-                  <v-card elevation="10">
-                    <v-card-actions class="mx-0 pa-0">
-                      <label class="blue pa-3">
-                        <v-icon class="pb-1" left small>mdi-login</v-icon>
-                        LogIn
-                      </label>
-                      <label class="orange pa-3">
-                        SignUp
-                      </label>
-                    </v-card-actions>
-                  </v-card>
+                <v-row align="center" justify="center">
+                  <!-- Login Button -->
+                  <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 0">
+                    <v-icon left>mdi-login</v-icon>
+                    LogIn
+                  </v-btn>
+                </v-row>
+
+                <br>
+                <br>
+
+                <v-row align="center" justify="center">
+                  <!-- Login Button -->
+                  <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 1">
+                    <v-icon left>mdi-account-plus</v-icon>
+                    SignUp
+                  </v-btn>
                 </v-row>
               </v-col>
 
               <!-- Button Launch Game -->
               <v-col>
                 <v-row align="center" justify="center">
-                  <v-btn color="success" tile rounded x-large @click="startGame()">
+                  <v-btn color="success" rounded x-large @click="startGame()">
                       <v-icon left>mdi-gamepad-variant</v-icon>
                       Launch a Game !
                   </v-btn>
@@ -239,7 +241,7 @@
               <br>
               <v-data-table
                 :headers="scoreboardHeaders"
-                :items="scoreboardItems"
+                :items="populateScoreBoard()"
                 :items-per-page="5"
               />
             </v-container>
