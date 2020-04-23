@@ -33,17 +33,17 @@
       <v-tooltip left>
           <!-- Item's picture -->
           <template v-slot:activator="{ on }">
-          <v-avatar
-              class="blue-grey darken-4"
-            size="50"
-            v-on="on"
-          >
             <v-avatar
-              class="blue-grey darken-3"
-              size="46">
-              <v-img contain :src="item.avatar"></v-img>
+                class="blue-grey darken-4"
+              size="50"
+              v-on="on"
+            >
+              <v-avatar
+                class="blue-grey darken-3"
+                size="46">
+                <v-img contain :src="item.avatar"></v-img>
+              </v-avatar>
             </v-avatar>
-          </v-avatar>
           </template>
 
           <!-- Description when hovering -->

@@ -9,7 +9,7 @@
       <v-card
         v-if="!!party"
         class="blue-grey darken-3"
-      >
+        >
         <v-card-title
           class="blue-grey darken-4"
         >
@@ -75,7 +75,7 @@
         <v-card-text
           class="blue-grey darken-2 blue-grey--text text--lighten-4"
           style="padding: 30px 70px"
-        >
+          >
           <p style="font-size: 3.5vh; line-height: 3.5vh">
             You seems to be on a party that doesn't exist or that is already finished.
           </p>

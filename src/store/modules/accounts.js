@@ -84,17 +84,27 @@ const mutations = {
     updateProp(state, { id, prop, value })
   },
   connectedTo (state, { account }) {
-    state.connectedAccount = account
+    Vue.set(state.connectedAccount, 'id', account.id)
+    Vue.set(state.connectedAccount, 'username', account.username)
+    Vue.set(state.connectedAccount, 'password', account.password)
+  },
+  logOut (state) {
+    Vue.set(state.connectedAccount, 'id', -1)
+    Vue.set(state.connectedAccount, 'username', 'anonymous')
   }
 }
 
 const actions = {
   signIn ({ commit, getters }, { username, password }) {
-    const account = getters.getAccountByUsernameAndPassword(username, password)
-    if (account !== undefined) {
-      commit('connectedTo', { account })
-      return account
-    }
+    return new Promise((resolve, reject) => {
+      const account = getters.getAccountByUsernameAndPassword(username, password)
+      if (account !== undefined) {
+        commit('connectedTo', { account })
+        resolve(account)
+      } else {
+        reject(new Error('User not found'))
+      }
+    })
   },
   signUp ({ commit, getters }, { username, password }) {
     const already = getters.getAccountByUsername({ username })

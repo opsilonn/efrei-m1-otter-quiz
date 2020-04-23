@@ -110,11 +110,16 @@ export default {
     animPlayer: '',
     animEnemy: '',
     animationKey: {
+      ARRIVAL: 'anim-arrival',
       HAPPY: 'anim-happy',
       DAMAGE: 'anim-damage',
       DEATH: 'anim-death'
     }
   }),
+  mounted () {
+    this.animPlayer = this.animationKey.ARRIVAL
+    this.animEnemy = this.animationKey.ARRIVAL
+  },
   computed: {
     // States
     ...mapState('accounts', ['accounts', 'connectedAccount']),
@@ -623,6 +628,200 @@ export default {
   100% {
     opacity:0;
     -ms-transform:  scaleX(0.30) scaleY(0.30) ;
+  }
+}
+
+/* Animation : Arrival in the dungeon */
+.anim-arrival{
+  animation: animationArrival linear 1s;
+  animation-iteration-count: 1;
+  transform-origin: 50% 50%;
+  -webkit-animation: animationArrival linear 1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-transform-origin: 50% 50%;
+  -moz-animation: animationArrival linear 1s;
+  -moz-animation-iteration-count: 1;
+  -moz-transform-origin: 50% 50%;
+  -o-animation: animationArrival linear 1s;
+  -o-animation-iteration-count: 1;
+  -o-transform-origin: 50% 50%;
+  -ms-animation: animationArrival linear 1s;
+  -ms-animation-iteration-count: 1;
+  -ms-transform-origin: 50% 50%;
+}
+@keyframes animationArrival{
+  0% {
+    transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  10% {
+    transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  20% {
+    transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  30% {
+    transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  40% {
+    transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  60% {
+    transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  70% {
+    transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  80% {
+    transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  90% {
+    transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    transform:  rotate(0deg) scaleX(1.10) scaleY(1.10) ;
+  }
+}
+@-moz-keyframes animationArrival{
+  0% {
+    -moz-transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  10% {
+    -moz-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  20% {
+    -moz-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  30% {
+    -moz-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  40% {
+    -moz-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    -moz-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  60% {
+    -moz-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  70% {
+    -moz-transform:  rotate(3deg) scaleX(1.20) scaleY(1.20) ;
+  }
+  80% {
+    -moz-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  90% {
+    -moz-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    -moz-transform:  rotate(0deg) scaleX(1.10) scaleY(1.10) ;
+  }
+}
+@-webkit-keyframes animationArrival {
+  0% {
+    -webkit-transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  10% {
+    -webkit-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  20% {
+    -webkit-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  30% {
+    -webkit-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  40% {
+    -webkit-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    -webkit-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  60% {
+    -webkit-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  70% {
+    -webkit-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  80% {
+    -webkit-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  90% {
+    -webkit-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    -webkit-transform:  rotate(0deg) scaleX(1.10) scaleY(1.10) ;
+  }
+}
+@-o-keyframes animationArrival {
+  0% {
+    -o-transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  10% {
+    -o-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  20% {
+    -o-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  30% {
+    -o-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  40% {
+    -o-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    -o-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  60% {
+    -o-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  70% {
+    -o-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  80% {
+    -o-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  90% {
+    -o-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    -o-transform:  rotate(0deg) scaleX(1.10) scaleY(1.10) ;
+  }
+}
+@-ms-keyframes animationArrival {
+  0% {
+    -ms-transform:  rotate(0deg) scaleX(1.00) scaleY(1.00) ;
+  }
+  10% {
+    -ms-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  20% {
+    -ms-transform:  rotate(-3deg) scaleX(0.80) scaleY(0.80) ;
+  }
+  30% {
+    -ms-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  40% {
+    -ms-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  50% {
+    -ms-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  60% {
+    -ms-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  70% {
+    -ms-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  80% {
+    -ms-transform:  rotate(-3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  90% {
+    -ms-transform:  rotate(3deg) scaleX(1.10) scaleY(1.10) ;
+  }
+  100% {
+    -ms-transform:  rotate(0deg) scaleX(1.10) scaleY(1.10) ;
   }
 }
 </style>
