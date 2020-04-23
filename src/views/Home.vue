@@ -1,7 +1,60 @@
 <template>
   <v-container
     class="height100 prettyBackground"
-    fluid>
+    fluid
+  >
+
+    <!-- Login Form -->
+    <v-dialog v-model="dialogLogin" max-width="600px">
+
+      <!-- Login Dialog -->
+      <v-card>
+        <!-- Title -->
+        <v-card-title>
+          <span class="headline">Login</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+              <v-form>
+                <!-- Text -->
+                <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
+                <v-spacer/>
+
+                <!-- Field : Username -->
+                <v-text-field
+                  class="pa-4"
+                  v-model="username"
+                  label="Username"
+                  prepend-icon="mdi-face"
+                  :rules="[rules.required]"
+                  clearable
+                  counter
+                  maxlength="15"
+                />
+
+                <!-- Field : Password -->
+                <v-text-field
+                  class="pa-4"
+                  v-model="password"
+                  label="Password"
+                  type="password"
+                  prepend-icon="mdi-lock"
+                  :rules="[rules.required]"
+                  required
+                />
+              </v-form>
+          </v-container>
+        </v-card-text>
+
+        <!-- Buttons -->
+        <v-card-actions>
+          <v-spacer/>
+          <v-btn color="secondary" text @click="dialogLogin = false">Close</v-btn>
+          <v-btn color="success" text @click="dialogLogin = false; login()">Login !</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <!-- Text to welcome the Player -->
     <v-container class="text-center">
@@ -37,79 +90,53 @@
       align="center"
       justify="center">
 
-     <!-- Button Logout -->
-      <v-col v-if="isUserLoggedIn">
-        <v-row align="center" justify="center">
-          <v-btn color="secondary" rounded x-large>
-              <v-icon left>mdi-logout</v-icon>
-              Logout...
-          </v-btn>
-        </v-row>
-      </v-col>
+        <!-- Button Logout -->
+        <v-col v-if="isUserLoggedIn">
+          <v-row align="center" justify="center">
+            <v-btn color="secondary" rounded x-large>
+                <v-icon left>mdi-logout</v-icon>
+                LogOut
+            </v-btn>
+          </v-row>
+        </v-col>
 
-     <!-- Button Login -->
-      <v-col v-else>
-        <v-row align="center" justify="center">
-          <!-- Login Form -->
-          <v-dialog v-model="dialogLogin" persistent max-width="600px">
-            <!-- Login Button -->
-            <template v-slot:activator="{ on }">
-              <v-btn color="secondary" dark v-on="on" rounded x-large>
-                <v-icon left>mdi-login</v-icon>
-                Login !
-              </v-btn>
-            </template>
-
-            <!-- Login Dialog -->
-            <v-card>
-              <!-- Title -->
-              <v-card-title>
-                <span class="headline">Login</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                    <v-form>
-                      <!-- Text -->
-                      <h3 class="pa-4" align="center"> Login to keep track of your score...</h3>
-                      <v-spacer/>
-
-                      <!-- Field : Username -->
-                      <v-text-field
-                        class="pa-4"
-                        v-model="username"
-                        label="Username"
-                        prepend-icon="mdi-face"
-                        :rules="[rules.required]"
-                        clearable
-                        counter
-                        maxlength="15"
-                      />
-
-                      <!-- Field : Password -->
-                      <v-text-field
-                        class="pa-4"
-                        v-model="password"
-                        label="Password"
-                        type="password"
-                        prepend-icon="mdi-lock"
-                        :rules="[rules.required]"
-                        required
-                      />
-                    </v-form>
-                </v-container>
-              </v-card-text>
-
-              <!-- Buttons -->
-              <v-card-actions>
-                <v-spacer/>
-                <v-btn color="secondary" text @click="dialogLogin = false">Close</v-btn>
-                <v-btn color="success" text @click="dialogLogin = false; login()">Login !</v-btn>
+      <!-- Button Login -->
+      <!--
+        <v-col v-else>
+          <v-row align="center" justify="center">
+            <!/-- Login Button -/->
+            <v-btn
+              dark
+              color="secondary"
+              rounded
+              x-large
+              @click="dialogLogin = true"
+            >
+              <v-icon left>mdi-login</v-icon>
+              LogIn - SignUp
+            </v-btn>
+          </v-row>
+        </v-col>
+        -->
+        <v-col v-else>
+          <v-row
+            align="center"
+            justify="center"
+            @click="dialogLogin = true"
+          >
+            <v-card elevation="10">
+              <v-card-actions class="mx-0 pa-0">
+                <label class="blue pa-3">
+                  <v-icon class="pb-1" left small>mdi-login</v-icon>
+                  LogIn
+                </label>
+                <label class="orange pa-3">
+                  SignUp
+                </label>
               </v-card-actions>
             </v-card>
-          </v-dialog>
-        </v-row>
-      </v-col>
+          </v-row>
+        </v-col>
 
       <!-- Logo :) -->
       <v-col class="d-flex justify-center ">
