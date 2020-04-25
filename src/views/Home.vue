@@ -166,7 +166,7 @@
           <v-card tile elevation="4" style="background: rgba(220, 150, 150, 0.98)">
             <!-- Text to welcome the Player -->
             <v-container class="text-center">
-              <h1>Welcome to the <b> Otter Quiz </b> !</h1>
+              <h1>Welcome to the <b> Otter Quiz </b> {{ (isUserLoggedIn) ? ', ' + account.username : '' }} !</h1>
             </v-container>
           </v-card>
           <!-- Text to display the essential rules of the game -->
@@ -190,8 +190,19 @@
               align="center"
               justify="center"
             >
+
+              <!-- Button Logout -->
+              <v-col v-if="isUserLoggedIn">
+                <v-row align="center" justify="center">
+                  <v-btn color="secondary" rounded x-large @click="logOut()">
+                      <v-icon left>mdi-logout</v-icon>
+                      LogOut
+                  </v-btn>
+                </v-row>
+              </v-col>
+
               <!-- Button Login -->
-              <v-col v-if="account.id == '-1'">
+              <v-col v-else>
                 <v-row align="center" justify="center">
                   <!-- Login Button -->
                   <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 0">
@@ -208,16 +219,6 @@
                   <v-btn dark color="secondary" rounded x-large @click="isDialogActive = true; tabModel = 1">
                     <v-icon left>mdi-account-plus</v-icon>
                     SignUp
-                  </v-btn>
-                </v-row>
-              </v-col>
-
-              <!-- Button Logout -->
-              <v-col v-else>
-                <v-row align="center" justify="center">
-                  <v-btn color="secondary" rounded x-large @click="logOut()">
-                      <v-icon left>mdi-logout</v-icon>
-                      LogOut
                   </v-btn>
                 </v-row>
               </v-col>
@@ -291,7 +292,6 @@ export default {
   name: 'Home',
   data: () => ({
     data: null,
-    isUserLoggedIn: false,
     isDialogActive: false,
     tabModel: null,
     loginUsername: '',
@@ -360,6 +360,10 @@ export default {
 
     account () {
       return this.connectedAccount
+    },
+
+    isUserLoggedIn () {
+      return this.account.id !== -1
     }
   },
   methods: {
@@ -376,19 +380,17 @@ export default {
     // Method to Log in (connect to account)
     logIn () {
       // We ask the login method
-      console.log(`[Home] partyId: ${this.account.id}`)
-      console.log(`[BEFORE] ${this.account.id === '-1'}`)
       this.signIn({ username: this.loginUsername, password: this.loginPassword })
         .then((success) => {
-          console.log('LOG IN - success')
-          console.log(success)
-          console.log(this.account.id)
+          // We disable the warning
+          this.loginFailed = false
+
+          // We close the dialog
           this.isDialogActive = false
-          console.log(`[AFTER] ${this.account.id === '-1'}`)
         })
         .catch((err) => {
-          console.log('LOGIN - error')
           console.log(err)
+          // We set the warning
           this.loginFailed = true
         })
     },
@@ -398,14 +400,16 @@ export default {
       // We ask the login method
       this.signUp({ username: this.signUpUsername, password: this.signUpPassword })
         .then((success) => {
-          console.log('SIGN UP - success')
-          console.log(success)
+          // We disable the warning
+          this.signUpFailed = false
+
+          // We close the dialog
           this.isDialogActive = false
-          // this.$router.push({ name: 'Home' })
         })
         .catch((err) => {
-          console.log('SIGN UP - error')
           console.log(err)
+
+          // We set the warning
           this.signUpFailed = true
         })
     },
