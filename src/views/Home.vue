@@ -176,7 +176,7 @@
                 This Website is a cross between a trivia game and a Rogue-like.
                 <br>
                 You'll enter a dungeon composed of different levels :
-                on each level, you'll face an opponent which you can beat by answering trivia questions.
+                on each level, you'll face an opponent that you can beat by answering trivia questions.
                 Depending on your answer, wrong or correct, you or your opponent will lose Health Points accordingly.
                 Additionally, some objects and spells may also help you in different ways.
               </h3>
@@ -349,19 +349,21 @@ export default {
   computed: {
     // States
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
     ...mapState('accounts', ['accounts', 'connectedAccount']),
 
     // Getters
-    ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
+    ...mapGetters('dungeons', ['getDungeonsByPartyId', 'getLastDungeonByPartyId']),
 
+    // Returns the account of the user if he is logged in, or a default one if not
     account () {
       return this.connectedAccount
     },
 
+    // Returns whether the user is logged in or not
     isUserLoggedIn () {
       return this.account.id !== -1
     }
@@ -377,7 +379,7 @@ export default {
     ...mapActions('parties', ['createParty']),
     ...mapActions('accounts', ['signIn', 'signUp']),
 
-    // Method to Log in (connect to account)
+    /** Method to Log in (connect to account) */
     logIn () {
       // We ask the login method
       this.signIn({ username: this.loginUsername, password: this.loginPassword })
@@ -395,7 +397,7 @@ export default {
         })
     },
 
-    // Method to Sign in (create new account)
+    /** Method to Sign in (create new account) */
     signUp () {
       // We ask the login method
       this.signUp({ username: this.signUpUsername, password: this.signUpPassword })
@@ -414,13 +416,14 @@ export default {
         })
     },
 
+    /** Launches the first dungeon of the game. Currently, it sends default data */
     startGame () {
       const defaultPlayerStat = {
         maxHP: 10,
         HP: 10,
         maxMana: 5,
         mana: 5,
-        gold: 1
+        gold: 10
       }
       const defaultEnemyStat = {
         maxHP: 3,
@@ -430,22 +433,17 @@ export default {
       const accountId = this.connectedAccount ? this.connectedAccount.id : -1
       this.createParty({ accountId, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
-          const dunjonId = this.getLastDunjonByPartyId(partyId).id
-
-          console.log(`[Home] partyId: ${partyId}`)
-          console.log(`[Home] dunjonId: ${dunjonId}`)
-
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
         })
     },
 
-    // Returns a random int
+    /** Returns a random int */
     getRandomInt (max) {
       return Math.floor(Math.random() * Math.floor(max)) + 1
     },
 
-    // Populates the ScoreBoard
+    /** Populates the ScoreBoard by creating random profiles with random scoreboards */
     populateScoreBoard () {
       // We initialize a List
       var list = []
@@ -458,7 +456,9 @@ export default {
 
         list.push(
           {
+            // A random name from the list of existing names
             name: this.names[this.getRandomInt(this.names.length - 1)],
+            // 1000 * the number of dungeons
             score: this.getRandomInt(_dungeons * 1000),
             dungeons: _dungeons,
             roundsFought: _roundsFought,

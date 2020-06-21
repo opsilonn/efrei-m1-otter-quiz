@@ -14,11 +14,11 @@ const getters = {
   },
 
   /**
-   * Get all the enemy stats with a specific dunjon id
-   * @param {number} dunjonId - The id of the dunjon
+   * Get all the enemy stats with a specific dungeon id
+   * @param {number} dungeonId - The id of the dungeon
    */
-  getEnemyStatByDunjonId: state => (dunjonId) => {
-    return state.enemyStats.find(enemyStat => enemyStat.dunjonId === dunjonId)
+  getEnemyStatByDungeonId: state => (dungeonId) => {
+    return state.enemyStats.find(enemyStat => enemyStat.dungeonId === dungeonId)
   },
 
   /**
@@ -66,9 +66,9 @@ const mutations = {
       state.enemyStats.push(enemyStat)
     }
   },
-  nextEnemyStat (state, { enemyStat, dunjonId }) {
+  nextEnemyStat (state, { enemyStat, dungeonId }) {
     const nextEnemyStat = {
-      dunjonId: dunjonId,
+      dungeonId: dungeonId,
       maxHP: enemyStat.maxHP,
       HP: enemyStat.HP
     }

@@ -5,7 +5,8 @@ const state = {
   accounts: [{
     id: 0,
     username: 'user1',
-    password: 'test'
+    password: 'test',
+    email: 'random.email@gmail.com'
   }]
 }
 

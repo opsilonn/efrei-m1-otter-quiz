@@ -14,20 +14,20 @@ const getters = {
   },
 
   /**
-   * Get all the rounds with a specific dunjon id
-   * @param {number} dunjonId - The id of the dunjon
+   * Get all the rounds with a specific dungeon id
+   * @param {number} dungeonId - The id of the dungeon
    */
-  getRoundsByDunjonId: state => (dunjonId) => {
-    return state.rounds.filter(round => round.dunjonId === dunjonId)
+  getRoundsByDungeonId: state => (dungeonId) => {
+    return state.rounds.filter(round => round.dungeonId === dungeonId)
   },
 
   /**
-   * Get the last round with a specific dunjon id
-   * @param {number} dunjonId - The id of the dunjon
+   * Get the last round with a specific dungeon id
+   * @param {number} dungeonId - The id of the dungeon
    */
-  getLastRoundByDunjonId: state => (dunjonId) => {
-    const roundsForDunjonId = getters.getRoundsByDunjonId(state)(dunjonId) || []
-    return roundsForDunjonId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
+  getLastRoundByDungeonId: state => (dungeonId) => {
+    const roundsForDungeonId = getters.getRoundsByDungeonId(state)(dungeonId) || []
+    return roundsForDungeonId.sort((_1, _2) => _1.id - _2.id).slice(-1)[0]
   },
 
   /**
@@ -97,18 +97,18 @@ const mutations = {
 }
 
 const actions = {
-  nextRound ({ commit, rootGetters, getters }, { dunjonId, trivia }) {
-    const dunjon = rootGetters['dunjons/getDunjonById'](dunjonId)
-    const party = rootGetters['parties/getPartyById'](dunjon.partyId)
+  nextRound ({ commit, rootGetters, getters }, { dungeonId, trivia }) {
+    const dungeon = rootGetters['dungeons/getDungeonById'](dungeonId)
+    const party = rootGetters['parties/getPartyById'](dungeon.partyId)
 
     if (party.isFinished === true) {
       return
     }
 
-    const lastRound = getters.getLastRoundByDunjonId(dunjonId)
+    const lastRound = getters.getLastRoundByDungeonId(dungeonId)
     const number = (lastRound) ? parseInt(lastRound.number) + 1 : 1
     const newRound = {
-      dunjonId,
+      dungeonId,
       trivia,
       number
     }
