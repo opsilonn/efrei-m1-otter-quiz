@@ -7,7 +7,7 @@ https://github.com/DulcheE/Projet-Front-End-Development
  ```
 
 ### The project's concept
-The goal of this project was to create a website using the VueX technology, by receiving data from an API, which is : https://opentdb.com/api_config.php
+The goal of this project is to create a website using the VueX technology, by receiving data from an API, which is : https://opentdb.com/api_config.php
 
 
 Our project consists of a Game that mixes the following ideas :
