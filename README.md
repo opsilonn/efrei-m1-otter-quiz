@@ -1,4 +1,4 @@
-###Project FrontEnd
+## Project FrontEnd
 
 ### Where to find the project
 Here is the Github repository :
@@ -33,8 +33,9 @@ To make the server operationnal, please enter :
   $npm run serve
 ```
  
-
-## Using the API open Trivia Database
+ 
+## Technical information
+### Using the API open Trivia Database
 We use the following API : https://opentdb.com/api_config.php
 It allows to search Trivia questions about various parameters :
 * category : History, General Knowledge...
@@ -42,7 +43,7 @@ It allows to search Trivia questions about various parameters :
 * type : True / False or Multiple choices
 
   
-## Using an Event Bus
+### Using an Event Bus
 The key feature of this game (at least, from the backend perspective), is that EVERYTHING is centralized over a file, called GameMaster.vue.
 It's goal is to emit events accordingly to what happens in game (ex : make the timer start, make the player gain an HP, make the enemy lose an HP...). Any other file can detect the events emitted, and interact accordingly.
 
@@ -50,7 +51,6 @@ Implementing this event bus made the development so much smoother...
 
 
 ## Authors
-
 It was made by the following Efrei Paris students :
 * **BEGEOT Hugues** - [his Git repository](https://github.com/opsilonn)
 * **BONI François** - [his Git repository](https://github.com/scorpionsdu78)
