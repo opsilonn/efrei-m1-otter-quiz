@@ -20,7 +20,7 @@ We also aim to implement a scoreboard and an account system to keep track your s
 
 
 ## Getting Started
-The programmation is fully completed, but we have a small requirement : downloading the dependences.
+The programmation is fully completed, but we have a small requirement : downloading the dependencies.
 Don't worry ! We've got you covered.
 
 
