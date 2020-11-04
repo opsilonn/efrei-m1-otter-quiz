@@ -19,6 +19,7 @@ Basically, you go through a dungeon, slaying foes. Each foe you encounter will q
 We also aim to implement a scoreboard and an account system to keep track your scores, and the overall higher scores (although we don't use a database (yet ?), so we keep some hardcoded values instead)
 
 
+
 ## Getting Started
 The programmation is fully completed, but we have a small requirement : downloading the dependencies.
 Don't worry ! We've got you covered.
@@ -34,6 +35,7 @@ To make the server operationnal, please enter :
 ```
  
  
+
 ## Technical information
 ### Using the API open Trivia Database
 We use the following API : https://opentdb.com/api_config.php
