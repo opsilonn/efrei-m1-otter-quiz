@@ -453,11 +453,6 @@ export default {
       const accountId = this.connectedAccount ? this.connectedAccount.id : -1
       this.createParty({ accountId, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
-          // const dunjonId = this.getLastDunjonByPartyId(partyId).id
-
-          // console.log(`[Home] partyId: ${partyId}`)
-          // console.log(`[Home] dunjonId: ${dunjonId}`)
-
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
         })
