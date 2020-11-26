@@ -101,13 +101,13 @@ export default {
   computed: {
     // State
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
 
     // Getter
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
-    ...mapGetters('rounds', ['getRoundsByDunjonId']),
+    ...mapGetters('dungeons', ['getLastDungeonByPartyId']),
+    ...mapGetters('rounds', ['getRoundsByDungeonId']),
 
     partyId () {
       return this.$route.params.partyId
@@ -115,17 +115,17 @@ export default {
     party () {
       return this.getPartyById(this.partyId)
     },
-    dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId)
+    dungeon () {
+      return this.getLastDungeonByPartyId(this.partyId)
     },
     rounds () {
-      return this.dunjon ? this.getRoundsByDunjonId(this.dunjon.id) : 0
+      return this.dungeon ? this.getRoundsByDungeonId(this.dungeon.id) : 0
     },
     totalRounds () {
       let rounds = []
-      const dunjons = this.getDunjonsByPartyId(this.partyId)
-      dunjons.forEach((dunjon) => {
-        rounds = rounds.concat(this.getRoundsByDunjonId(dunjon.id))
+      const dungeons = this.getDungeonsByPartyId(this.partyId)
+      dungeons.forEach((dungeon) => {
+        rounds = rounds.concat(this.getRoundsByDungeonId(dungeon.id))
       })
       return rounds
     }

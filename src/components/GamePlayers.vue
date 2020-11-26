@@ -11,7 +11,7 @@
             class="font-weight-black blue-grey--text text--lighten-5"
             style="text-shadow: 2px 2px 5px black; font-size: 2.5vh"
             align="center">
-            {{ isPlayer ? account.username : 'Enemy' + dunjon.id }}
+            {{ isPlayer ? account.username : 'Enemy' + dungeon.id }}
           </h3>
 
           <!-- Health bar -->
@@ -124,17 +124,17 @@ export default {
     // States
     ...mapState('accounts', ['accounts', 'connectedAccount']),
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
-    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('dungeons', ['getLastDungeonByPartyId']),
+    ...mapGetters('rounds', ['getLastRoundByDungeonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
-    ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByDungeonId']),
 
     // Custom
     account () {
@@ -143,17 +143,17 @@ export default {
     partyId () {
       return parseInt(this.$route.params.partyId)
     },
-    dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: '9', difficulty: 'none', number: '0' }
+    dungeon () {
+      return this.getLastDungeonByPartyId(this.partyId) || { category: '9', difficulty: 'none', number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { roundTime: '0', result: 'none', number: '0' }
+      return this.getLastRoundByDungeonId(this.dungeon.id) || { roundTime: '0', result: 'none', number: '0' }
     },
     playerStat () {
       return this.getPlayerStatByPartyId(this.partyId) || { maxHP: '0', HP: '0', maxMana: '0', mana: '0', gold: '0' }
     },
     enemyStat () {
-      return this.dunjon ? this.getEnemyStatByDunjonId(this.dunjon.id) || { maxHP: '0', HP: '0' } : { maxHP: '0', HP: '0' }
+      return this.dungeon ? this.getEnemyStatByDungeonId(this.dungeon.id) || { maxHP: '0', HP: '0' } : { maxHP: '0', HP: '0' }
     },
     maxHP () {
       return this.isPlayer ? this.playerStat.maxHP : this.enemyStat.maxHP
@@ -216,7 +216,7 @@ export default {
 
     // Main listener : whenever the timer resets, enter a dungeon or start a party, we withdraw the animations
     EventBus.$on('timer-end', this.resetAnimations)
-    EventBus.$on('dunjon-enter', this.resetAnimations)
+    EventBus.$on('dungeon-enter', this.resetAnimations)
     EventBus.$on('party-start', this.resetAnimations)
 
     // Depending on the event, we call the corresponding animations

@@ -4,7 +4,7 @@
     <div>
       <label>
         <h2 align="center" style="font-size: 3vh">
-            Dungeon n° {{ dunjon.number }} : {{ dunjonCategoryName }}
+            Dungeon n° {{ dungeon.number }} : {{ dungeonCategoryName }}
             <br/>
             Round n° {{ round.number }} : {{ round.result }}
             <br/>
@@ -42,13 +42,13 @@ export default {
   computed: {
     // States
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId']),
-    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('dungeons', ['getLastDungeonByPartyId']),
+    ...mapGetters('rounds', ['getLastRoundByDungeonId']),
     ...mapGetters('trivias', ['getTriviaCategoryNameById']),
 
     // Custom
@@ -58,14 +58,14 @@ export default {
     party () {
       return this.getPartyById(this.partyId) || {}
     },
-    dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', roundTime: 0, number: '0' }
+    dungeon () {
+      return this.getLastDungeonByPartyId(this.partyId) || { category: 'none', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { result: 'none', number: '0' }
+      return this.getLastRoundByDungeonId(this.dungeon.id) || { result: 'none', number: '0' }
     },
-    dunjonCategoryName () {
-      return this.dunjon ? this.getTriviaCategoryNameById(this.dunjon.category) : 'none'
+    dungeonCategoryName () {
+      return this.dungeon ? this.getTriviaCategoryNameById(this.dungeon.category) : 'none'
     }
   },
   methods: {

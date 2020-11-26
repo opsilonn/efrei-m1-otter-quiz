@@ -349,14 +349,14 @@ export default {
   computed: {
     // States
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
     ...mapState('accounts', ['accounts', 'connectedAccount']),
 
     // Getters
-    ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
+    ...mapGetters('dungeons', ['getDungeonsByPartyId', 'getLastDungeonByPartyId']),
 
     account () {
       return this.connectedAccount

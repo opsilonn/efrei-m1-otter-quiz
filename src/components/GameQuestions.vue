@@ -80,23 +80,23 @@ export default {
     // States
     ...mapState('themes', ['themes']),
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getDunjonsByPartyId', 'getLastDunjonByPartyId']),
-    ...mapGetters('rounds', ['getLastRoundByDunjonId']),
+    ...mapGetters('dungeons', ['getDungeonsByPartyId', 'getLastDungeonByPartyId']),
+    ...mapGetters('rounds', ['getLastRoundByDungeonId']),
 
     // Custom
     partyId () {
       return parseInt(this.$route.params.partyId)
     },
-    dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId) || { category: '0', difficulty: 'none', roundTime: 0, number: '0' }
+    dungeon () {
+      return this.getLastDungeonByPartyId(this.partyId) || { category: '0', difficulty: 'none', roundTime: 0, number: '0' }
     },
     round () {
-      return this.getLastRoundByDunjonId(this.dunjon.id) || { number: '0' }
+      return this.getLastRoundByDungeonId(this.dungeon.id) || { number: '0' }
     },
     timerRemainingSec () {
       return Math.abs((this.timer.remaining || 0.0) / 1000)

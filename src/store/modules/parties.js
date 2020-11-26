@@ -103,19 +103,19 @@ const actions = {
     // Stats
     commit('playerStats/addPlayerStat', { playerStat: defaultPlayerStat }, { root: true })
 
-    // Dunjon
-    const newDunjon = {
+    // Dungeon
+    const newDungeon = {
       partyId: newParty.id,
       category: 9,
       difficulty: 'easy',
       roundTime: 20000
     }
-    return dispatch('dunjons/nextDunjon', { partyId: newParty.id, dunjon: newDunjon, defaultEnemyStat }, { root: true })
-      .then((dunjonId) => {
+    return dispatch('dungeons/nextDungeon', { partyId: newParty.id, dungeon: newDungeon, defaultEnemyStat }, { root: true })
+      .then((dungeonId) => {
         return newParty.id
       })
       .catch((err) => {
-        // console.log('[createParty] Error in dunjons/nextDunjon')
+        // console.log('[createParty] Error in dungeons/nextDungeon')
         // console.log(err)
         throw err
       })

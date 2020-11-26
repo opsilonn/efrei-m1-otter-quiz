@@ -27,7 +27,7 @@
           style="padding: 30px 70px"
         >
           <p style="font-size: 3.5vh; line-height: 3.5vh">
-            You managed to beat <b>{{ getDunjonsByPartyId(partyId).length - 1}} dungeon{{getDunjonsByPartyId(partyId).length - 1 > 1 ? 's' : ''}}</b>.
+            You managed to beat <b>{{ getDungeonsByPartyId(partyId).length - 1}} dungeon{{getDungeonsByPartyId(partyId).length - 1 > 1 ? 's' : ''}}</b>.
             <br/>
             You went through <b>{{ totalRounds.length }} rounds</b> and answered good to <b>{{ totalRoundsSucceeded.length }} questions</b>.
           </p>
@@ -243,9 +243,9 @@
       </v-card>
     </v-dialog>
 
-    <!-- Dialog to choose next dunjon -->
+    <!-- Dialog to choose next dungeon -->
     <v-dialog
-      v-model="dialogNextDunjon"
+      v-model="dialogNextDungeon"
       persistent
       max-width="150vh"
     >
@@ -281,7 +281,7 @@
             >
               <v-card
                 class="blue-grey lighten-3 flex d-flex flex-column"
-                @click="enterNewDunjon({
+                @click="enterNewDungeon({
                   category: choosableDungeon.category.id,
                   difficulty: choosableDungeon.difficulty,
                   roundTime: choosableDungeon.roundTime
@@ -327,7 +327,7 @@ export default {
     // Dialog controller
     dialogEnding: false,
     dialogLoot: false,
-    dialogNextDunjon: false,
+    dialogNextDungeon: false,
     // Game controller
     gameReaload: true,
     chooseDungeon: false,
@@ -338,7 +338,7 @@ export default {
     // States
     ...mapState('themes', ['themes']),
     ...mapState('parties', ['parties']),
-    ...mapState('dunjons', ['dunjons']),
+    ...mapState('dungeons', ['dungeons']),
     ...mapState('rounds', ['rounds']),
     ...mapState('playerStats', ['playerStats']),
     ...mapState('enemyStats', ['enemyStats']),
@@ -346,10 +346,10 @@ export default {
 
     // Getters
     ...mapGetters('parties', ['getPartyById']),
-    ...mapGetters('dunjons', ['getLastDunjonByPartyId', 'getDunjonsByPartyId', 'getRandomRoundTime']),
-    ...mapGetters('rounds', ['getLastRoundByDunjonId', 'getRoundsByDunjonId']),
+    ...mapGetters('dungeons', ['getLastDungeonByPartyId', 'getDungeonsByPartyId', 'getRandomRoundTime']),
+    ...mapGetters('rounds', ['getLastRoundByDungeonId', 'getRoundsByDungeonId']),
     ...mapGetters('playerStats', ['getPlayerStatByPartyId']),
-    ...mapGetters('enemyStats', ['getEnemyStatByDunjonId']),
+    ...mapGetters('enemyStats', ['getEnemyStatByDungeonId']),
     ...mapGetters('trivias', ['getLastTrivia', 'getTriviaCategoryNameById', 'getRandomTriviasCategorySet', 'getRandomTriviasDifficulty']),
 
     // Custom
@@ -359,11 +359,11 @@ export default {
     party () {
       return this.getPartyById(this.partyId)
     },
-    dunjon () {
-      return this.getLastDunjonByPartyId(this.partyId)
+    dungeon () {
+      return this.getLastDungeonByPartyId(this.partyId)
     },
     round () {
-      return this.dunjon ? this.getLastRoundByDunjonId(this.dunjon.id) : {}
+      return this.dungeon ? this.getLastRoundByDungeonId(this.dungeon.id) : {}
     },
     roundAnswer () {
       return this.round ? this.round.answer : undefined
@@ -375,7 +375,7 @@ export default {
       return this.playerStat ? this.playerStat.HP : 0
     },
     enemyStat () {
-      return this.dunjon ? this.getEnemyStatByDunjonId(this.dunjon.id) : {}
+      return this.dungeon ? this.getEnemyStatByDungeonId(this.dungeon.id) : {}
     },
     enemyStat_HP () {
       return this.enemyStat ? this.enemyStat.HP : 0
@@ -385,9 +385,9 @@ export default {
     },
     totalRounds () {
       let rounds = []
-      const dunjons = this.getDunjonsByPartyId(this.partyId)
-      dunjons.forEach((dunjon) => {
-        rounds = rounds.concat(this.getRoundsByDunjonId(dunjon.id))
+      const dungeons = this.getDungeonsByPartyId(this.partyId)
+      dungeons.forEach((dungeon) => {
+        rounds = rounds.concat(this.getRoundsByDungeonId(dungeon.id))
       })
       return rounds
     },
@@ -409,14 +409,14 @@ export default {
   methods: {
     // Mutations
     ...mapMutations('parties', ['addParty', 'addPartyScore', 'partyFinish']),
-    ...mapMutations('dunjons', ['addDunjon']),
+    ...mapMutations('dungeons', ['addDungeon']),
     ...mapMutations('rounds', ['addRound', 'setRoundResult']),
     ...mapMutations('playerStats', ['addPlayerStat', 'setPlayerStatHP', 'setPlayerStatMana', 'setPlayerStatGold']),
     ...mapMutations('enemyStats', ['addEnemyStat', 'setEnemyStatHP']),
 
     // Actions
     ...mapActions('parties', ['createParty']),
-    ...mapActions('dunjons', ['nextDunjon']),
+    ...mapActions('dungeons', ['nextDungeon']),
     ...mapActions('rounds', ['nextRound']),
     ...mapActions('trivias', ['fetchTrivias', 'fetchTriviaCategories']),
 
@@ -482,35 +482,35 @@ export default {
         this.choosableDungeons[index].category = category
       })
 
-      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dunjon.number)
+      const RandomTriviasDifficulty = this.getRandomTriviasDifficulty(3, this.dungeon.number)
       RandomTriviasDifficulty.forEach((difficulty, index) => {
         this.choosableDungeons[index].difficulty = difficulty
-        this.choosableDungeons[index].roundTime = parseInt(this.getRandomRoundTime(this.dunjon.roundTime, difficulty)) + (selection === 'time' ? 1000 : 0)
+        this.choosableDungeons[index].roundTime = parseInt(this.getRandomRoundTime(this.dungeon.roundTime, difficulty)) + (selection === 'time' ? 1000 : 0)
       })
 
-      this.dialogNextDunjon = true
+      this.dialogNextDungeon = true
     },
-    enterNewDunjon (dunjon) {
-      this.dialogNextDunjon = false
+    enterNewDungeon (dungeon) {
+      this.dialogNextDungeon = false
       this.chooseDungeon = false
       const defaultEnemyStat = {
         maxHP: parseInt(this.enemyStat.maxHP) + 1,
         HP: parseInt(this.enemyStat.maxHP) + 1
       }
-      this.nextDunjon({ partyId: this.partyId, dunjon, defaultEnemyStat })
-      EventBus.$emit('dunjon-enter')
+      this.nextDungeon({ partyId: this.partyId, dungeon, defaultEnemyStat })
+      EventBus.$emit('dungeon-enter')
       this.startTimer()
     },
     async startTimer () {
       if (this.party.isFinished || this.chooseDungeon) {
         return
       }
-      await this.fetchTrivias({ amount: 1, category: this.dunjon.category })
-      this.nextRound({ dunjonId: this.dunjon.id, trivia: this.lastTrivia })
+      await this.fetchTrivias({ amount: 1, category: this.dungeon.category })
+      this.nextRound({ dungeonId: this.dungeon.id, trivia: this.lastTrivia })
       this.gameReaload = false
 
       // Reset localy
-      this.timer.length = this.dunjon.roundTime
+      this.timer.length = this.dungeon.roundTime
       this.timer.begin = Date.now()
       this.timer.end = this.timer.begin + this.timer.length
 
