@@ -453,8 +453,9 @@ export default {
           }
         })
         .catch((err) => {
-          console.log('Error in createParty')
-          console.log(err)
+          // console.log('Error in createParty')
+          // console.log(err)
+          throw err
         })
     },
     applyingLoot (selection) {

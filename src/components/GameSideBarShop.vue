@@ -67,7 +67,7 @@ export default {
 
     // Method called when clicking on something
     onClick () {
-      console.log('clicked from the shop !')
+      // console.log('clicked from the shop !')
     },
 
     // List of all the items the player CAN buy

@@ -391,9 +391,10 @@ export default {
           this.isDialogActive = false
         })
         .catch((err) => {
-          console.log(err)
+          // console.log(err)
           // We set the warning
           this.loginFailed = true
+          throw err
         })
     },
 
@@ -409,10 +410,11 @@ export default {
           this.isDialogActive = false
         })
         .catch((err) => {
-          console.log(err)
+          // console.log(err)
 
           // We set the warning
           this.signUpFailed = true
+          throw err
         })
     },
 

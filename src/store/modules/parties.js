@@ -115,8 +115,9 @@ const actions = {
         return newParty.id
       })
       .catch((err) => {
-        console.log('[createParty] Error in dungeons/nextDungeon')
-        console.log(err)
+        // console.log('[createParty] Error in dungeons/nextDungeon')
+        // console.log(err)
+        throw err
       })
   }
 }
