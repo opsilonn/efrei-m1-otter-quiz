@@ -42,7 +42,7 @@ export default {
   }),
   methods: {
     onClick () {
-      console.log('clicked from the inventory !')
+      // console.log('clicked from the inventory !')
     },
 
     // Returns a list of items that is artificially inflated
