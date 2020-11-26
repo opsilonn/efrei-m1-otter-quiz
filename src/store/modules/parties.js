@@ -115,8 +115,9 @@ const actions = {
         return newParty.id
       })
       .catch((err) => {
-        console.log('[createParty] Error in dunjons/nextDunjon')
-        console.log(err)
+        // console.log('[createParty] Error in dunjons/nextDunjon')
+        // console.log(err)
+        throw err
       })
   }
 }

@@ -401,20 +401,21 @@ export default {
     // Method to Log in (connect to account)
     logIn () {
       // We ask the login method
-      console.log(`[Home] partyId: ${this.account.id}`)
-      console.log(`[BEFORE] ${this.account.id === '-1'}`)
+      // console.log(`[Home] partyId: ${this.account.id}`)
+      // console.log(`[BEFORE] ${this.account.id === '-1'}`)
       this.signIn({ username: this.loginUsername, password: this.loginPassword })
         .then((success) => {
-          console.log('LOG IN - success')
-          console.log(success)
-          console.log(this.account.id)
+          // console.log('LOG IN - success')
+          // console.log(success)
+          // console.log(this.account.id)
           this.isDialogActive = false
-          console.log(`[AFTER] ${this.account.id === '-1'}`)
+          // console.log(`[AFTER] ${this.account.id === '-1'}`)
         })
         .catch((err) => {
-          console.log('LOGIN - error')
-          console.log(err)
+          // console.log('LOGIN - error')
+          // console.log(err)
           this.loginFailed = true
+          throw err
         })
     },
 
@@ -423,15 +424,16 @@ export default {
       // We ask the login method
       this.signUp({ username: this.signUpUsername, password: this.signUpPassword })
         .then((success) => {
-          console.log('SIGN UP - success')
-          console.log(success)
+          // console.log('SIGN UP - success')
+          // console.log(success)
           this.isDialogActive = false
           // this.$router.push({ name: 'Home' })
         })
         .catch((err) => {
-          console.log('SIGN UP - error')
-          console.log(err)
+          // console.log('SIGN UP - error')
+          // console.log(err)
           this.signUpFailed = true
+          throw err
         })
     },
 
@@ -451,10 +453,10 @@ export default {
       const accountId = this.connectedAccount ? this.connectedAccount.id : -1
       this.createParty({ accountId, defaultPlayerStat, defaultEnemyStat })
         .then((partyId) => {
-          const dunjonId = this.getLastDunjonByPartyId(partyId).id
+          // const dunjonId = this.getLastDunjonByPartyId(partyId).id
 
-          console.log(`[Home] partyId: ${partyId}`)
-          console.log(`[Home] dunjonId: ${dunjonId}`)
+          // console.log(`[Home] partyId: ${partyId}`)
+          // console.log(`[Home] dunjonId: ${dunjonId}`)
 
           // Go to Game page
           this.$router.push({ name: 'Game', params: { partyId } })
