@@ -242,7 +242,7 @@
               <br>
               <v-data-table
                 :headers="scoreboardHeaders"
-                :items="populateScoreBoard()"
+                :items="populateScoreBoard"
                 :items-per-page="5"
               />
             </v-container>
@@ -363,9 +363,29 @@ export default {
       return this.connectedAccount
     },
 
-    // Returns whether the user is logged in or not
-    isUserLoggedIn () {
-      return this.account.id !== -1
+    // Populates the ScoreBoard
+    populateScoreBoard () {
+      // We initialize a List
+      var list = []
+
+      // We add all the questions to our List several times
+      for (var i = 0; i < 25; i++) {
+        var _dungeons = this.getRandomInt(5)
+        var _roundsFought = this.getRandomInt(_dungeons * 5)
+        var _roundsWon = this.getRandomInt(_roundsFought - 1)
+
+        list.push(
+          {
+            name: this.names[this.getRandomInt(this.names.length - 1)],
+            score: this.getRandomInt(_dungeons * 1000),
+            dungeons: _dungeons,
+            roundsFought: _roundsFought,
+            roundsWon: _roundsWon
+          })
+      }
+
+      // We return the List
+      return list
     }
   },
   methods: {
@@ -443,33 +463,6 @@ export default {
     /** Returns a random int */
     getRandomInt (max) {
       return Math.floor(Math.random() * Math.floor(max)) + 1
-    },
-
-    /** Populates the ScoreBoard by creating random profiles with random scoreboards */
-    populateScoreBoard () {
-      // We initialize a List
-      var list = []
-
-      // We add all the questions to our List several times
-      for (var i = 0; i < 25; i++) {
-        var _dungeons = this.getRandomInt(5)
-        var _roundsFought = this.getRandomInt(_dungeons * 5)
-        var _roundsWon = this.getRandomInt(_roundsFought - 1)
-
-        list.push(
-          {
-            // A random name from the list of existing names
-            name: this.names[this.getRandomInt(this.names.length - 1)],
-            // 1000 * the number of dungeons
-            score: this.getRandomInt(_dungeons * 1000),
-            dungeons: _dungeons,
-            roundsFought: _roundsFought,
-            roundsWon: _roundsWon
-          })
-      }
-
-      // We return the List
-      return list
     }
   }
 }
