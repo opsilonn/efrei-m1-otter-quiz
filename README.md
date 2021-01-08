@@ -3,7 +3,7 @@
 ### Where to find the project
 Here is the Github repository :
  ```
-https://github.com/DulcheE/Projet-Front-End-Development
+https://github.com/opsilonn/efrei-m1-otter-quiz
  ```
 
 ### The project's concept
