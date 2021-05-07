@@ -6,6 +6,11 @@ Here is the Github repository :
 https://github.com/opsilonn/efrei-m1-otter-quiz
  ```
 
+And here is a deployed version on Heroku :
+ ```
+otter-quiz.herokuapp.com/#/home
+ ```
+
 ### The project's concept
 The goal of this project is to create a website using the VueX technology, by receiving data from an API, which is : https://opentdb.com/api_config.php
 
@@ -59,6 +64,6 @@ It was made by the following Efrei Paris students :
 * **DULCHE Eddy** - [his Git repository](https://github.com/DulcheE)
 * **NAGELS Kevin** - ???
 
-See also the list of [contributors](https://github.com/DulcheE/Projet-Front-End-Development/graphs/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/opsilonn/efrei-m1-otter-quiz/graphs/contributors) who participated in this project.
 
 Note : we are currently in our 4th year (2019-20), in a Software Engineering cursus.
